@@ -191,6 +191,12 @@ public class Nurse : HormigaGenerica
         EnemigoGenerico enemigo = enemigosCerca[0];
         if (enemigo != null)
         {
+            if (!estaLuchando)
+            {
+                reina.HormigaAtacando();
+            }
+            estaLuchando = true;
+            
             //Debug.Log("Hay enemigo");
             agente.SetDestination(enemigo.transform.position);
             float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
@@ -212,6 +218,11 @@ public class Nurse : HormigaGenerica
             }
         } else
         {
+            if (estaLuchando)
+            {
+                reina.HomirgaDejaDeAtacar();
+            }
+            estaLuchando = false;
             //Debug.Log("No hay enemigo");
             enemigosCerca.RemoveAt(0);
             if (enemigosCerca.Count == 0)

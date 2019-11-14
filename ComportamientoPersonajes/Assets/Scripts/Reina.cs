@@ -58,10 +58,10 @@ public class Reina : HormigaGenerica
     public HormigaGenerica[] hormigasHeridas;
     public List<Nurse> nursesOcupadas;
     public Obrera[] obrerasOcupadas;
-    public Soldado[] soldadosOcupadas;
+    public List<Soldado> soldadosOcupadas = new List<Soldado>();
     public List<Nurse> nursesDesocupadas = new List<Nurse>();
-    public Obrera[] obrerasDesocupadas;
-    public Soldado[] soldadosDesocupadas;
+    public List<Obrera> obrerasDesocupadas = new List<Obrera>();
+    public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
     public int numHormigasCuidandoHuevos;
     public int numHormigasAtacando;
     public int numHormigasBuscandoComida;
@@ -126,6 +126,9 @@ public class Reina : HormigaGenerica
 
     //para ver si hay que mandar patrullar
     public bool hormigaMuerta = false;
+
+    // para mandar a atacar;
+    public float umbralHormigasAtacando;
 
     
     // tiempos de cambio de prioridades
@@ -813,17 +816,121 @@ public class Reina : HormigaGenerica
         huevosTotal.Remove(miHuevo);
     }
 
-
-    #region mandarOrdenes
-    [Task]
-    public void atacados()
+    public void HormigaAtacando()
     {
+        numHormigasAtacando++;
 
+    }
+
+    public void HomirgaDejaDeAtacar()
+    {
+        numHormigasAtacando--;
+    }
+
+
+
+
+    #region mandarOrdenesAtacar
+    [Task]
+    public void Atacados()
+    {
+        if (HayQueAtacar)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void SuficientesHormigasLuchando()
+    {
+        if(totalHormigas * umbralHormigasAtacando > numHormigasAtacando)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void HaySoldadosLibres()
+    {
+        if(soldadosDesocupadas.Count > 0)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void HayObrerasLibres()
+    {
+        if(obrerasDesocupadas.Count > 0)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void OrdenAtacarSoldados()
+    {
+        Soldado aux = soldadosDesocupadas[0];
+        if(aux != null)
+        {
+            aux.hayOrdenDeAtacar = true;
+            aux.enemigoAlQueAtacar = enemigosTotales[0];
+            soldadosDesocupadas.Remove(aux);
+            soldadosOcupadas.Add(aux);
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
     }
 
 
 
     #endregion
+
+
+    #region MandarOrdenHuevos
+
+    [Task]
+    public void HayHuevosQueCuidar()
+    {
+        if(huevosQueTienenQueSerCuidados.Count > 0)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
+        
+    }
+
+
+    [Task]
+    public void OrdenCuidarHuevos()
+    {
+        Nurse aux = nursesDesocupadas[0];
+        if(aux != null)
+        {
+            // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
+            aux.hayOrdenCuidarHuevos = true;
+        }
+
+    }
+
+    #endregion
+
     public void MandarOrden()
     {
 

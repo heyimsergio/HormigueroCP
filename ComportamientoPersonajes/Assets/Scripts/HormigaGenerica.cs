@@ -7,6 +7,13 @@ public class HormigaGenerica : PersonajeGenerico
     protected float hambre = 200;
     public float pesoQuePuedenTransportar;
     protected Vector3 posicionReina;
+    public bool estaLuchando = false;
+
+    public bool hayOrdenDeAtacar = false;
+    public EnemigoGenerico enemigoAlQueAtacar = null;
+    public bool hayOrdenBuscarComida = false;
+    public bool hayOrdenCuidarHuevos = false;
+
 
     // Start is called before the first frame update
     void Start()
