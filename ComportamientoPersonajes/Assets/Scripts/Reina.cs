@@ -556,12 +556,12 @@ public class Reina : HormigaGenerica
             //
             if (this.zonaDondeEsta == 0)
             {
-                Debug.Log("Estoy dentro, asi que exploro " + siguientePosicionExplorar + " " + transform.position);
+                //Debug.Log("Estoy dentro, asi que exploro " + siguientePosicionExplorar + " " + transform.position);
                 float distanceToTarget = Vector3.Distance(this.transform.position, siguientePosicionExplorar);
-                Debug.Log(distanceToTarget);
+                //Debug.Log(distanceToTarget);
                 if (distanceToTarget < 1.8f)
                 {
-                    Debug.Log("Esta cerca");
+                    //Debug.Log("Esta cerca");
                     Vector3 randomDirection;
                     NavMeshHit aux;
                     bool aux2;
@@ -576,7 +576,7 @@ public class Reina : HormigaGenerica
                 }
                 else
                 {
-                    Debug.Log("Esta lejos, voy hacia el");
+                    //Debug.Log("Esta lejos, voy hacia el");
                     agente.SetDestination(siguientePosicionExplorar);
 
                 }

@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 451619049}
   - component: {fileID: 451619048}
   - component: {fileID: 451619050}
+  - component: {fileID: 451619051}
   m_Layer: 0
   m_Name: Nurse
   m_TagString: Hormiga
@@ -348,6 +349,8 @@ MonoBehaviour:
   hayHuevosCerca: 0
   hayEnemigosCerca: 0
   enemigosCerca: []
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 1000
   tiempoCuidandoHuevos: 0
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
@@ -399,6 +402,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &451619051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451619044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  link: {fileID: 0}
 --- !u!1 &473553769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,6 +1563,8 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigaCerca: {fileID: 0}
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 0.5
 --- !u!114 &1285418719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1726,6 +1745,8 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigaCerca: {fileID: 0}
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 0.5
 --- !u!65 &1459648001
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1966,6 +1987,8 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigaCerca: {fileID: 0}
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 0.5
 --- !u!65 &1546281724
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2091,6 +2114,7 @@ GameObject:
   - component: {fileID: 1569208530}
   - component: {fileID: 1569208529}
   - component: {fileID: 1569208528}
+  - component: {fileID: 1569208534}
   m_Layer: 0
   m_Name: Nurse (1)
   m_TagString: Hormiga
@@ -2135,6 +2159,8 @@ MonoBehaviour:
   hayHuevosCerca: 0
   hayEnemigosCerca: 0
   enemigosCerca: []
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 1000
   tiempoCuidandoHuevos: 0
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
@@ -2227,6 +2253,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1569208534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569208527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  link: {fileID: 0}
 --- !u!1 &1646566900
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,6 +2298,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dc19c0e779afa041ad189140669b80d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vida: 0
+  zonaDondeEsta: 0
+  pesoQuePuedenTransportar: 0
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
   tiempoQueTardaEnPonerHuevo: 3
   tiempoQueLllevaPoniendoHuevo: 0
   estaPoniendoHuevo: 0
@@ -2313,6 +2357,8 @@ MonoBehaviour:
   importanciaNurses: 0
   importanciaObreras: 0
   importanciaSoldados: 0
+  HayQueBuscarComida: 0
+  hormigaMuerta: 0
   TIEMPO1: 0
   TIEMPO2: 0
   TIEMPO3: 0
@@ -2325,6 +2371,7 @@ MonoBehaviour:
   umbralComida: 0.4
   comidaPrefab: {fileID: 2867959774170439277, guid: 09ba6be01b00b9b46a847381e95dd101,
     type: 3}
+  prefabNurse: {fileID: 0}
   crearSala: 0
   ponerHuevo: 0
 --- !u!4 &1646566902
@@ -2400,6 +2447,7 @@ GameObject:
   - component: {fileID: 1664277722}
   - component: {fileID: 1664277721}
   - component: {fileID: 1664277720}
+  - component: {fileID: 1664277726}
   m_Layer: 0
   m_Name: Nurse (2)
   m_TagString: Hormiga
@@ -2444,6 +2492,8 @@ MonoBehaviour:
   hayHuevosCerca: 0
   hayEnemigosCerca: 0
   enemigosCerca: []
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 1000
   tiempoCuidandoHuevos: 0
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
@@ -2536,6 +2586,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1664277726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664277719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  link: {fileID: 0}
 --- !u!1 &1818423899
 GameObject:
   m_ObjectHideFlags: 0
@@ -2691,6 +2755,7 @@ GameObject:
   - component: {fileID: 1895791245}
   - component: {fileID: 1895791244}
   - component: {fileID: 1895791243}
+  - component: {fileID: 1895791249}
   m_Layer: 0
   m_Name: Obrera
   m_TagString: Hormiga
@@ -2821,6 +2886,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1895791249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895791242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  link: {fileID: 0}
 --- !u!1 &1922200432
 GameObject:
   m_ObjectHideFlags: 0
@@ -2881,6 +2960,8 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigaCerca: {fileID: 0}
+  tiempoEntreAtaques: 0
+  tiempoEntreAtaquesMax: 0.5
 --- !u!65 &1922200435
 BoxCollider:
   m_ObjectHideFlags: 0

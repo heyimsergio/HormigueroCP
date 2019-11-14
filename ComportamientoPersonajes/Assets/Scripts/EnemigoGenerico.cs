@@ -15,6 +15,10 @@ public class EnemigoGenerico : PersonajeGenerico
     public HormigaGenerica hormigaCerca;
     protected int tiempoParaIrse;
 
+    public float tiempoEntreAtaques;
+    [HideInInspector]
+    public float tiempoEntreAtaquesMax = 0.5f;
+
     Floor hormigueroDentro;
 
     // Start is called before the first frame update
@@ -27,6 +31,7 @@ public class EnemigoGenerico : PersonajeGenerico
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         this.siguientePosicion = this.transform.position;
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
+        tiempoEntreAtaques = tiempoEntreAtaquesMax;
     }
 
     // Update is called once per frame
@@ -64,21 +69,32 @@ public class EnemigoGenerico : PersonajeGenerico
             float distanceToTarget = Vector3.Distance(transform.position, hormigaCerca.transform.position);
             if (distanceToTarget < 1.2f)
             {
-                float random = Random.Range(0, 10);
-                if (random < 9f)
+                if (tiempoEntreAtaques <= 0)
                 {
-                    if (hormigaCerca.vida - this.daño <= 0)
+                    float random = Random.Range(0, 10);
+                    if (random < 9f)
                     {
-                        hormigaCerca.quitarVida(this.daño);
-                        hormigaCerca = null;
+                        if (hormigaCerca.vida - this.daño <= 0)
+                        {
+                            hormigaCerca.quitarVida(this.daño);
+                            hormigaCerca = null;
+                        }
+                        else
+                        {
+                            hormigaCerca.quitarVida(this.daño);
+                        }
+                        
                     }
                     else
                     {
-                        hormigaCerca.quitarVida(this.daño);
+                        //Debug.Log("Ataque fallido");
                     }
-                } else
-                {
-                    Debug.Log("Ataque fallido");
+                    tiempoEntreAtaques = tiempoEntreAtaquesMax;
+                }
+                else{
+                    Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + hormigaCerca.transform.position;
+                    agente.SetDestination(randomDirection);
+                    tiempoEntreAtaques -= Time.deltaTime;
                 }
                 
             }
