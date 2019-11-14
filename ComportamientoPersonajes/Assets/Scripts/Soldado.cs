@@ -6,15 +6,6 @@ using Panda;
 
 public class Soldado : HormigaGenerica
 {
-    NavMeshAgent agente;
-    Floor hormigueroDentro; //Saber donde empieza el suelo para no meterte dentro del hormiguero cuando exploras
-    Outside hormigueroFuera;
-    PandaBehaviour pb;
-
-    //Atacar
-    public bool hayEnemigosCerca;
-    public List<EnemigoGenerico> enemigosCerca = new List<EnemigoGenerico>();
-
     //Patrullar
     public int tiempoPatrullando;
     public Vector3 centro;
@@ -25,7 +16,6 @@ public class Soldado : HormigaGenerica
     public int tiempoParaCurar;
 
     //Ordenes de la reina
-    public Reina reina;
     public bool meHanMandadoOrden;
     public enum ordenes { ORDEN1, ORDEN2 };
 
@@ -35,15 +25,10 @@ public class Soldado : HormigaGenerica
     public Room salaDejarComida = null;
     Vector3 posDejarComida = Vector3.zero;
 
-    // Comer
-    Comida comidaAComer;
-
     //Buscar comida
     public Vector3 siguientePosicionBuscandoComida;
     public Vector3 almacenComida;
 
-    //Explorar
-    public Vector3 siguientePosicionExplorar;
 
     // Start is called before the first frame update
     void Start()
@@ -121,138 +106,6 @@ public class Soldado : HormigaGenerica
     }
 
     // Tareas
-    [Task]
-    public void HayEnemigosCerca()
-    {
-        if (hayEnemigosCerca)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void Atacar()
-    {
-        EnemigoGenerico enemigo = enemigosCerca[0];
-        if (enemigo != null)
-        {
-            //Debug.Log("Hay enemigo");
-            agente.SetDestination(enemigo.transform.position);
-            float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
-            //Debug.Log(distanceToTarget);
-            if (distanceToTarget < 1.2f)
-            {
-                //Debug.Log("Quitar vida");
-                float random = Random.Range(0, 10);
-                if (random < 9f)
-                {
-                    enemigo.quitarVida(this.daño);
-                }
-                else
-                {
-                    Debug.Log("Ataque fallido");
-                }
-            }
-            else
-            {
-                //Debug.Log("no estoy a rango para pegarle");
-            }
-        }
-        else
-        {
-            //Debug.Log("No hay enemigo");
-            enemigosCerca.RemoveAt(0);
-            if (enemigosCerca.Count == 0)
-            {
-                hayEnemigosCerca = false;
-                siguientePosicionExplorar = this.transform.position;
-            }
-        }
-        Task.current.Succeed();
-
-    }
-
-    [Task]
-    public void TengoHambre()
-    {
-        //Debug.Log("Hola");
-        //Debug.Log(this.hambre + " : hambre");
-        if (this.hambre <= 75)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void TengoMuchaHambre()
-    {
-        if (this.hambre <= 30)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void HayComida()
-    {
-        if (reina.totalComida <= 0)
-        {
-            Task.current.Fail();
-        }
-        else
-        {
-            Task.current.Succeed();
-        }
-    }
-
-    [Task]
-    public void Comer()
-    {
-        Debug.Log("comer");
-        if (comidaAComer == null)
-        {
-            Debug.Log("Tengo comida");
-            comidaAComer = reina.pedirComida();
-            if (comidaAComer != null)
-            {
-                agente.SetDestination(comidaAComer.transform.position);
-            }
-            else
-            {
-                Task.current.Fail();
-            }
-        }
-        else
-        {
-            if (Vector3.Distance(this.transform.position, comidaAComer.transform.position) < 0.2f)
-            {
-                Debug.Log("He llegado a la comida");
-                hambre += comidaAComer.comer();
-                if (comidaAComer.usosDeLaComida == 0)
-                {
-                    reina.sacarComidaSala(comidaAComer.misala, comidaAComer);
-                    Destroy(comidaAComer.gameObject);
-                    comidaAComer = null;
-                    Debug.Log("Comida destruida");
-                    Task.current.Succeed();
-                }
-
-            }
-        }
-
-    }
 
     [Task]
     public void TengoOrdenDeLaReina()

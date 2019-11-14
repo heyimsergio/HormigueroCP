@@ -11,9 +11,6 @@ public class Reina : HormigaGenerica
 
     #region atributos propios de la reina
 
-    NavMeshAgent agente;
-    public Vector3 siguientePosicionExplorar;
-
     //Poner huevos
     public int tiempoQueTardaEnPonerHuevo;
     public float tiempoQueLllevaPoniendoHuevo;
@@ -32,7 +29,6 @@ public class Reina : HormigaGenerica
     public List<Huevo> huevosQueTienenQueSerCuidados = new List<Huevo>();
 
     //Atacar
-    public bool hayEnemigosCerca;
     public EnemigoGenerico[] enemigosCercanos;
     public int numEnemigosCerca;
 
@@ -340,8 +336,6 @@ public class Reina : HormigaGenerica
     }
 
     #endregion
-
-
 
 
 
