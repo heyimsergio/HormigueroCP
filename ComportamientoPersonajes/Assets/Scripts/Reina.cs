@@ -43,6 +43,10 @@ public class Reina : HormigaGenerica
     //Comer
     public Comida comida;
 
+    //Bocadillo
+    public GameObject bocadillo;
+    public GameObject sprite;
+    public List<Sprite> spriteBocadillos = new List<Sprite>();
 
 
     
@@ -169,6 +173,9 @@ public class Reina : HormigaGenerica
         afueras = GameObject.FindObjectOfType<Outside>();
         initTime = Time.time;
         siguientePosicionExplorar = this.transform.position;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+
     }
 
     // Update is called once per frame
@@ -183,6 +190,7 @@ public class Reina : HormigaGenerica
         SimulateWorld();
         actualizarPercepcionesHormiguero();
         actualizarVariablesReina();
+        bocadillo.transform.rotation = Quaternion.Euler(90,-(sprite.transform.rotation.y), 0);
     }
 
      public void SimulateWorld()
@@ -444,6 +452,9 @@ public class Reina : HormigaGenerica
     [Task]
     public void PonerHuevos()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[1];
+        
         if (ponerHuevo)
         {
             if (hormigaAponer == TipoHormiga.NULL)
@@ -533,6 +544,10 @@ public class Reina : HormigaGenerica
     [Task]
     public void Explorar()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[0];
+        
+
         if (this.zonaDondeEsta == 1)
         {
             //Esta fuera, tiene que entrar
@@ -581,7 +596,7 @@ public class Reina : HormigaGenerica
 
                 }
             }
-        }
+        }        
         Task.current.Succeed();
     }
 

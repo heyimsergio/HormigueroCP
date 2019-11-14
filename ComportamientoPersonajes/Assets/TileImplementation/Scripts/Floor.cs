@@ -18,8 +18,8 @@ public class Floor : MonoBehaviour
     public int maxCorridor;
 
     //prefabs
-    public GameObject prefabGround;
-    public GameObject prefabRoom;
+    public GameObject[] prefabGroundList = new GameObject[5];
+    public GameObject[] prefabRoomList = new GameObject[7];
     public GameObject prefabCorridor;
     public GameObject prefabTile;
     public GameObject prefabAgujero;
@@ -61,7 +61,8 @@ public class Floor : MonoBehaviour
                 GameObject tileObject = Instantiate(prefabTile,GetComponentInParent<Transform>());
                 tileObject.transform.position = new Vector3(x + posX, this.transform.position.y, y + posZ);                
                 TileScript tile = tileObject.GetComponent<TileScript>();
-                    tile.initTile(x, y, depth, x, y, prefabGround);
+                int idx = (int) Random.Range(0.0f, 4.0f);
+                    tile.initTile(x, y, depth, x, y, prefabGroundList[idx]);
                 level[x, y] = tileObject;
             }
         }
@@ -310,7 +311,7 @@ public class Floor : MonoBehaviour
             case CorridorDir.RIGTH:
                 y = (int)(room.heigth /2);
                 x = (int) room.width -1;
-                tile = room.tiles[x, y];
+                tile = room.tiles[x, y];               
                 myTile = tile.GetComponent<TileScript>();
                 x = myTile.indexX+1;
                 y = myTile.indexY;
@@ -319,6 +320,7 @@ public class Floor : MonoBehaviour
                     if (i >= 0 && i < width)
                     {
                         tile = level[i, y];
+                        tile.transform.Rotate(0.0f, 90.0f, 0.0f);
                         myTile = tile.GetComponent<TileScript>();
                         if (myTile.tileType == TileScript.type.GROUND)
                         {
@@ -365,6 +367,7 @@ public class Floor : MonoBehaviour
                     if (i >= 0 && i < width)
                     {
                         tile = level[i, y];
+                        tile.transform.Rotate(0.0f, 90.0f, 0.0f);
                         myTile = tile.GetComponent<TileScript>();
                         if (myTile.tileType == TileScript.type.GROUND)
                         {
@@ -427,7 +430,7 @@ public class Floor : MonoBehaviour
                 return null;
             }
 
-            roomAux = new Room(roomWidth, roomHeigth, prefabRoom,roomType);
+            roomAux = new Room(roomWidth, roomHeigth, prefabRoomList, roomType);
             for (int i = x; i < x + roomWidth; i++)
             {
                 for (int j = y; j < y + roomHeigth; j++)
