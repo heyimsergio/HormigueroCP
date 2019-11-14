@@ -1,0 +1,10 @@
+tree("Root")
+	sequence
+		tree("Enemigo")
+
+tree("Enemigo")
+	fallback
+		sequence
+			HayHormigasCerca()
+			Atacar()
+		Explorar()

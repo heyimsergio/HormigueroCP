@@ -1,0 +1,33 @@
+tree("Root")
+	sequence
+		tree("Nurse")
+
+tree("Nurse")
+	fallback
+		sequence
+			HayEnemigosCerca()
+			fallback
+				sequence
+					fallback
+						HayHuevosCerca()
+						not
+							HayObrerasOSoldadosCerca()
+						ReinaEnPeligro()
+					Atacar()
+				Huir()
+		sequence
+			TengoMuchaHambre()
+			HayComida()
+			Comer()
+		sequence
+			HayHuevosQueNecesitanCuidados()
+			CuidarHuevos()
+		sequence
+			not 
+				HaySuficienteComida()
+			BuscarComida()
+		sequence
+			TengoHambre()
+			HayComida()
+			Comer()
+		Explorar()

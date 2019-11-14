@@ -1,0 +1,9 @@
+tree("Root")
+	sequence
+		tree("Reina")
+
+tree("Reina")
+	fallback
+		PonerHuevos()
+		ConstruirSala()
+		Explorar()

@@ -1,0 +1,7 @@
+tree("Root")
+	sequence
+		tree("Obrera")
+
+tree("Obrera")
+	fallback
+		Explorar()
