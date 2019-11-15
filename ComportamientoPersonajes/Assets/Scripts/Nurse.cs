@@ -24,6 +24,9 @@ public class Nurse : HormigaGenerica
     public bool hayHuevosCerca = false;
     public bool hayEnemigosCerca = false;
     public List <EnemigoGenerico> enemigosCerca = new List<EnemigoGenerico>();
+    public float tiempoEntreAtaques;
+    [HideInInspector]
+    public float tiempoEntreAtaquesMax = 0.5f;
 
     //Cuidar de huevos
     public int tiempoCuidandoHuevos = 2;
@@ -64,6 +67,8 @@ public class Nurse : HormigaGenerica
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         this.vida = 10;
         this.daño = 2;
+        tiempoEntreAtaquesMax = 0.5f;
+        this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
         siguientePosicionExplorar = this.transform.position;
     }
 
@@ -203,14 +208,27 @@ public class Nurse : HormigaGenerica
             //Debug.Log(distanceToTarget);
             if (distanceToTarget < 1.2f)
             {
-                //Debug.Log("Quitar vida");
-                float random = Random.Range(0, 10);
-                if (random < 9f)
+                Debug.Log("Tiempo entre ataques: " + tiempoEntreAtaques);
+                if (tiempoEntreAtaques <= 0)
                 {
-                    enemigo.quitarVida(this.daño);
-                } else
+                    Debug.Log("Ataque");
+                    float random = Random.Range(0, 10);
+                    if (random < 9f)
+                    {
+                        Debug.Log("Ataque acertado");
+                        enemigo.quitarVida(this.daño);
+                    }
+                    else
+                    {
+                        Debug.Log("Ataque fallido");
+                    }
+                    tiempoEntreAtaques = tiempoEntreAtaquesMax;
+                }
+                else 
                 {
-                    Debug.Log("Ataque fallido");
+                    Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigo.transform.position;
+                    agente.SetDestination(randomDirection);
+                    tiempoEntreAtaques -= Time.deltaTime;
                 }
             } else
             {
