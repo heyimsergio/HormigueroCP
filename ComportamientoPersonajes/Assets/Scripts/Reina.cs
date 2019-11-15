@@ -36,12 +36,7 @@ public class Reina : HormigaGenerica
     public HormigaGenerica hormigasACurar;
     public HormigaGenerica hormigasDesocupadas;
 
-    //Comer
-    public Comida comida;
 
-
-
-    
     #endregion
 
     #region logica global hormiguero
@@ -78,8 +73,6 @@ public class Reina : HormigaGenerica
     //FALTA ESTRUCTURA DE DATOS DEL MAPA
     private Floor hormiguero;
     private Outside afueras;
-
-
 
     public List<Room> salasHormigas = new List<Room>();
     public List<Room> salasComida = new List<Room>();
@@ -184,7 +177,7 @@ public class Reina : HormigaGenerica
         actualizarVariablesReina();
     }
 
-     public void SimulateWorld()
+    public void SimulateWorld()
     {
         crearComida();
     }
@@ -399,7 +392,7 @@ public class Reina : HormigaGenerica
     }
     #endregion
 
-    // devuleve una sala de cada tipo con espacio
+    // devuelve una sala de cada tipo con espacio
     #region geters de salas libres
     public Room getSalaLibreHormigas()
     {
@@ -783,7 +776,6 @@ public class Reina : HormigaGenerica
             sala.meterCosas();
         }
     }
-
 
     public Comida pedirComida()
     {
