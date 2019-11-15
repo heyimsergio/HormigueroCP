@@ -1,20 +1,12 @@
 tree("Root")
 	sequence
-		tree("Nurse")
+		tree("Soldado")
 
-tree("Nurse")
+tree("Soldado")
 	fallback
 		sequence
 			HayEnemigosCerca()
-			fallback
-				sequence
-					fallback
-						HayHuevosCerca()
-						not
-							HayObrerasOSoldadosCerca()
-						ReinaEnPeligro()
-					Atacar()
-				Huir()
+			Atacar()
 		sequence
 			TengoMuchaHambre()
 			HayComida()
@@ -23,20 +15,23 @@ tree("Nurse")
 			TengoOrdenDeLaReina()
 			fallback
 				sequence
-					TengoOrdenDeCuidarHuevos()
-					CuidarHuevos()
+					TengoOrdenDeAtacar()
+					Atacar()
 				sequence
 					TengoOrdenDeCurarHormiga()
 					CurarHormiga()
 				sequence
 					TengoOrdenDeBuscarComida()
 					BuscarComida()
-		sequence
-			HayHuevosCercaQueNecesitanCuidados()
-			CuidarHuevos()
+				sequence
+					TengoOrdenDePatrullar()
+					Patrullar()
 		sequence
 			HayHormigaQueCurarCerca()
 			CurarHormiga()
+		sequence
+			HaceMuchoQueHabiaEnemigos()
+			Patrullar()
 		sequence
 			TengoHambre()
 			HayComida()

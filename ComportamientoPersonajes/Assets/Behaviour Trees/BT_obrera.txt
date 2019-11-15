@@ -4,4 +4,44 @@ tree("Root")
 
 tree("Obrera")
 	fallback
+		sequence
+			HayEnemigosCerca()
+			fallback
+				sequence
+					fallback
+						not
+							HaySoldadosCerca()
+						ReinaEnPeligro()
+					Atacar()
+				Huir()
+		sequence
+			TengoMuchaHambre()
+			HayComida()
+			Comer()
+		sequence
+			TengoOrdenDeLaReina()
+			fallback
+				sequence
+					TengoOrdenDeAtacar()
+					Atacar()
+				sequence
+					TengoOrdenDeCurarHormiga()
+					CurarHormiga()
+				sequence
+					TengoOrdenDeBuscarComida()
+					BuscarComida()
+				sequence
+					TengoOrdenDeCavar()
+					Cavar()
+		sequence
+			HayHormigaQueCurarCerca()
+			CurarHormiga()
+		sequence
+			not 
+				HaySuficienteComida()
+			BuscarComida()
+		sequence
+			TengoHambre()
+			HayComida()
+			Comer()
 		Explorar()

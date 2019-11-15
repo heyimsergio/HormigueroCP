@@ -6,17 +6,6 @@ using UnityEngine.AI;
 
 public class Nurse : HormigaGenerica
 {
-    //Agente Navmesh
-    NavMeshAgent agente;
-    PandaBehaviour pb;
-    Floor hormigueroDentro; //Saber donde empieza el suelo para no meterte dentro del hormiguero cuando exploras
-    Outside hormigueroFuera;
-    //bool estaDentro = true; //True: está dentro, false: esta fuera
-    // bool saliendo = false;
-
-    // Comer
-    Comida comidaAComer;
-
     //Atacar
     public int numeroDeObrerasCerca = 0;
     public int numeroDeSoldadosCerca = 0;
@@ -49,12 +38,8 @@ public class Nurse : HormigaGenerica
     public Vector3 almacenComida;
 
     //Ordenes de la reina
-    public Reina reina;
     public bool meHanMandadoOrden = false;
     public enum ordenes {ORDEN1, ORDEN2};
-
-    //Explorar
-    public Vector3 siguientePosicionExplorar;
 
     // Start is called before the first frame update
     void Start()
@@ -76,9 +61,6 @@ public class Nurse : HormigaGenerica
     {
         actualizarHambre();
     }
-
-    
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -114,7 +96,6 @@ public class Nurse : HormigaGenerica
             {
                 huevoACuidar = aux;
             }
-
         }
     }
 
@@ -141,17 +122,6 @@ public class Nurse : HormigaGenerica
         }
     }
 
-    [Task]
-    public void HayEnemigosCerca()
-    {
-        if (hayEnemigosCerca)
-        {
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
 
     [Task]
     public void HayHuevosCerca()
@@ -159,7 +129,8 @@ public class Nurse : HormigaGenerica
         if (hayHuevosCerca)
         {
             Task.current.Succeed();
-        } else
+        }
+        else
         {
             Task.current.Fail();
         }
@@ -171,18 +142,6 @@ public class Nurse : HormigaGenerica
         if (numeroDeObrerasCerca > 0 || numeroDeSoldadosCerca > 0)
         {
             Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void ReinaEnPeligro()
-    {
-        if (reina.hayEnemigosCerca == true)
-        {
-            Task.current.Succeed();
         }
         else
         {
@@ -191,7 +150,7 @@ public class Nurse : HormigaGenerica
     }
 
     [Task]
-    public void Atacar()
+    public void TengoOrdenDeLaReina()
     {
         EnemigoGenerico enemigo = enemigosCerca[0];
         if (enemigo != null)
@@ -254,116 +213,60 @@ public class Nurse : HormigaGenerica
     }
 
     [Task]
-    public void Huir()
+    public void TengoOrdenDeCuidarHuevos()
     {
-        Task.current.Succeed();
-        Debug.Log("Huir");
+        Task.current.Fail();
     }
 
     [Task]
-    public void Explorar()
+    public void CuidarHuevos()
     {
-        if (this.zonaDondeEsta == 1)
+        if (posHuevo == Vector3.zero)
         {
-            //Esta fuera, tiene que entrar
-            Debug.Log("Estoy fuera ais que tengo que entrar");
-            Vector3 randomDirection;
-            NavMeshHit aux;
-            bool aux2;
-            do
-            {
-                randomDirection = UnityEngine.Random.insideUnitSphere * 100 + this.transform.position;
-                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-            } while (aux.position.x < (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2)) || !aux2);
-            //Debug.Log("Salir hacia: " + aux.position);
-            //saliendo = true;
-            agente.SetDestination(aux.position);
-            siguientePosicionExplorar = aux.position;
-            //
-        } else
-        {
-            //
-            if (this.zonaDondeEsta == 0)
-            {
-                Debug.Log("Estoy dentro, asi que exploro " + siguientePosicionExplorar + " " + transform.position);
-                float distanceToTarget = Vector3.Distance(this.transform.position, siguientePosicionExplorar);
-                Debug.Log(distanceToTarget);
-                if (distanceToTarget < 1.8f)
-                {
-                    Debug.Log("Esta cerca");
-                    Vector3 randomDirection;
-                    NavMeshHit aux;
-                    bool aux2;
-                    do
-                    {
-                        randomDirection = UnityEngine.Random.insideUnitSphere * 10 + this.transform.position;
-                        aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-                    } while (!aux2 || (aux.position.x < (hormigueroDentro.transform.position.x - (hormigueroDentro.width/2))));
-                    //saliendo = true;
-                    agente.SetDestination(aux.position);
-                    siguientePosicionExplorar = aux.position;
-                } else
-                {
-                    Debug.Log("Esta lejos, voy hacia el");
-                    agente.SetDestination(siguientePosicionExplorar);
+            agente.SetDestination(huevoACuidar.transform.position);
+            posHuevo = huevoACuidar.transform.position;
+        }
 
+        if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
+        {
+            if (huevoACuidar.puedeSerCuidado)
+            {
+                TiempoActual -= Time.deltaTime;
+                if (TiempoActual <= 0)
+                {
+                    huevoACuidar.cuidar();
+                    TiempoActual = tiempoCuidandoHuevos;
+                    huevoACuidar = null;
+                    posHuevo = Vector3.zero;
+                    Task.current.Succeed();
                 }
             }
-        }
-        Task.current.Succeed();
-    }
-
-    [Task]
-    public void TengoHambre()
-    {
-        //Debug.Log("Hola");
-        //Debug.Log(this.hambre + " : hambre");
-        if (this.hambre <= 75)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
+            else
+            {
+                TiempoActual = tiempoCuidandoHuevos;
+                huevoACuidar = null;
+                posHuevo = Vector3.zero;
+                Task.current.Fail();
+            }
         }
     }
 
     [Task]
-    public void TengoMuchaHambre()
+    public void TengoOrdenDeCurarHormiga()
     {
-        if (this.hambre <= 30)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }
+        Task.current.Fail();
     }
 
     [Task]
-    public void HayComida()
+    public void CurarHormiga()
     {
-        if (reina.totalComida <= 0)
-        {
-            Task.current.Fail();
-        } else
-        {
-            Task.current.Succeed();
-        }
+        Task.current.Fail();
     }
 
     [Task]
-    public void HaySuficienteComida()
+    public void TengoOrdenDeBuscarComida()
     {
-        if (reina.totalComida < 5)
-        {
-            Task.current.Fail();
-        }
-        else
-        {
-            Task.current.Succeed();
-        }
+        Task.current.Fail();
     }
 
     [Task]
@@ -371,7 +274,7 @@ public class Nurse : HormigaGenerica
     {
         if (hayEnemigosCerca)
         {
-            if(comida != null)
+            if (comida != null)
             {
                 comida.laEstanLLevando = false;
                 comida.transform.SetParent(null);
@@ -393,18 +296,19 @@ public class Nurse : HormigaGenerica
                 if (distComida < 0.2f)
                 {
                     //Debug.Log("Estamos donde la comida");
-                    if(salaDejarComida == null)
+                    if (salaDejarComida == null)
                     {
                         salaDejarComida = reina.getSalaLibreComida();
                         posDejarComida = salaDejarComida.getRandomPosition();
-                        if(salaDejarComida == null)
+                        if (salaDejarComida == null)
                         {
                             comida.laEstanLLevando = false;
                             comida.transform.SetParent(null);
                             comida = null;
                             Task.current.Fail();
                         }
-                    } else 
+                    }
+                    else
 
                     {
                         //Debug.Log("Hay sala disponible, asi que la llevamos");
@@ -413,7 +317,7 @@ public class Nurse : HormigaGenerica
                         comida.transform.position = new Vector3(comida.transform.position.x, comida.transform.position.y, comida.transform.position.z);
                         agente.SetDestination(posDejarComida);
                         //Debug.Log("Llegado");
-                    } 
+                    }
 
                 }
                 else
@@ -439,7 +343,8 @@ public class Nurse : HormigaGenerica
                     //saliendo = true;
                     agente.SetDestination(aux.position);
                     siguientePosicionExplorar = aux.position;
-                } else
+                }
+                else
                 {
                     agente.SetDestination(siguientePosicionExplorar);
                 }
@@ -468,7 +373,7 @@ public class Nurse : HormigaGenerica
             }
             else if (this.zonaDondeEsta == 0 && comida != null)
             {
-                
+
                 if (salaDejarComida != null)
                 {
                     if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
@@ -481,11 +386,13 @@ public class Nurse : HormigaGenerica
                         comida = null;
                         salaDejarComida = null;
                         Task.current.Succeed();
-                    } else
+                    }
+                    else
                     {
                         //Debug.Log("Distancia es mayor");
                     }
-                } else
+                }
+                else
                 {
                     //Debug.Log("he llegado pero nohay sala");
                 }
@@ -496,88 +403,87 @@ public class Nurse : HormigaGenerica
 
     // Ahora voy a cambiarlos para que se lo pregunten a la reina, pero deberian saberl solas.
     [Task]
-    public void HayHuevosQueNecesitanCuidados()
+    public void HayHuevosCercaQueNecesitanCuidados()
     {
         Debug.Log("Pregunto por cuidar Huevos");
         Debug.Log("La cuenta de huevos sin cuidar es: " + reina.huevosQueTienenQueSerCuidados.Count);
-        if(huevoACuidar != null)
+        if (huevoACuidar != null)
         {
             Task.current.Succeed();
-        } else if (reina.huevosQueTienenQueSerCuidados.Count > 0)
+        }
+        else if (reina.huevosQueTienenQueSerCuidados.Count > 0)
         {
             huevoACuidar = reina.huevosQueTienenQueSerCuidados[Random.Range(0, reina.huevosQueTienenQueSerCuidados.Count)];
             Task.current.Succeed();
             return;
         }
-      
+
         Task.current.Fail();
     }
 
     [Task]
-    public void CuidarHuevos()
+    public void HayHormigaQueCurarCerca()
     {
-        if (posHuevo == Vector3.zero)
-        {
-            agente.SetDestination(huevoACuidar.transform.position);
-            posHuevo = huevoACuidar.transform.position;
-        }
-
-        if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
-        {
-            if (huevoACuidar.puedeSerCuidado)
-            {
-                TiempoActual -= Time.deltaTime;
-                if(TiempoActual <= 0)
-                {
-                    huevoACuidar.cuidar();
-                    TiempoActual = tiempoCuidandoHuevos;
-                    huevoACuidar = null;
-                    posHuevo = Vector3.zero;
-                    Task.current.Succeed();
-                }
-            } else
-            {
-                TiempoActual = tiempoCuidandoHuevos;
-                huevoACuidar = null;
-                posHuevo = Vector3.zero;
-                Task.current.Fail();
-            }
-        }
+        Task.current.Fail();
     }
 
     [Task]
-    public void Comer()
+    public void Explorar()
     {
-        Debug.Log("comer");
-        if (comidaAComer== null)
+        if (this.zonaDondeEsta == 1)
         {
-            Debug.Log("Tengo comida");
-            comidaAComer = reina.pedirComida();
-            if (comidaAComer != null)
+            //Esta fuera, tiene que entrar
+            Debug.Log("Estoy fuera ais que tengo que entrar");
+            Vector3 randomDirection;
+            NavMeshHit aux;
+            bool aux2;
+            do
             {
-                agente.SetDestination(comidaAComer.transform.position);
-            } else
-            {
-                Task.current.Fail();
-            }
-        } else
+                randomDirection = UnityEngine.Random.insideUnitSphere * 100 + this.transform.position;
+                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+            } while (aux.position.x < (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2)) || !aux2);
+            //Debug.Log("Salir hacia: " + aux.position);
+            //saliendo = true;
+            agente.SetDestination(aux.position);
+            siguientePosicionExplorar = aux.position;
+            //
+        }
+        else
         {
-            if (Vector3.Distance(this.transform.position, comidaAComer.transform.position) < 0.2f)
+            //
+            if (this.zonaDondeEsta == 0)
             {
-                Debug.Log("He llegado a la comida");
-                hambre += comidaAComer.comer();
-                if (comidaAComer.usosDeLaComida == 0)
+                Debug.Log("Estoy dentro, asi que exploro " + siguientePosicionExplorar + " " + transform.position);
+                float distanceToTarget = Vector3.Distance(this.transform.position, siguientePosicionExplorar);
+                Debug.Log(distanceToTarget);
+                if (distanceToTarget < 1.8f)
                 {
-                    reina.sacarComidaSala(comidaAComer.misala,comidaAComer);
-                    Destroy(comidaAComer.gameObject);
-                    comidaAComer = null;
-                    Debug.Log("Comida destruida");
-                    Task.current.Succeed();
+                    Debug.Log("Esta cerca");
+                    Vector3 randomDirection;
+                    NavMeshHit aux;
+                    bool aux2;
+                    do
+                    {
+                        randomDirection = UnityEngine.Random.insideUnitSphere * 10 + this.transform.position;
+                        aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+                    } while (!aux2 || (aux.position.x < (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2))));
+                    //saliendo = true;
+                    agente.SetDestination(aux.position);
+                    siguientePosicionExplorar = aux.position;
                 }
+                else
+                {
+                    Debug.Log("Esta lejos, voy hacia el");
+                    agente.SetDestination(siguientePosicionExplorar);
 
+                }
             }
         }
-
+        Task.current.Succeed();
     }
+
+
+    
+
 
 }
