@@ -112,6 +112,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &370589108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 370589109}
+  m_Layer: 0
+  m_Name: LinkDentro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &370589109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370589108}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 85, y: 0, z: 25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &434455673
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +309,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451619044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 91.46, y: 0.016666668, z: 23.05}
+  m_LocalPosition: {x: 85, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2085257191}
@@ -343,12 +373,24 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   pesoQuePuedenTransportar: 0
+  estaLuchando: 0
+  hayOrdenDeAtacar: 0
+  enemigoAlQueAtacar: {fileID: 0}
+  hayOrdenBuscarComida: 0
+  hayOrdenCuidarHuevos: 0
+  agente: {fileID: 0}
+  pb: {fileID: 0}
+  hormigueroDentro: {fileID: 0}
+  hormigueroFuera: {fileID: 0}
+  hayEnemigosCerca: 0
+  enemigosCerca: []
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
+  comidaAComer: {fileID: 0}
+  reina: {fileID: 0}
   numeroDeObrerasCerca: 0
   numeroDeSoldadosCerca: 0
   reinaEstaCerca: 0
   hayHuevosCerca: 0
-  hayEnemigosCerca: 0
-  enemigosCerca: []
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 1000
   tiempoCuidandoHuevos: 0
@@ -361,9 +403,7 @@ MonoBehaviour:
   tiempoParaCurar: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   almacenComida: {x: 0, y: 0, z: 0}
-  reina: {fileID: 0}
   meHanMandadoOrden: 0
-  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
 --- !u!114 &451619049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,7 +449,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451619044}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
   m_Name: 
@@ -657,12 +697,12 @@ OffMeshLink:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534962857}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_AreaIndex: 0
   m_AgentTypeID: 0
-  m_Start: {fileID: 0}
-  m_End: {fileID: 0}
+  m_Start: {fileID: 370589109}
+  m_End: {fileID: 2039563717}
   m_CostOverride: -1
   m_BiDirectional: 1
   m_Activated: 1
@@ -987,12 +1027,12 @@ OffMeshLink:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943513750}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_AreaIndex: 0
   m_AgentTypeID: 0
-  m_Start: {fileID: 0}
-  m_End: {fileID: 0}
+  m_Start: {fileID: 370589109}
+  m_End: {fileID: 2039563717}
   m_CostOverride: -1
   m_BiDirectional: 1
   m_Activated: 1
@@ -1319,12 +1359,12 @@ OffMeshLink:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1163372116}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_AreaIndex: 0
   m_AgentTypeID: 0
-  m_Start: {fileID: 0}
-  m_End: {fileID: 0}
+  m_Start: {fileID: 370589109}
+  m_End: {fileID: 2039563717}
   m_CostOverride: -1
   m_BiDirectional: 1
   m_Activated: 1
@@ -1917,12 +1957,12 @@ OffMeshLink:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1482372612}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_AreaIndex: 0
   m_AgentTypeID: 0
-  m_Start: {fileID: 0}
-  m_End: {fileID: 0}
+  m_Start: {fileID: 370589109}
+  m_End: {fileID: 2039563717}
   m_CostOverride: -1
   m_BiDirectional: 1
   m_Activated: 1
@@ -2153,12 +2193,24 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   pesoQuePuedenTransportar: 0
+  estaLuchando: 0
+  hayOrdenDeAtacar: 0
+  enemigoAlQueAtacar: {fileID: 0}
+  hayOrdenBuscarComida: 0
+  hayOrdenCuidarHuevos: 0
+  agente: {fileID: 0}
+  pb: {fileID: 0}
+  hormigueroDentro: {fileID: 0}
+  hormigueroFuera: {fileID: 0}
+  hayEnemigosCerca: 0
+  enemigosCerca: []
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
+  comidaAComer: {fileID: 0}
+  reina: {fileID: 0}
   numeroDeObrerasCerca: 0
   numeroDeSoldadosCerca: 0
   reinaEstaCerca: 0
   hayHuevosCerca: 0
-  hayEnemigosCerca: 0
-  enemigosCerca: []
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 1000
   tiempoCuidandoHuevos: 0
@@ -2171,9 +2223,7 @@ MonoBehaviour:
   tiempoParaCurar: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   almacenComida: {x: 0, y: 0, z: 0}
-  reina: {fileID: 0}
   meHanMandadoOrden: 0
-  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
 --- !u!114 &1569208530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2245,7 +2295,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569208527}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 91.46, y: 0.016666668, z: 24.75}
+  m_LocalPosition: {x: 85, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1818423900}
@@ -2260,7 +2310,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569208527}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
   m_Name: 
@@ -2301,7 +2351,20 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   pesoQuePuedenTransportar: 0
+  estaLuchando: 0
+  hayOrdenDeAtacar: 0
+  enemigoAlQueAtacar: {fileID: 0}
+  hayOrdenBuscarComida: 0
+  hayOrdenCuidarHuevos: 0
+  agente: {fileID: 0}
+  pb: {fileID: 0}
+  hormigueroDentro: {fileID: 0}
+  hormigueroFuera: {fileID: 0}
+  hayEnemigosCerca: 0
+  enemigosCerca: []
   siguientePosicionExplorar: {x: 0, y: 0, z: 0}
+  comidaAComer: {fileID: 0}
+  reina: {fileID: 0}
   tiempoQueTardaEnPonerHuevo: 3
   tiempoQueLllevaPoniendoHuevo: 0
   estaPoniendoHuevo: 0
@@ -2313,7 +2376,6 @@ MonoBehaviour:
   tiempoRestanteHuevo: 0
   numeroDeNurses: 0
   huevosQueTienenQueSerCuidados: []
-  hayEnemigosCerca: 0
   enemigosCercanos: []
   numEnemigosCerca: 0
   hormigasACurar: {fileID: 0}
@@ -2359,6 +2421,7 @@ MonoBehaviour:
   importanciaSoldados: 0
   HayQueBuscarComida: 0
   hormigaMuerta: 0
+  umbralHormigasAtacando: 0
   TIEMPO1: 0
   TIEMPO2: 0
   TIEMPO3: 0
@@ -2382,7 +2445,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646566900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 85, y: 0.16, z: 20.8}
+  m_LocalPosition: {x: 85, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 711407350}
@@ -2486,12 +2549,24 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   pesoQuePuedenTransportar: 0
+  estaLuchando: 0
+  hayOrdenDeAtacar: 0
+  enemigoAlQueAtacar: {fileID: 0}
+  hayOrdenBuscarComida: 0
+  hayOrdenCuidarHuevos: 0
+  agente: {fileID: 0}
+  pb: {fileID: 0}
+  hormigueroDentro: {fileID: 0}
+  hormigueroFuera: {fileID: 0}
+  hayEnemigosCerca: 0
+  enemigosCerca: []
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
+  comidaAComer: {fileID: 0}
+  reina: {fileID: 0}
   numeroDeObrerasCerca: 0
   numeroDeSoldadosCerca: 0
   reinaEstaCerca: 0
   hayHuevosCerca: 0
-  hayEnemigosCerca: 0
-  enemigosCerca: []
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 1000
   tiempoCuidandoHuevos: 0
@@ -2504,9 +2579,7 @@ MonoBehaviour:
   tiempoParaCurar: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   almacenComida: {x: 0, y: 0, z: 0}
-  reina: {fileID: 0}
   meHanMandadoOrden: 0
-  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
 --- !u!114 &1664277722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2578,7 +2651,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664277719}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 90.47, y: 0.016666668, z: 22.39}
+  m_LocalPosition: {x: 85, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1934602681}
@@ -2593,7 +2666,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664277719}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
   m_Name: 
@@ -2794,8 +2867,21 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   pesoQuePuedenTransportar: 0
-  numeroDeSoldadosCerca: 0
+  estaLuchando: 0
+  hayOrdenDeAtacar: 0
+  enemigoAlQueAtacar: {fileID: 0}
+  hayOrdenBuscarComida: 0
+  hayOrdenCuidarHuevos: 0
+  agente: {fileID: 0}
+  pb: {fileID: 0}
+  hormigueroDentro: {fileID: 0}
+  hormigueroFuera: {fileID: 0}
   hayEnemigosCerca: 0
+  enemigosCerca: []
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
+  comidaAComer: {fileID: 0}
+  reina: {fileID: 0}
+  numeroDeSoldadosCerca: 0
   tiempoParaHacerTunel: 0
   posicionInicialTunel: {x: 0, y: 0, z: 0}
   posicionFinalTunel: {x: 0, y: 0, z: 0}
@@ -2804,9 +2890,7 @@ MonoBehaviour:
   comida: {fileID: 0}
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   almacenComida: {x: 0, y: 0, z: 0}
-  reina: {fileID: 0}
   meHanMandadoOrden: 0
-  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
 --- !u!114 &1895791245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2878,7 +2962,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895791242}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 90.68, y: 0.016666668, z: 23.84}
+  m_LocalPosition: {x: 85, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 473553770}
@@ -3152,6 +3236,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2039563716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2039563717}
+  m_Layer: 0
+  m_Name: LinkFuera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2039563717
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039563716}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 25, y: 0, z: 25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2085257190
 GameObject:
   m_ObjectHideFlags: 0

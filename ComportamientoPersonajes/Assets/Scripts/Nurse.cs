@@ -11,8 +11,6 @@ public class Nurse : HormigaGenerica
     public int numeroDeSoldadosCerca = 0;
     public bool reinaEstaCerca = false;
     public bool hayHuevosCerca = false;
-    public bool hayEnemigosCerca = false;
-    public List <EnemigoGenerico> enemigosCerca = new List<EnemigoGenerico>();
     public float tiempoEntreAtaques;
     [HideInInspector]
     public float tiempoEntreAtaquesMax = 0.5f;
@@ -152,7 +150,7 @@ public class Nurse : HormigaGenerica
     [Task]
     public void TengoOrdenDeLaReina()
     {
-        EnemigoGenerico enemigo = enemigosCerca[0];
+        /*EnemigoGenerico enemigo = enemigosCerca[0];
         if (enemigo != null)
         {
             if (!estaLuchando)
@@ -209,7 +207,9 @@ public class Nurse : HormigaGenerica
             }
         }
         Task.current.Succeed();
-        
+        */
+        Task.current.Fail();
+
     }
 
     [Task]

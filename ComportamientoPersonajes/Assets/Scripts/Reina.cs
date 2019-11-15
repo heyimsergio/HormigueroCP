@@ -784,10 +784,15 @@ public class Reina : HormigaGenerica
         }
     }
 
+
     public Comida pedirComida()
     {
-      return ComidaTotal[0];
-        
+        if(ComidaTotal.Count > 0)
+        {
+            return ComidaTotal[0];
+        }
+
+        return null;
     }
 
     public void huevoNecesitaCuidado(Huevo miHuevo)
@@ -816,7 +821,7 @@ public class Reina : HormigaGenerica
 
     }
 
-    public void HomirgaDejaDeAtacar()
+    public void HormigaDejaDeAtacar()
     {
         numHormigasAtacando--;
     }

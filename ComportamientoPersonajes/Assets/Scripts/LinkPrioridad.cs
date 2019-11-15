@@ -7,8 +7,8 @@ public class LinkPrioridad : MonoBehaviour
 {
 
     public NavMeshAgent agent;
-    public OffMeshLink link;
-    private float oldLinkCost;
+    public NavMeshLink link;
+    private int oldLinkCost;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,8 @@ public class LinkPrioridad : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (agent.currentOffMeshLinkData.valid)
+        //if (agent.currentOffMeshLinkData.valid)
+        if (agent.isOnOffMeshLink)
         {
             AcquireOffmeshLink();
         }
@@ -34,9 +35,9 @@ public class LinkPrioridad : MonoBehaviour
     {
         if (link == null)
         {
-            link = agent.currentOffMeshLinkData.offMeshLink;
-            oldLinkCost = link.costOverride;
-            link.costOverride = 1000.0f;
+            link = (NavMeshLink) agent.navMeshOwner;
+            oldLinkCost = link.costModifier;
+            link.costModifier = 1000;
             //          link.activated = false;
         }
     }
@@ -45,7 +46,7 @@ public class LinkPrioridad : MonoBehaviour
     {
         if (link != null)
         {
-            link.costOverride = oldLinkCost;
+            link.costModifier = oldLinkCost;
             //          link.activated = true;
             link = null;
         }
