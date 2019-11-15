@@ -123,26 +123,6 @@ public class Obrera : HormigaGenerica
     }
 
     [Task]
-    public void ReinaEnPeligro()
-    {
-        if (reina.hayEnemigosCerca == true)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void Huir()
-    {
-        Task.current.Succeed();
-        Debug.Log("Huir");
-    }
-
-    [Task]
     public void TengoOrdenDeLaReina()
     {
         Task.current.Fail();

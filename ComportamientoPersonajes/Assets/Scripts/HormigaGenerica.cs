@@ -158,6 +158,19 @@ public class HormigaGenerica : PersonajeGenerico
     }
 
     [Task]
+    public void ReinaEnPeligro()
+    {
+        if (reina.hayEnemigosCerca == true)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
     public void Comer()
     {
         Debug.Log("comer");
@@ -192,6 +205,13 @@ public class HormigaGenerica : PersonajeGenerico
             }
         }
 
+    }
+
+    [Task]
+    public void Huir()
+    {
+        Task.current.Succeed();
+        Debug.Log("Huir");
     }
 
 }
