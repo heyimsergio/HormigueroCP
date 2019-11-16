@@ -11,8 +11,7 @@ public class EnemigoGenerico : PersonajeGenerico
     NavMeshAgent agente;
     PandaBehaviour pb;
 
-    protected int numeroHormigasCerca;
-    public HormigaGenerica hormigaCerca;
+    public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
     protected int tiempoParaIrse;
 
     public float tiempoEntreAtaques;
@@ -41,77 +40,103 @@ public class EnemigoGenerico : PersonajeGenerico
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Colision enemigo con algo ");
-        if (other.gameObject.tag == "Hormiga")
+        Debug.Log("Colision enemigo con algo");
+        if (other.gameObject.tag == "Reina" ||
+            other.gameObject.tag == "Nurse" ||
+            other.gameObject.tag == "Obrera" ||
+            other.gameObject.tag == "Soldado")
         {
             Debug.Log("Colision con hormiga");
+
+            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
+            if (!hormigasCerca.Contains(aux))
+            {
+                hormigasCerca.Add(aux);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Reina" ||
+            other.gameObject.tag == "Nurse" ||
+            other.gameObject.tag == "Obrera" ||
+            other.gameObject.tag == "Soldado")
+        {
+            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
+            if (hormigasCerca.Contains(aux))
+            {
+                hormigasCerca.Remove(aux);
+            }
         }
     }
 
     [Task]
     public void HayHormigasCerca()
     {
-        if (hormigaCerca == null)
-        {
-            Task.current.Fail();
-        } else
+        if (hormigasCerca.Count != 0)
         {
             Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
         }
     }
 
     [Task]
     public void Atacar()
     {
-        if (hormigaCerca != null)
+        if (hormigasCerca != null)
         {
-            agente.SetDestination(hormigaCerca.transform.position);
-            float distanceToTarget = Vector3.Distance(transform.position, hormigaCerca.transform.position);
-            if (distanceToTarget < 1.2f)
+            HormigaGenerica hormigaCerca = hormigasCerca[0];
+            if (hormigaCerca != null)
             {
-                if (tiempoEntreAtaques <= 0)
+                agente.SetDestination(hormigaCerca.transform.position);
+                float distanceToTarget = Vector3.Distance(transform.position, hormigaCerca.transform.position);
+                if (distanceToTarget < 1.2f)
                 {
-                    float random = Random.Range(0, 10);
-                    if (random < 9f)
+                    if (tiempoEntreAtaques <= 0)
                     {
-                        if (hormigaCerca.vida - this.daño <= 0)
+                        float random = Random.Range(0, 10);
+                        if (random < 9f)
                         {
                             hormigaCerca.quitarVida(this.daño);
-                            hormigaCerca = null;
                         }
                         else
                         {
-                            hormigaCerca.quitarVida(this.daño);
+                            //Debug.Log("Ataque fallido");
                         }
-                        
+                        tiempoEntreAtaques = tiempoEntreAtaquesMax;
                     }
                     else
                     {
-                        //Debug.Log("Ataque fallido");
+                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + hormigaCerca.transform.position;
+                        agente.SetDestination(randomDirection);
+                        tiempoEntreAtaques -= Time.deltaTime;
                     }
-                    tiempoEntreAtaques = tiempoEntreAtaquesMax;
+
                 }
-                else{
-                    Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + hormigaCerca.transform.position;
-                    agente.SetDestination(randomDirection);
-                    tiempoEntreAtaques -= Time.deltaTime;
+            }
+            else
+            {
+                hormigasCerca.RemoveAt(0);
+                if (hormigasCerca.Count == 0)
+                {
+                    siguientePosicion = this.transform.position;
+                    Task.current.Succeed();
                 }
-                
             }
         }
-        Task.current.Succeed();
     }
 
-    public bool quitarVida(int damage)
+    public void quitarVida(int damage)
     {
         Debug.Log("Enemigo perdiendo vida");
         this.vida -= damage;
         if (vida <= 0)
         {
             Destroy(this.gameObject);
-            return true;
         }
-        return false;
     }
 
     [Task]

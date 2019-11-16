@@ -10,16 +10,20 @@ public class Huevo : MonoBehaviour
     public float maxTimeParaCuidar;
     public bool necesitaCuidados = false;
     public bool puedeSerCuidado = false;
+    public HormigaGenerica siendoCuidadoPor = null;
     public int umbralDeAvisoCuidarHuevo;
     public int umbralDePoderseCuidar;
     public Room myRoom;
     private Reina miReina;
+    Collider huevoCollider;
 
     // Start is called before the first frame update
     void Start()
     {
         miReina = GameObject.FindObjectOfType<Reina>();
         tiempoQueAguantaSinCuidar = maxTimeParaCuidar;
+        huevoCollider = GetComponent<Collider>();
+        huevoCollider.isTrigger = true;
     }
 
     public void init(Room aux, Reina.TipoHormiga tipo)

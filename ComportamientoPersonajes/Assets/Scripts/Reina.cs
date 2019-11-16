@@ -13,7 +13,7 @@ public class Reina : HormigaGenerica
 
     //Poner huevos
     public int tiempoQueTardaEnPonerHuevo;
-    public float tiempoQueLllevaPoniendoHuevo;
+    public float tiempoQueLlevaPoniendoHuevo;
     public bool estaPoniendoHuevo = false;
     private bool tienePosicionPonerHuevo = false;
     private TipoHormiga hormigaAponer = TipoHormiga.NULL;
@@ -36,7 +36,6 @@ public class Reina : HormigaGenerica
     public HormigaGenerica hormigasACurar;
     public HormigaGenerica hormigasDesocupadas;
 
-
     #endregion
 
     #region logica global hormiguero
@@ -46,13 +45,13 @@ public class Reina : HormigaGenerica
     public List<EnemigoGenerico> enemigosTotales = new List<EnemigoGenerico>();
     public List<Comida> ComidaTotal = new List<Comida>();
     public List<Huevo> huevosTotal = new List<Huevo>();
-    public HormigaGenerica[] hormigasHeridas;
+    public List<HormigaGenerica> hormigasHeridas = new List<HormigaGenerica>();
     public List<Nurse> nursesOcupadas;
-    public Obrera[] obrerasOcupadas;
-    public List<Soldado> soldadosOcupadas = new List<Soldado>();
+    //public Obrera[] obrerasOcupadas;
+    //public List<Soldado> soldadosOcupadas = new List<Soldado>();
     public List<Nurse> nursesDesocupadas = new List<Nurse>();
-    public List<Obrera> obrerasDesocupadas = new List<Obrera>();
-    public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
+    //public List<Obrera> obrerasDesocupadas = new List<Obrera>();
+    //public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
     public int numHormigasCuidandoHuevos;
     public int numHormigasAtacando;
     public int numHormigasBuscandoComida;
@@ -70,6 +69,7 @@ public class Reina : HormigaGenerica
     public int totalHormigas;
     public int totalComida;
     public int totalHuevos;
+
     //FALTA ESTRUCTURA DE DATOS DEL MAPA
     private Floor hormiguero;
     private Outside afueras;
@@ -87,8 +87,6 @@ public class Reina : HormigaGenerica
     // CosasVistas
     public LinkedList<Comida> ComidaVista = new LinkedList<Comida>();
 
-
-
     //IMPORTANCIA DE OBJETIVOS
     public float importanciaHormigas;
     public float importanciaHuevos;
@@ -98,7 +96,6 @@ public class Reina : HormigaGenerica
     public float importanciaObreras;
     public float importanciaSoldados;
 
-
     //NECESIDADES DEL HORMIGUERO
     // MandarHordenes:
     enum tipoOrden { CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA }
@@ -106,7 +103,6 @@ public class Reina : HormigaGenerica
     private bool HayQueCrearSalasComida = false;
     private bool HayQueCrearSalasHuevos = false;
     private bool HayQueCrearSalas = false;
-
 
     public bool HayQueBuscarComida = false;
     private bool HayQueAtacar = false;
@@ -119,13 +115,11 @@ public class Reina : HormigaGenerica
     // para mandar a atacar;
     public float umbralHormigasAtacando;
 
-    
     // tiempos de cambio de prioridades
     public int TIEMPO1 = 2*60+30; // 2 mins y 30 segs 
     public int TIEMPO2 = 5*60;// 5 mins
     public int TIEMPO3 = 7*60 +30; // 7 mins y 30 segs
     public int TIEMPO4 = 10*60;
-
 
     // planificador de necesidad  de crear salas
     public float umbralCapacidadHormigas = 0.2f;
@@ -133,7 +127,6 @@ public class Reina : HormigaGenerica
     public float umbralCapacidadComida = 0.3f;
     public int tamañoMaxColaConstruccionSalas;
     public int salasEnConstruccion = 0;
-
 
     // planificador necesidades
     public float umbralComida = 0.4f;
@@ -153,7 +146,7 @@ public class Reina : HormigaGenerica
     // Start is called before the first frame update
     void Start()
     {
-        tiempoQueLllevaPoniendoHuevo = 0;
+        tiempoQueLlevaPoniendoHuevo = 0;
         tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
         tamañoMaxColaConstruccionSalas = 1;
         agente = this.gameObject.GetComponent<NavMeshAgent>();
@@ -285,12 +278,11 @@ public class Reina : HormigaGenerica
     {
         if(totalHormigas * umbralComida  > totalComida)
         {
-            Debug.Log(totalHormigas * umbralComida);
             if(totalComida < capacidadTotalDeComida)
             {
                 HayQueBuscarComida = true;
-                //Debug.Log("Hay que buscar comida");
-            } else
+            }
+            else
             {
                 HayQueBuscarComida = false;
             }
@@ -320,7 +312,7 @@ public class Reina : HormigaGenerica
     }
 
     // se ha muerto una hormiga
-    public void chaeckearNecesiadadPatrullar()
+    public void checkearNecesidadPatrullar()
     {
         if (hormigaMuerta)
         {
@@ -332,8 +324,6 @@ public class Reina : HormigaGenerica
     }
 
     #endregion
-
-
 
     // Devuelve la sala porque sera necesario asignarsela a las homirmigas comidas y huevos para manejarlas
     #region Meter Cosas en salas
@@ -431,6 +421,395 @@ public class Reina : HormigaGenerica
     }
     #endregion
 
+    // Alertas que recibe la reina
+
+    public void recibirAlertaComida(Comida comida)
+    {
+        if (!ComidaVista.Contains(comida) && !comida.laEstanLLevando)
+        {
+            ComidaVista.AddLast(comida);
+        }
+    }
+
+    public void recibirAlertaEnemigo(EnemigoGenerico enemigo)
+    {
+        if (!enemigosTotales.Contains(enemigo))
+        {
+            enemigosTotales.Add(enemigo);
+        }
+    }
+
+    // Tareas de la reina
+
+    [Task]
+    public void HaySoldadosLibres()
+    {
+        /*if(soldadosDesocupadas.Count > 0)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }*/
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void HayObrerasLibres()
+    {
+        /*if(obrerasDesocupadas.Count > 0)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }*/
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void HayNursesLibres()
+    {
+        if(nursesDesocupadas.Count > 0)
+        {
+            Task.current.Succeed();
+        } else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    #region Ordenes Atacar
+    [Task]
+    public void SiendoAtacados()
+    {
+        if (HayQueAtacar)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void SuficientesLuchando()
+    {
+        if (totalHormigas * umbralHormigasAtacando > numHormigasAtacando)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void OrdenAtacarSoldado()
+    {
+        /*Soldado aux = soldadosDesocupadas[0];
+        if (aux != null)
+        {
+            aux.hayOrdenDeAtacar = true;
+            aux.enemigoAlQueAtacar = enemigosTotales[0];
+            soldadosDesocupadas.Remove(aux);
+            soldadosOcupadas.Add(aux);
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }*/
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenAtacarObrera()
+    {
+        /*Obrera aux = obrerasDesocupadas[0];
+        if (aux != null)
+        {
+            aux.hayOrdenDeAtacar = true;
+            aux.enemigoAlQueAtacar = enemigosTotales[0];
+            obrerasDesocupadas.Remove(aux);
+            obrerasOcupadas.Add(aux);
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }*/
+        Task.current.Fail();
+    }
+
+    #endregion
+
+    #region Ordenes Llover
+
+    [Task]
+    public void VaALlover()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void HormigueroEstaTapado()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void SuficientesObrerasTapando()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenTaparObreras()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void HaDejadoDeLlover()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenDestaparObreras()
+    {
+        Task.current.Fail();
+    }
+
+    #endregion
+
+    #region Ordenes Buscar Comida
+
+    [Task]
+    public void HayComidaSuficiente()
+    {
+        if (totalHormigas * umbralComida > totalComida)
+        {
+            if (totalComida < capacidadTotalDeComida)
+            {
+                Task.current.Fail();
+            }
+            else
+            {
+                Task.current.Succeed();
+            }
+        }
+        Task.current.Succeed();
+    }
+
+    [Task]
+    public void HayHormigasBuscandoComida()
+    {
+        if (numHormigasBuscandoComida == 0)
+        {
+            Task.current.Succeed();
+        }
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenBuscarComidaObreras()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenBuscarComidaSoldados()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenBuscarComidaNurses()
+    {
+        Task.current.Fail();
+    }
+
+    #endregion
+
+    #region Ordenes Cavar
+
+    [Task]
+    public void HayEspacio()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void HayObrerasCavando()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenCavarObreras()
+    {
+        Task.current.Fail();
+    }
+
+
+    #endregion
+
+    #region Ordenes Cuidar Huevos
+
+    [Task]
+    public void HayHuevosQueCuidar()
+    {
+        if (huevosQueTienenQueSerCuidados.Count > 0)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+
+    }
+
+    [Task]
+    public void MandarNursesACuidar()
+    {
+        Task.current.Fail();
+    }
+
+    #endregion
+
+    #region Ordenes Curar Hormiga
+
+    [Task]
+    public void HayHormigasHeridas()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenCurarSoldado()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenCurarObreras()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenCurarNurses()
+    {
+        Task.current.Fail();
+    }
+
+    #endregion
+
+    #region Ordenes Patrullar
+
+    [Task]
+    public void HaHabidoUnAtaqueReciente()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void OrdenPatrullarSoldado()
+    {
+        Task.current.Fail();
+    }
+
+    #endregion
+
+    #region Tareas De La Reina
+
+    //HayEnemigosCerca()
+    //Atacar()
+    // TengoMuchaHambre()
+    // TengoHambre()
+    // HayComida()
+    // Comer()
+    // HayHormigaQueCurarCerca()
+    [Task]
+    public void HayHormigaQueCurarCerca()
+    {
+        /*if (hayOrdenCurarHormiga == false)
+        {
+            bool encontrado = false;
+            for (int i = 0; i < hormigasCerca.Count; i++)
+            {
+                if (hormigasCerca[i] == null)
+                {
+                    hormigasCerca.RemoveAt(i);
+                    i--;
+                }
+                else if (hormigasCerca[i].puedeCurarse() && hormigasCerca[i].siendoCuradaPor == null
+                    && encontrado == false && !hormigasCerca[i].estaLuchando)
+                {
+                    encontrado = true;
+                    hormigaACurar = hormigasCerca[i];
+                    hormigasCerca[i].siendoCuradaPor = this;
+
+                    if (reina.hormigasHeridas.Contains(hormigaACurar))
+                    {
+                        reina.hormigasHeridas.Remove(hormigaACurar);
+                    }
+                    //break;
+                }
+            }
+
+            if (hormigaACurar != null)
+            {
+                Task.current.Succeed();
+                Debug.Log("Hay Hormiga Cerca que necesita curarse");
+            }
+            else
+            {
+                Task.current.Fail();
+            }
+        }
+
+        foreach (HormigaGenerica h in hormigasCerca)
+        {
+            if (h.vida < 75)
+            {
+                hormigaACurar = h;
+                Task.current.Succeed();
+            }
+            else
+            {
+                Task.current.Fail();
+            }
+        }*/
+        Task.current.Fail();
+    }
+    // CurarHormiga()
+
+    // HayHuevosCercaQueNecesitanCuidados() --> está en la nurse actualmente solo
+    [Task]
+    public void HayHuevosCercaQueNecesitanCuidados()
+    {
+        Task.current.Fail();
+    }
+
+    // CuidarHuevos() --> está en la nurse actualmente solo
+    [Task]
+    public void CuidarHuevos()
+    {
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void PuedoPonerHuevos()
+    {
+        Task.current.Succeed();
+    }
+
     [Task]
     public void PonerHuevos()
     {
@@ -462,7 +841,7 @@ public class Reina : HormigaGenerica
                 }
                 else
                 {
-                    Debug.Log("No hay sala de huevos");
+                    //Debug.Log("No hay sala de huevos");
                     tienePosicionPonerHuevo = false;
                     hormigaAponer = TipoHormiga.NULL;
                     salaDondePonerHuevo = null;
@@ -488,10 +867,11 @@ public class Reina : HormigaGenerica
             if (auxDistance < 0.1 && tienePosicionPonerHuevo)
             {
                 estaPoniendoHuevo = true;
-                if(tiempoQueLllevaPoniendoHuevo < tiempoQueTardaEnPonerHuevo)
+                if (tiempoQueLlevaPoniendoHuevo < tiempoQueTardaEnPonerHuevo)
                 {
-                    tiempoQueLllevaPoniendoHuevo += Time.deltaTime;
-                } else
+                    tiempoQueLlevaPoniendoHuevo += Time.deltaTime;
+                }
+                else
                 {
                     GameObject huevoAux = Instantiate(PrefabHuevo, posicionParaColocarHuevo, Quaternion.identity);
                     Huevo huevoScript = huevoAux.GetComponent<Huevo>();
@@ -506,14 +886,15 @@ public class Reina : HormigaGenerica
                     ponerHuevo = false;
                     tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
                     estaPoniendoHuevo = false;
-                    tiempoQueLllevaPoniendoHuevo = 0;
+                    tiempoQueLlevaPoniendoHuevo = 0;
                     Task.current.Succeed();
                 }
-               
+
             }
 
 
-        } else
+        }
+        else
         {
             Task.current.Fail();
         }
@@ -521,12 +902,12 @@ public class Reina : HormigaGenerica
     }
 
     [Task]
-    public void Explorar()
+    public void Esperar()
     {
         if (this.zonaDondeEsta == 1)
         {
             //Esta fuera, tiene que entrar
-            Debug.Log("Estoy fuera ais que tengo que entrar");
+            //Debug.Log("Estoy fuera ais que tengo que entrar");
             Vector3 randomDirection;
             NavMeshHit aux;
             bool aux2;
@@ -574,6 +955,10 @@ public class Reina : HormigaGenerica
         }
         Task.current.Succeed();
     }
+
+    #endregion
+
+    // Otros ???
 
     [Task]
     public void ConstruirSala()
@@ -625,7 +1010,7 @@ public class Reina : HormigaGenerica
                     capacidadTotalDeHormigas += aux.capacidadTotalRoom;
                     salasHormigas.Add(aux);
                     HayQueCrearSalasHormigas = false;
-                    Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
+                    //Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
                     Task.current.Succeed();
                 }
                 else
@@ -642,7 +1027,7 @@ public class Reina : HormigaGenerica
                     salasComida.Add(aux);
                     capacidadTotalDeComida += aux.capacidadTotalRoom;
                     HayQueCrearSalasComida = false;
-                    Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
+                    //Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
                     Task.current.Succeed();
                 }
                 else
@@ -659,7 +1044,7 @@ public class Reina : HormigaGenerica
                     salasHuevos.Add(aux);
                     capacidadTotalDeHuevos += aux.capacidadTotalRoom;
                     HayQueCrearSalasHuevos = false;
-                    Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
+                    //Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
                     Task.current.Succeed();
                 }
                 else
@@ -758,14 +1143,6 @@ public class Reina : HormigaGenerica
 
     }
 
-    public void recibirAlertaComida(Comida comida)
-    {
-        if (!ComidaVista.Contains(comida) && !comida.laEstanLLevando)
-        {
-            ComidaVista.AddLast(comida);
-        }
-    }
-
     public void comidaGuardada(Comida comida, Room sala)
     {
         if (!ComidaTotal.Contains(comida))
@@ -821,91 +1198,7 @@ public class Reina : HormigaGenerica
 
 
 
-    #region mandarOrdenesAtacar
-    [Task]
-    public void Atacados()
-    {
-        if (HayQueAtacar)
-        {
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void SuficientesHormigasLuchando()
-    {
-        if(totalHormigas * umbralHormigasAtacando > numHormigasAtacando)
-        {
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void HaySoldadosLibres()
-    {
-        if(soldadosDesocupadas.Count > 0)
-        {
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void HayObrerasLibres()
-    {
-        if(obrerasDesocupadas.Count > 0)
-        {
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
-
-    [Task]
-    public void OrdenAtacarSoldados()
-    {
-        Soldado aux = soldadosDesocupadas[0];
-        if(aux != null)
-        {
-            aux.hayOrdenDeAtacar = true;
-            aux.enemigoAlQueAtacar = enemigosTotales[0];
-            soldadosDesocupadas.Remove(aux);
-            soldadosOcupadas.Add(aux);
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-    }
-
-
-
-    #endregion
-
-
     #region MandarOrdenHuevos
-
-    [Task]
-    public void HayHuevosQueCuidar()
-    {
-        if(huevosQueTienenQueSerCuidados.Count > 0)
-        {
-            Task.current.Succeed();
-        } else
-        {
-            Task.current.Fail();
-        }
-        
-    }
 
 
     [Task]
@@ -916,6 +1209,10 @@ public class Reina : HormigaGenerica
         {
             // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
             aux.hayOrdenCuidarHuevos = true;
+            nursesOcupadas.Add(aux);
+            nursesDesocupadas.Remove(aux);
+            aux.huevoACuidar = huevosQueTienenQueSerCuidados[0];
+            huevosQueTienenQueSerCuidados.RemoveAt(0);
         }
 
     }

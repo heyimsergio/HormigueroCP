@@ -8,6 +8,10 @@ TagManager:
   - Trigo
   - Huevo
   - Hormiga
+  - Nurse
+  - Obrera
+  - Soldado
+  - Reina
   layers:
   - Default
   - TransparentFX

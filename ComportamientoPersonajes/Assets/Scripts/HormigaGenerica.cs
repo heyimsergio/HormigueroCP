@@ -23,9 +23,10 @@ public class HormigaGenerica : PersonajeGenerico
     public float tiempoEntreAtaques;
     [HideInInspector]
     public float tiempoEntreAtaquesMax = 0.5f;
+    public float TiempoActual;
 
     // Atacar
-    public bool hayEnemigosCerca = false;
+    //public EnemigoGenerico enemigoCerca = null;
     public List<EnemigoGenerico> enemigosCerca = new List<EnemigoGenerico>();
     //Orden atacar
     public bool hayOrdenDeAtacar = false;
@@ -42,6 +43,9 @@ public class HormigaGenerica : PersonajeGenerico
     //Curar otras hormigas
     public HormigaGenerica hormigaACurar;
     public int tiempoParaCurar = 0;
+    public HormigaGenerica siendoCuradaPor = null;
+    public Vector3 posHerida = Vector3.zero;
+    public int cantidadDeCura = 3;
     //Orden Curar Hormiga
     public bool hayOrdenCurarHormiga = false;
 
@@ -64,6 +68,7 @@ public class HormigaGenerica : PersonajeGenerico
     // Start is called before the first frame update
     void Start()
     {
+        TiempoActual = 20.0f;
         this.zonaDondeEsta = 0;
     }
 
@@ -77,23 +82,48 @@ public class HormigaGenerica : PersonajeGenerico
         hambre -= Time.deltaTime;
     }
 
-    public bool quitarVida(int damage)
+    public void quitarVida(int damage)
     {
         Debug.Log("Hormiga perdiendo vida");
         this.vida -= damage;
         if (vida <= 0)
         {
             Destroy(this.gameObject);
-            return true;
         }
-        return false;
     }
 
-    // Tareas Panda
+    public void sumarVida()
+    {
+        Debug.Log("Hormiga ganando vida");
+        this.vida += cantidadDeCura;
+        if (this.vida > 10)
+            this.vida = 10;
+    }
+
+    public bool puedeCurarse()
+    {
+        return (this.vida < 8);
+    }
+
+    #region Tareas Globales Hormigas
+
     [Task]
     public void HayEnemigosCerca()
     {
-        if (hayEnemigosCerca)
+        if (enemigosCerca.Count != 0)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void ReinaEnPeligro()
+    {
+        if (reina.enemigosCerca.Count != 0)
         {
             Task.current.Succeed();
         }
@@ -109,13 +139,10 @@ public class HormigaGenerica : PersonajeGenerico
         EnemigoGenerico enemigo = enemigosCerca[0];
         if (enemigo != null)
         {
-            //Debug.Log("Hay enemigo");
             agente.SetDestination(enemigo.transform.position);
             float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
-            //Debug.Log(distanceToTarget);
             if (distanceToTarget < 1.2f)
             {
-                //Debug.Log("Quitar vida");
                 float random = Random.Range(0, 10);
                 if (random < 9f)
                 {
@@ -123,7 +150,7 @@ public class HormigaGenerica : PersonajeGenerico
                 }
                 else
                 {
-                    Debug.Log("Ataque fallido");
+                    //Debug.Log("Ataque fallido");
                 }
             }
             else
@@ -133,23 +160,36 @@ public class HormigaGenerica : PersonajeGenerico
         }
         else
         {
-            //Debug.Log("No hay enemigo");
             enemigosCerca.RemoveAt(0);
-            if (enemigosCerca.Count == 0)
-            {
-                hayEnemigosCerca = false;
-                siguientePosicionExplorar = this.transform.position;
-            }
         }
-        Task.current.Succeed();
 
+        if (enemigosCerca.Count == 0)
+        {
+            siguientePosicionExplorar = this.transform.position;
+            Task.current.Succeed();
+        }
+    }
+
+    [Task]
+    public void Huir()
+    {
+        EnemigoGenerico enemigoCerca = enemigosCerca[0];
+        if (enemigoCerca != null)
+        {
+            Vector3 direccionEnemigo = enemigoCerca.transform.position - this.transform.position;
+            Vector3 direccionContraria = direccionEnemigo * -1;
+            agente.SetDestination(this.transform.position + direccionContraria);
+        }
+        else
+        {
+            Task.current.Succeed();
+        }
+        Debug.Log("Huir");
     }
 
     [Task]
     public void TengoHambre()
     {
-        //Debug.Log("Hola");
-        //Debug.Log(this.hambre + " : hambre");
         if (this.hambre <= 75)
         {
             Task.current.Succeed();
@@ -176,36 +216,21 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void HayComida()
     {
-        if (reina.totalComida <= 0)
+        if (reina.ComidaTotal.Count <= 0)
         {
             Task.current.Fail();
         }
         else
         {
             Task.current.Succeed();
-        }
-    }
-
-    [Task]
-    public void ReinaEnPeligro()
-    {
-        if (reina.hayEnemigosCerca == true)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
         }
     }
 
     [Task]
     public void Comer()
     {
-        Debug.Log("comer");
         if (comidaAComer == null)
         {
-            Debug.Log("Tengo comida");
             comidaAComer = reina.pedirComida();
             if (comidaAComer != null)
             {
@@ -228,22 +253,14 @@ public class HormigaGenerica : PersonajeGenerico
                     Destroy(comidaAComer.gameObject);
                     comidaAComer = null;
                     Debug.Log("Comida destruida");
-                    Task.current.Succeed();
                 }
-
+                Task.current.Succeed();
             }
         }
 
     }
 
-    [Task]
-    public void Huir()
-    {
-        Task.current.Succeed();
-        Debug.Log("Huir");
-    }
-
-    [Task]
+    /*[Task]
     public void TengoOrdenDeLaReina()
     {
         /*EnemigoGenerico enemigo = enemigosCerca[0];
@@ -303,27 +320,83 @@ public class HormigaGenerica : PersonajeGenerico
             }
         }
         Task.current.Succeed();
-        */
+        
         Task.current.Fail();
 
     }
+*/
 
     [Task]
     public void TengoOrdenDeCurarHormiga()
     {
-        Task.current.Fail();
+        if (hayOrdenCurarHormiga)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
-    [Task]
+    /*[Task]
     public void HayHormigaQueCurarCerca()
     {
         Task.current.Fail();
-    }
+    }*/
 
     [Task]
     public void CurarHormiga()
     {
-        Task.current.Fail();
+        if (hormigaACurar != null)
+        {
+            if (posHerida == Vector3.zero)
+            {
+                Debug.Log("Se asigna la posicion de la hormiga a curar");
+                posHerida = hormigaACurar.transform.position;
+                agente.SetDestination(hormigaACurar.transform.position);
+            }
+
+            if (Vector3.Distance(this.transform.position, posHerida) < 0.2)
+            {
+                // Si la hormiga no ha muerto y no entra a luchar
+                if (hormigaACurar.puedeCurarse() && !hormigaACurar.estaLuchando)
+                {
+                    Debug.Log("La hormiga puede ser curada");
+                    TiempoActual -= Time.deltaTime;
+                    if (TiempoActual <= 0)
+                    {
+                        hormigaACurar.sumarVida();
+                        Debug.Log("Huevo Cuidado");
+                        TiempoActual = 20.0f;
+                        posHerida = Vector3.zero;
+                        if (hayOrdenCurarHormiga == true)
+                        {
+                            hayOrdenCurarHormiga = false;
+                        }
+                        hormigaACurar.siendoCuradaPor = null;
+                        hormigaACurar = null;
+                        posHerida = Vector3.zero;
+                        Task.current.Succeed();
+                    }
+                }
+                else
+                {
+                    TiempoActual = 20.0f;
+                    hormigaACurar = null;
+                    posHerida = Vector3.zero;
+                    Task.current.Fail();
+                }
+            }
+        }
+        // Si la hormiga ha muerto
+        else
+        {
+            TiempoActual = 20.0f;
+            hormigaACurar = null;
+            posHerida = Vector3.zero;
+            Task.current.Fail();
+        }
     }
 
     [Task]
@@ -341,7 +414,7 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void BuscarComida()
     {
-        if (hayEnemigosCerca)
+        if (enemigosCerca.Count != 0)
         {
             if (comida != null)
             {
@@ -469,4 +542,6 @@ public class HormigaGenerica : PersonajeGenerico
         }
 
     }
+
+    #endregion
 }
