@@ -52,6 +52,7 @@ public class Nurse : HormigaGenerica
     // Start is called before the first frame update
     void Start()
     {
+        // Inicialización
         this.zonaDondeEsta = 0;
 
         // Respecto al hormiguero
@@ -60,6 +61,17 @@ public class Nurse : HormigaGenerica
         reina = GameObject.FindObjectOfType<Reina>();
         pb = this.gameObject.GetComponent<PandaBehaviour>();
         agente = this.gameObject.GetComponent<NavMeshAgent>();
+        reina.totalHormigas++;
+        reina.numeroDeNursesTotal++;
+        reina.nursesDesocupadas.Add(this);
+
+        // Prioridades NavMesh
+        reina.contPrioridadNavMesh++;
+        if (reina.contPrioridadNavMesh > 99)
+        {
+            reina.contPrioridadNavMesh = 0;
+        }
+        agente.avoidancePriority = reina.contPrioridadNavMesh;
 
         // Ataques y Vida
         this.vida = 10;
@@ -74,8 +86,7 @@ public class Nurse : HormigaGenerica
         // Explorar
         siguientePosicionExplorar = this.transform.position;
 
-        // Añadir a la lista de desocupadas
-        reina.nursesDesocupadas.Add(this);
+
     }
 
     /*private void Update()

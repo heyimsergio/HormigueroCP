@@ -40,6 +40,7 @@ public class Huevo : MonoBehaviour
         {
             puedeSerCuidado = true;
         }
+
         //Avisamos de que hay que cuidar al huevo
         if(tiempoQueAguantaSinCuidar < umbralDeAvisoCuidarHuevo)
         {
@@ -50,7 +51,7 @@ public class Huevo : MonoBehaviour
             }
         }
 
-        // huevo muerto
+        // Huevo muerto
         if(tiempoQueAguantaSinCuidar < 0)
         {
             Debug.Log("Huevo Muerto");
@@ -61,19 +62,22 @@ public class Huevo : MonoBehaviour
 
         tiempoQueAguantaSinCuidar -= Time.deltaTime;
 
-        if(tiempoParaNacer < 0)
+        // Nace Huevo
+        if (tiempoParaNacer < 0)
         {
-            quitarHuevo();
+            myRoom.sacarCosas();
+            miReina.NaceHuevo(this);
             Destroy(this.gameObject);
         }
         tiempoParaNacer -= Time.deltaTime;
     }
 
-    public void quitarHuevo()
-    {
-        myRoom.sacarCosas();
-        miReina.NaceHuevo(this);
-    }
+    /*   public void quitarHuevo()
+        {
+            myRoom.sacarCosas();
+            miReina.NaceHuevo(this);
+        }
+    */
 
     public void cuidar()
     {
@@ -85,5 +89,4 @@ public class Huevo : MonoBehaviour
         puedeSerCuidado = false;
         tiempoQueAguantaSinCuidar = maxTimeParaCuidar;
     }
-
 }

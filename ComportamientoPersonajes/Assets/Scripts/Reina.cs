@@ -11,6 +11,9 @@ public class Reina : HormigaGenerica
 
     #region atributos propios de la reina
 
+    // NavMesh
+    public int contPrioridadNavMesh = 0;
+
     //Poner huevos
     [Header("Variables Poner Huevos Reina")]
     public int tiempoQueTardaEnPonerHuevo;
@@ -102,8 +105,8 @@ public class Reina : HormigaGenerica
     public float importanciaSoldados;
 
     //NECESIDADES DEL HORMIGUERO
-    // MandarHordenes:
-    enum tipoOrden { CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA }
+    // MandarHordenes
+    enum tipoOrden {CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA}
     private bool HayQueCrearSalasHormigas = false;
     private bool HayQueCrearSalasComida = false;
     private bool HayQueCrearSalasHuevos = false;
@@ -151,19 +154,75 @@ public class Reina : HormigaGenerica
     // Start is called before the first frame update
     void Start()
     {
-        tiempoQueLlevaPoniendoHuevo = 0;
-        tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
+        // Inicializacion
+        initTime = Time.time;
+        this.zonaDondeEsta = 0;
+
+        // Respecto al hormiguero
         tamañoMaxColaConstruccionSalas = 1;
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         hormiguero = GameObject.FindObjectOfType<Floor>();
         afueras = GameObject.FindObjectOfType<Outside>();
-        initTime = Time.time;
+
+        // Atributos poner huevos
+        tiempoQueLlevaPoniendoHuevo = 0;
+        tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
+
+        // Prioridades NavMesh
+        contPrioridadNavMesh++;
+        if (contPrioridadNavMesh > 99)
+        {
+            contPrioridadNavMesh = 0;
+        }
+        agente.avoidancePriority = contPrioridadNavMesh;
+
+        // Ataques y Vida
+        this.vida = 10;
+        this.daño = 2;
+        tiempoEntreAtaquesMax = 0.5f;
+        this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
+
+        // Cuidar huevos
+        tiempoCuidandoHuevos = 10.0f;
+        TiempoActual = tiempoCuidandoHuevos;
+
+        // Explorar
         siguientePosicionExplorar = this.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Actualizar hambre
+        actualizarHambre();
+
+        // Actualizar si tiene vida suficiente o no
+        if (puedeCurarse())
+        {
+            puedeSerCurada = true;
+        }
+        else
+        {
+            puedeSerCurada = false;
+        }
+
+        if (necesitaCurarse())
+        {
+            necesitaSerCurada = true;
+            if (!reina.hormigasHeridas.Contains(this))
+            {
+                if (siendoCuradaPor == null)
+                {
+                    reina.hormigasHeridas.Add(this);
+                }
+            }
+        }
+        else
+        {
+            necesitaSerCurada = false;
+        }
+
+        // Actualización del hormiguero y creación de salas
         actualTime = Time.time - initTime;
         if (crearSala)
         {
@@ -171,23 +230,23 @@ public class Reina : HormigaGenerica
             crearSala = false;
         }
         SimulateWorld();
-        actualizarPercepcionesHormiguero();
-        actualizarVariablesReina();
+        ActualizarPercepcionesHormiguero();
+        ActualizarVariablesReina();
     }
 
-    public void SimulateWorld()
+    private void SimulateWorld()
     {
         crearComida();
     }
 
-    public void actualizarPercepcionesHormiguero()
+    private void ActualizarPercepcionesHormiguero()
     {
         actualizarPrioridades();
         comprobarCreacionSalas();
         checkearNecesidadComida();
     }
 
-    public void actualizarVariablesReina()
+    private void ActualizarVariablesReina()
     {
         tiempoRestanteHuevo -= Time.deltaTime;
         if (tiempoRestanteHuevo < 0 && !ponerHuevo)
@@ -196,6 +255,9 @@ public class Reina : HormigaGenerica
         }
     }
 
+    /// <summary>
+    /// Funciones de simulacion del mundo
+    /// </summary>
     #region Funciones simulacion mundo
 
     public void crearComida()
@@ -218,6 +280,9 @@ public class Reina : HormigaGenerica
 
     #endregion
 
+    /// <summary>
+    /// Prioridades de la reina al poner un huevo
+    /// </summary>
     #region Funciones actualizar prioridades Reina
 
     public void actualizarPrioridades()
@@ -426,6 +491,7 @@ public class Reina : HormigaGenerica
     }
     #endregion
 
+
     // Alertas que recibe la reina
 
     public void recibirAlertaComida(Comida comida)
@@ -443,6 +509,8 @@ public class Reina : HormigaGenerica
             enemigosTotales.Add(enemigo);
         }
     }
+
+
 
     // Tareas de la reina
 
@@ -813,14 +881,8 @@ public class Reina : HormigaGenerica
                     ponerHuevo = false;
                     Task.current.Fail();
                     return;
-
-
                 }
-
-
             }
-
-
 
             if (!tienePosicionPonerHuevo)
             {
@@ -925,6 +987,7 @@ public class Reina : HormigaGenerica
 
     // Otros ???
 
+    // Pasará a ser el cavar de las obreras
     [Task]
     public void ConstruirSala()
     {
@@ -1074,7 +1137,8 @@ public class Reina : HormigaGenerica
         return finalNum;
     }
 
-    // Se llama desde la clase Huevo cuando se le termina el tiempo para nacer
+
+    // Métodos para el tratamiento de huevos
     public void NaceHuevo(Huevo huevo)
     {
         totalHuevos--;
@@ -1083,16 +1147,16 @@ public class Reina : HormigaGenerica
         {
             huevosQueTienenQueSerCuidados.Remove(huevo);
         }
-        switch(huevo.miType)
+        switch (huevo.miType)
         {
             case TipoHormiga.NURSE:
-                numeroDeNursesTotal++;
-                totalHormigas++;
-                /*
-                GameObject aux = Instantiate(prefabNurse,);
-                aux.transform.position = huevo.transform.position;
-                nursesDesocupadas.Add(aux.GetComponent<Nurse>());
-                */
+                //numeroDeNursesTotal++;
+                //totalHormigas++;
+                Vector3 posNurse = huevo.transform.position;
+                GameObject aux = Instantiate(prefabNurse, posNurse, Quaternion.identity);
+                //aux.transform.position = huevo.transform.position;
+                //nursesDesocupadas.Add(aux.GetComponent<Nurse>());
+                
                 //Se instanciaria el objeto de hormiga
                 break;
             case TipoHormiga.OBRERA:
@@ -1107,27 +1171,6 @@ public class Reina : HormigaGenerica
 
         }
 
-    }
-
-    public void comidaGuardada(Comida comida, Room sala)
-    {
-        if (!ComidaTotal.Contains(comida))
-        {
-            ComidaTotal.Add(comida);
-            comida.misala = sala;
-            totalComida++;
-            sala.meterCosas();
-        }
-    }
-
-    public Comida pedirComida()
-    {
-        if(ComidaTotal.Count > 0)
-        {
-            return ComidaTotal[0];
-        }
-
-        return null;
     }
 
     public void huevoNecesitaCuidado(Huevo miHuevo)
@@ -1150,6 +1193,31 @@ public class Reina : HormigaGenerica
         huevosTotal.Remove(miHuevo);
     }
 
+    // Métodos para el tratamiento de la comida
+
+    public void comidaGuardada(Comida comida, Room sala)
+    {
+        if (!ComidaTotal.Contains(comida))
+        {
+            ComidaTotal.Add(comida);
+            comida.misala = sala;
+            totalComida++;
+            sala.meterCosas();
+        }
+    }
+
+    public Comida pedirComida()
+    {
+        if(ComidaTotal.Count > 0)
+        {
+            return ComidaTotal[0];
+        }
+
+        return null;
+    }
+
+    // Métodos para el tratamiento de los ataques
+
     public void HormigaAtacando()
     {
         numHormigasAtacando++;
@@ -1159,12 +1227,6 @@ public class Reina : HormigaGenerica
     public void HormigaDejaDeAtacar()
     {
         numHormigasAtacando--;
-    }
-
-
-    public void MandarOrden()
-    {
-
     }
     
 }
