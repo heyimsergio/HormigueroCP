@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PersonajeGenerico : MonoBehaviour
 {
+    [Header("Atributos generales personaje")]
     public int vida;
     protected int daño;
     protected float velocidad;

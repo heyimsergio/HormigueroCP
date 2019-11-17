@@ -8,13 +8,13 @@ public class Nurse : HormigaGenerica
 {
     #region Variables Nurse
     //Atacar
-    // bool hayEnemigosCerca
+    // List<EnemigoGenerico> enemigosCerca
     public List<Huevo> huevosCerca = new List<Huevo>();
     public int numeroDeObrerasCerca = 0;
     public int numeroDeSoldadosCerca = 0;
     public bool reinaCerca = false;
 
-    //Comer
+    // Comer
     // float hambre
     // int reina.totalComida
 
@@ -25,15 +25,15 @@ public class Nurse : HormigaGenerica
     // bool hayOrdenBuscarComida
 
     //Cuidar de huevos
-    public float tiempoCuidandoHuevos = 20.0f;
-    public Huevo huevoACuidar = null;
-    public Vector3 posHuevo = Vector3.zero;
+    // float tiempoCuidandoHuevos = 20.0f;
+    // Huevo huevoACuidar = null;
+    // Vector3 posHuevo = Vector3.zero;
     // float TiempoActual;
 
     //Curar A Una Hormiga
     // HormigaGenerica hormigaACurar
     // int tiempoParaCurar
-    public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
+    // List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
 
     // Buscar Comida
     // Vector3 siguientePosicionBuscandoComida
@@ -52,24 +52,35 @@ public class Nurse : HormigaGenerica
     // Start is called before the first frame update
     void Start()
     {
-        tiempoCuidandoHuevos = 20.0f;
-        TiempoActual = tiempoCuidandoHuevos;
+        this.zonaDondeEsta = 0;
+
+        // Respecto al hormiguero
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
         hormigueroFuera = GameObject.FindObjectOfType<Outside>();
         reina = GameObject.FindObjectOfType<Reina>();
         pb = this.gameObject.GetComponent<PandaBehaviour>();
         agente = this.gameObject.GetComponent<NavMeshAgent>();
+
+        // Ataques y Vida
         this.vida = 10;
         this.daño = 2;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
+
+        // Cuidar huevos
+        tiempoCuidandoHuevos = 10.0f;
+        TiempoActual = tiempoCuidandoHuevos;
+
+        // Explorar
         siguientePosicionExplorar = this.transform.position;
+
+        // Añadir a la lista de desocupadas
+        reina.nursesDesocupadas.Add(this);
     }
 
-    private void Update()
+    /*private void Update()
     {
-        actualizarHambre();
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
@@ -175,12 +186,6 @@ public class Nurse : HormigaGenerica
         }
     }
 
-    /*private void OnTriggerStay(Collider other)
-    {
-        numeroDeObrerasCerca = GameObject.FindGameObjectsWithTag("Obrera").Length;
-        numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
-    }*/
-
     #region Tareas Nurse
 
     // HayEnemigosCerca()
@@ -266,7 +271,6 @@ public class Nurse : HormigaGenerica
                 // Si el huevo no ha muerto
                 if (huevoACuidar.puedeSerCuidado)
                 {
-                    Debug.Log("El huevo puede ser cuidado");
                     TiempoActual -= Time.deltaTime;
                     if (TiempoActual <= 0)
                     {
@@ -281,6 +285,12 @@ public class Nurse : HormigaGenerica
                         huevoACuidar.siendoCuidadoPor = null;
                         huevoACuidar = null;
                         posHuevo = Vector3.zero;
+
+                        if (hayOrdenCuidarHuevos == true)
+                        {
+                            hayOrdenCuidarHuevos = false;
+                        }
+
                         Task.current.Succeed();
                     }
                 }
@@ -289,6 +299,10 @@ public class Nurse : HormigaGenerica
                     TiempoActual = tiempoCuidandoHuevos;
                     huevoACuidar = null;
                     posHuevo = Vector3.zero;
+                    if (hayOrdenCuidarHuevos == true)
+                    {
+                        hayOrdenCuidarHuevos = false;
+                    }
                     Task.current.Fail();
                 }
             }
@@ -299,6 +313,10 @@ public class Nurse : HormigaGenerica
             TiempoActual = tiempoCuidandoHuevos;
             huevoACuidar = null;
             posHuevo = Vector3.zero;
+            if (hayOrdenCuidarHuevos == true)
+            {
+                hayOrdenCuidarHuevos = false;
+            }
             Task.current.Fail();
         }
     }
@@ -321,12 +339,13 @@ public class Nurse : HormigaGenerica
                     huevosCerca.RemoveAt(i);
                     i--;
                 }
-                else if (huevosCerca[i].necesitaCuidados && huevosCerca[i].siendoCuidadoPor == null && encontrado == false)
+                else if (huevosCerca[i].puedeSerCuidado && huevosCerca[i].siendoCuidadoPor == null && encontrado == false)
                 {
                     encontrado = true;
                     huevoACuidar = huevosCerca[i];
                     huevosCerca[i].siendoCuidadoPor = this;
 
+                    // Notifico a la reina de que va a cuidar ese huevo
                     if (reina.huevosQueTienenQueSerCuidados.Contains(huevoACuidar))
                     {
                         reina.huevosQueTienenQueSerCuidados.Remove(huevoACuidar);
@@ -338,7 +357,7 @@ public class Nurse : HormigaGenerica
             if (huevoACuidar != null)
             {
                 Task.current.Succeed();
-                Debug.Log("Hay Huevo Cerca que necesita cuidado");
+                Debug.Log("Hay Huevo Cerca que puede ser o necesita cuidados");
             }
             else
             {
@@ -351,59 +370,7 @@ public class Nurse : HormigaGenerica
         }
     }
 
-    // HayHormigaQueCurarCerca() --> habrá que pasarlo a la generica
-    [Task]
-    public void HayHormigaQueCurarCerca()
-    {
-        if (hayOrdenCurarHormiga == false)
-        {
-            bool encontrado = false;
-            for (int i = 0; i < hormigasCerca.Count; i++)
-            {
-                if (hormigasCerca[i] == null)
-                {
-                    hormigasCerca.RemoveAt(i);
-                    i--;
-                }
-                else if (hormigasCerca[i].puedeCurarse() && hormigasCerca[i].siendoCuradaPor == null 
-                    && encontrado == false && !hormigasCerca[i].estaLuchando)
-                {
-                    encontrado = true;
-                    hormigaACurar = hormigasCerca[i];
-                    hormigasCerca[i].siendoCuradaPor = this;
-
-                    if (reina.hormigasHeridas.Contains(hormigaACurar))
-                    {
-                        reina.hormigasHeridas.Remove(hormigaACurar);
-                    }
-                    //break;
-                }
-            }
-
-            if (hormigaACurar != null)
-            {
-                Task.current.Succeed();
-                Debug.Log("Hay Hormiga Cerca que necesita curarse");
-            }
-            else
-            {
-                Task.current.Fail();
-            }
-        }
-
-            foreach (HormigaGenerica h in hormigasCerca)
-        {
-            if (h.vida < 75)
-            {
-                hormigaACurar = h;
-                Task.current.Succeed();
-            }
-            else
-            {
-                Task.current.Fail();
-            }
-        }
-    }
+    // HayHormigaQueCurarCerca()
 
     [Task]
     public void Explorar()

@@ -58,7 +58,7 @@ tree("Reina")
 					HayHuevosQueCuidar()
 					sequence
 						HayNursesLibres()
-						MandarNursesACuidar()
+						OrdenCuidarNurses()
 			mute
 				sequence
 					HayHormigasHeridas()
@@ -95,6 +95,8 @@ tree("Reina")
 			sequence
 				PuedoPonerHuevos()
 				PonerHuevos()
+			sequence
+				ConstruirSala()
 			sequence
 				TengoHambre()
 				HayComida()

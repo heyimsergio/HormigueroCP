@@ -7,25 +7,27 @@ using UnityEngine.AI;
 public class HormigaGenerica : PersonajeGenerico
 {
     //Agente Navmesh
-    public NavMeshAgent agente;
-    public PandaBehaviour pb;
-    public Floor hormigueroDentro; //Saber donde empieza el suelo para no meterte dentro del hormiguero cuando exploras
-    public Outside hormigueroFuera;
+    protected NavMeshAgent agente;
+    protected PandaBehaviour pb;
+    protected Floor hormigueroDentro; //Saber donde empieza el suelo para no meterte dentro del hormiguero cuando exploras
+    protected Outside hormigueroFuera;
     //bool estaDentro = true; //True: está dentro, false: esta fuera
     //bool saliendo = false;
 
     // ATRIBUTOS ////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Atributos de las hormigas generales
-    protected float hambre = 200;
+    [Header ("Atributos generales hormiga")]
+    public float hambre = 200;
     public float pesoQuePuedenTransportar;
     public bool estaLuchando = false;
-    public float tiempoEntreAtaques;
+    protected float tiempoEntreAtaques;
     [HideInInspector]
-    public float tiempoEntreAtaquesMax = 0.5f;
-    public float TiempoActual;
+    protected float tiempoEntreAtaquesMax = 0.5f;
+    protected float TiempoActual;
 
     // Atacar
+    [Header("Variables ataque")]
     //public EnemigoGenerico enemigoCerca = null;
     public List<EnemigoGenerico> enemigosCerca = new List<EnemigoGenerico>();
     //Orden atacar
@@ -33,6 +35,7 @@ public class HormigaGenerica : PersonajeGenerico
     public EnemigoGenerico enemigoAlQueAtacar = null;
 
     //Buscar Comida
+    [Header("Variables Búsqueda Comida")]
     public Vector3 siguientePosicionBuscandoComida;
     public Comida comida;
     public Room salaDejarComida = null;
@@ -41,21 +44,32 @@ public class HormigaGenerica : PersonajeGenerico
     public bool hayOrdenBuscarComida = false;
 
     //Curar otras hormigas
+    [Header("Variables Curar Hormigas")]
     public HormigaGenerica hormigaACurar;
     public int tiempoParaCurar = 0;
     public HormigaGenerica siendoCuradaPor = null;
     public Vector3 posHerida = Vector3.zero;
+    public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
     public int cantidadDeCura = 3;
+    public bool puedeSerCurada = false;
+    public bool necesitaSerCurada = false;
     //Orden Curar Hormiga
     public bool hayOrdenCurarHormiga = false;
 
+    //Cuidar Huevos
+    public float tiempoCuidandoHuevos = 10.0f;
+    public Huevo huevoACuidar = null;
+    public Vector3 posHuevo = Vector3.zero;
+
     //Explorar
-    public Vector3 siguientePosicionExplorar;
+    protected Vector3 siguientePosicionExplorar;
 
     // Comer
+    [Header("Comida a Comer")]
     public Comida comidaAComer;
 
     // Reina
+    [Header("REINA")]
     public Reina reina;
     protected Vector3 posicionReina;
     //Ordenes de la reina
@@ -68,13 +82,37 @@ public class HormigaGenerica : PersonajeGenerico
     // Start is called before the first frame update
     void Start()
     {
-        TiempoActual = 20.0f;
-        this.zonaDondeEsta = 0;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        actualizarHambre();
+
+        if (puedeCurarse())
+        {
+            puedeSerCurada = true;
+        }
+        else
+        {
+            puedeSerCurada = false;
+        }
+
+        if (necesitaCurarse())
+        {
+            necesitaSerCurada = true;
+            if (!reina.hormigasHeridas.Contains(this))
+            {
+                if (siendoCuradaPor == null){
+                    reina.hormigasHeridas.Add(this);
+                }
+            }
+        }
+        else
+        {
+            necesitaSerCurada = false;
+        }
     }
 
     public void actualizarHambre()
@@ -104,6 +142,12 @@ public class HormigaGenerica : PersonajeGenerico
     {
         return (this.vida < 8);
     }
+
+    public bool necesitaCurarse()
+    {
+        return (this.vida < 4);
+    }
+
 
     #region Tareas Globales Hormigas
 
@@ -344,6 +388,59 @@ public class HormigaGenerica : PersonajeGenerico
     {
         Task.current.Fail();
     }*/
+
+    [Task]
+    public void HayHormigaQueCurarCerca()
+    {
+        if (hayOrdenCurarHormiga == false)
+        {
+            bool encontrado = false;
+            for (int i = 0; i < hormigasCerca.Count; i++)
+            {
+                if (hormigasCerca[i] == null)
+                {
+                    hormigasCerca.RemoveAt(i);
+                    i--;
+                }
+                else if (hormigasCerca[i].puedeCurarse() && hormigasCerca[i].siendoCuradaPor == null
+                    && encontrado == false && !hormigasCerca[i].estaLuchando)
+                {
+                    encontrado = true;
+                    hormigaACurar = hormigasCerca[i];
+                    hormigasCerca[i].siendoCuradaPor = this;
+
+                    if (reina.hormigasHeridas.Contains(hormigaACurar))
+                    {
+                        reina.hormigasHeridas.Remove(hormigaACurar);
+                    }
+                    //break;
+                }
+            }
+
+            if (hormigaACurar != null)
+            {
+                Task.current.Succeed();
+                Debug.Log("Hay Hormiga Cerca que necesita curarse");
+            }
+            else
+            {
+                Task.current.Fail();
+            }
+        }
+
+        foreach (HormigaGenerica h in hormigasCerca)
+        {
+            if (h.vida < 75)
+            {
+                hormigaACurar = h;
+                Task.current.Succeed();
+            }
+            else
+            {
+                Task.current.Fail();
+            }
+        }
+    }
 
     [Task]
     public void CurarHormiga()

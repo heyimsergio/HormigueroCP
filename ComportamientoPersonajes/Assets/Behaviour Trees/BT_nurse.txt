@@ -32,11 +32,11 @@ tree("Nurse")
 					TengoOrdenDeBuscarComida()
 					BuscarComida()
 		sequence
-			HayHuevosCercaQueNecesitanCuidados()
-			CuidarHuevos()
-		sequence
 			HayHormigaQueCurarCerca()
 			CurarHormiga()
+		sequence
+			HayHuevosCercaQueNecesitanCuidados()
+			CuidarHuevos()
 		sequence
 			TengoHambre()
 			HayComida()

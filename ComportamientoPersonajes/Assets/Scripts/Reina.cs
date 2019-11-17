@@ -12,6 +12,7 @@ public class Reina : HormigaGenerica
     #region atributos propios de la reina
 
     //Poner huevos
+    [Header("Variables Poner Huevos Reina")]
     public int tiempoQueTardaEnPonerHuevo;
     public float tiempoQueLlevaPoniendoHuevo;
     public bool estaPoniendoHuevo = false;
@@ -25,33 +26,39 @@ public class Reina : HormigaGenerica
     public float tiempoRestanteHuevo;
 
     //Cuidar huevos
+    [Header("Variables Cuidar Huevos Reina")]
     public int numeroDeNurses;
     public List<Huevo> huevosQueTienenQueSerCuidados = new List<Huevo>();
 
     //Atacar
+    [Header("Variables Atacar Reina")]
     public EnemigoGenerico[] enemigosCercanos;
     public int numEnemigosCerca;
 
     //Curar
+    [Header("Variables Curar Hormiga Reina")]
     public HormigaGenerica hormigasACurar;
     public HormigaGenerica hormigasDesocupadas;
 
     #endregion
 
     #region logica global hormiguero
-    public int numeroDeNursesTotal;
-    public int numeroDeObrerasTotal;
-    public int numeroDeSoldadosTotal;
-    public List<EnemigoGenerico> enemigosTotales = new List<EnemigoGenerico>();
-    public List<Comida> ComidaTotal = new List<Comida>();
-    public List<Huevo> huevosTotal = new List<Huevo>();
-    public List<HormigaGenerica> hormigasHeridas = new List<HormigaGenerica>();
-    public List<Nurse> nursesOcupadas;
+    [Header("Variables Lógica Global Hormiguero")]
+    public List<Nurse> nursesOcupadas = new List<Nurse>();
     //public Obrera[] obrerasOcupadas;
     //public List<Soldado> soldadosOcupadas = new List<Soldado>();
     public List<Nurse> nursesDesocupadas = new List<Nurse>();
     //public List<Obrera> obrerasDesocupadas = new List<Obrera>();
     //public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
+    public int capacidadTotalDeHormigas;
+    public int capacidadTotalDeComida;
+    public int capacidadTotalDeHuevos;
+    public int totalHormigas;                           // Esto para que ??
+    public int totalComida;                             // Esto para que ??
+    public int totalHuevos;                             // Esto para que ??
+    public int numeroDeNursesTotal;
+    public int numeroDeObrerasTotal;
+    public int numeroDeSoldadosTotal;
     public int numHormigasCuidandoHuevos;
     public int numHormigasAtacando;
     public int numHormigasBuscandoComida;
@@ -60,20 +67,18 @@ public class Reina : HormigaGenerica
     public int numHormigasCurando;
     public int numHormigasAbriendoHormiguero;
     public int numHormigasAbriendoCerrandoHormiguero;
+    public List<EnemigoGenerico> enemigosTotales = new List<EnemigoGenerico>();
+    public List<Comida> ComidaTotal = new List<Comida>();
+    public List<Huevo> huevosTotal = new List<Huevo>();
+    public List<HormigaGenerica> hormigasHeridas = new List<HormigaGenerica>();
     public int tiempoQueQuedaParaQueLlueva;
     public int tiempoQueLlueve;
     public int tiempoGlobal;
-    public int capacidadTotalDeHormigas;
-    public int capacidadTotalDeComida;
-    public int capacidadTotalDeHuevos;
-    public int totalHormigas;
-    public int totalComida;
-    public int totalHuevos;
 
     //FALTA ESTRUCTURA DE DATOS DEL MAPA
+    [Header("Otros")]
     private Floor hormiguero;
     private Outside afueras;
-
     public List<Room> salasHormigas = new List<Room>();
     public List<Room> salasComida = new List<Room>();
     public List<Room> salasHuevos = new List<Room>();
@@ -665,6 +670,7 @@ public class Reina : HormigaGenerica
     {
         if (huevosQueTienenQueSerCuidados.Count > 0)
         {
+            Debug.Log("Reina: Hay huevos que necesitan cuidados");
             Task.current.Succeed();
         }
         else
@@ -675,9 +681,21 @@ public class Reina : HormigaGenerica
     }
 
     [Task]
-    public void MandarNursesACuidar()
+    public void OrdenCuidarNurses()
     {
-        Task.current.Fail();
+        Nurse aux = nursesDesocupadas[0];
+        if (aux != null)
+        {
+            Debug.Log("Tengo nurse que mandar a cuidar");
+            // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
+            aux.hayOrdenCuidarHuevos = true;
+            nursesOcupadas.Add(aux);
+            nursesDesocupadas.Remove(aux);
+            aux.huevoACuidar = huevosQueTienenQueSerCuidados[0];
+            aux.huevoACuidar.siendoCuidadoPor = aux;
+            huevosQueTienenQueSerCuidados.RemoveAt(0);
+            Task.current.Succeed();
+        }
     }
 
     #endregion
@@ -735,59 +753,6 @@ public class Reina : HormigaGenerica
     // HayComida()
     // Comer()
     // HayHormigaQueCurarCerca()
-    [Task]
-    public void HayHormigaQueCurarCerca()
-    {
-        /*if (hayOrdenCurarHormiga == false)
-        {
-            bool encontrado = false;
-            for (int i = 0; i < hormigasCerca.Count; i++)
-            {
-                if (hormigasCerca[i] == null)
-                {
-                    hormigasCerca.RemoveAt(i);
-                    i--;
-                }
-                else if (hormigasCerca[i].puedeCurarse() && hormigasCerca[i].siendoCuradaPor == null
-                    && encontrado == false && !hormigasCerca[i].estaLuchando)
-                {
-                    encontrado = true;
-                    hormigaACurar = hormigasCerca[i];
-                    hormigasCerca[i].siendoCuradaPor = this;
-
-                    if (reina.hormigasHeridas.Contains(hormigaACurar))
-                    {
-                        reina.hormigasHeridas.Remove(hormigaACurar);
-                    }
-                    //break;
-                }
-            }
-
-            if (hormigaACurar != null)
-            {
-                Task.current.Succeed();
-                Debug.Log("Hay Hormiga Cerca que necesita curarse");
-            }
-            else
-            {
-                Task.current.Fail();
-            }
-        }
-
-        foreach (HormigaGenerica h in hormigasCerca)
-        {
-            if (h.vida < 75)
-            {
-                hormigaACurar = h;
-                Task.current.Succeed();
-            }
-            else
-            {
-                Task.current.Fail();
-            }
-        }*/
-        Task.current.Fail();
-    }
     // CurarHormiga()
 
     // HayHuevosCercaQueNecesitanCuidados() --> está en la nurse actualmente solo
@@ -1109,6 +1074,7 @@ public class Reina : HormigaGenerica
         return finalNum;
     }
 
+    // Se llama desde la clase Huevo cuando se le termina el tiempo para nacer
     public void NaceHuevo(Huevo huevo)
     {
         totalHuevos--;
@@ -1195,29 +1161,6 @@ public class Reina : HormigaGenerica
         numHormigasAtacando--;
     }
 
-
-
-
-    #region MandarOrdenHuevos
-
-
-    [Task]
-    public void OrdenCuidarHuevos()
-    {
-        Nurse aux = nursesDesocupadas[0];
-        if(aux != null)
-        {
-            // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
-            aux.hayOrdenCuidarHuevos = true;
-            nursesOcupadas.Add(aux);
-            nursesDesocupadas.Remove(aux);
-            aux.huevoACuidar = huevosQueTienenQueSerCuidados[0];
-            huevosQueTienenQueSerCuidados.RemoveAt(0);
-        }
-
-    }
-
-    #endregion
 
     public void MandarOrden()
     {

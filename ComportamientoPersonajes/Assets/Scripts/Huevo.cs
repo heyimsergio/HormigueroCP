@@ -21,6 +21,7 @@ public class Huevo : MonoBehaviour
     void Start()
     {
         miReina = GameObject.FindObjectOfType<Reina>();
+        miReina.huevosTotal.Add(this);
         tiempoQueAguantaSinCuidar = maxTimeParaCuidar;
         huevoCollider = GetComponent<Collider>();
         huevoCollider.isTrigger = true;
@@ -43,7 +44,10 @@ public class Huevo : MonoBehaviour
         if(tiempoQueAguantaSinCuidar < umbralDeAvisoCuidarHuevo)
         {
             necesitaCuidados = true;
-            miReina.huevoNecesitaCuidado(this);
+            if (siendoCuidadoPor == null)
+            {
+                miReina.huevoNecesitaCuidado(this);
+            }
         }
 
         // huevo muerto
