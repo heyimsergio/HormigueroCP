@@ -12,7 +12,7 @@ public class Nurse : HormigaGenerica
     public List<Huevo> huevosCerca = new List<Huevo>();
     public int numeroDeObrerasCerca = 0;
     public int numeroDeSoldadosCerca = 0;
-    public bool reinaCerca = false;
+    // bool reinaCerca = false;
 
     // Comer
     // float hambre

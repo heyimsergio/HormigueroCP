@@ -33,6 +33,7 @@ public class HormigaGenerica : PersonajeGenerico
     //Orden atacar
     public bool hayOrdenDeAtacar = false;
     public EnemigoGenerico enemigoAlQueAtacar = null;
+    public bool reinaCerca = false;
 
     //Buscar Comida
     [Header("Variables Búsqueda Comida")]
@@ -82,7 +83,6 @@ public class HormigaGenerica : PersonajeGenerico
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame

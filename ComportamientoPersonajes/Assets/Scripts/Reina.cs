@@ -48,10 +48,10 @@ public class Reina : HormigaGenerica
     #region logica global hormiguero
     [Header("Variables Lógica Global Hormiguero")]
     public List<Nurse> nursesOcupadas = new List<Nurse>();
-    //public Obrera[] obrerasOcupadas;
+    public List<Obrera> obrerasOcupadas = new List<Obrera>();
     //public List<Soldado> soldadosOcupadas = new List<Soldado>();
     public List<Nurse> nursesDesocupadas = new List<Nurse>();
-    //public List<Obrera> obrerasDesocupadas = new List<Obrera>();
+    public List<Obrera> obrerasDesocupadas = new List<Obrera>();
     //public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
     public int capacidadTotalDeHormigas;
     public int capacidadTotalDeComida;
