@@ -143,6 +143,7 @@ public class Reina : HormigaGenerica
     #region prefabs
     public GameObject comidaPrefab;
     public GameObject prefabNurse;
+    public GameObject prefabObrera;
     #endregion
 
     #region Variables Auxiliares Durante el desarrollo
@@ -163,6 +164,7 @@ public class Reina : HormigaGenerica
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         hormiguero = GameObject.FindObjectOfType<Floor>();
         afueras = GameObject.FindObjectOfType<Outside>();
+        reina = this;
 
         // Atributos poner huevos
         tiempoQueLlevaPoniendoHuevo = 0;
@@ -188,7 +190,6 @@ public class Reina : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = this.transform.position;
-        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = false;
 
 
     }
@@ -235,7 +236,6 @@ public class Reina : HormigaGenerica
         SimulateWorld();
         ActualizarPercepcionesHormiguero();
         ActualizarVariablesReina();
-        bocadillo.transform.rotation = Quaternion.Euler(90,-(sprite.transform.rotation.y), 0);
     }
 
     private void SimulateWorld()
@@ -849,10 +849,7 @@ public class Reina : HormigaGenerica
 
     [Task]
     public void PonerHuevos()
-    {
-        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[1];
-        
+    {        
         if (ponerHuevo)
         {
             if (hormigaAponer == TipoHormiga.NULL)
@@ -938,9 +935,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void Esperar()
     {
-        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[0];
-        
 
         if (this.zonaDondeEsta == 1)
         {
@@ -1171,17 +1165,17 @@ public class Reina : HormigaGenerica
                 //Se instanciaria el objeto de hormiga
                 break;
             case TipoHormiga.OBRERA:
-                numeroDeObrerasTotal++;
-                totalHormigas++;
+                //numeroDeObrerasTotal++;
+                //totalHormigas++;
+                Vector3 posObrera = huevo.transform.position;
+                GameObject aux2 = Instantiate(prefabObrera, posObrera, Quaternion.identity);
                 // se instanciaria
                 break;
             case TipoHormiga.SOLDADO:
                 numeroDeSoldadosTotal++;
                 totalHormigas++;
                 break;
-
         }
-
     }
 
     public void huevoNecesitaCuidado(Huevo miHuevo)

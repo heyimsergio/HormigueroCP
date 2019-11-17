@@ -180,37 +180,40 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void Atacar()
     {
-        EnemigoGenerico enemigo = enemigosCerca[0];
-        if (enemigo != null)
+        if (enemigosCerca.Count > 0)
         {
-            agente.SetDestination(enemigo.transform.position);
-            float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
-            if (distanceToTarget < 1.2f)
+            EnemigoGenerico enemigo = enemigosCerca[0];
+            if (enemigo != null)
             {
-                float random = Random.Range(0, 10);
-                if (random < 9f)
+                agente.SetDestination(enemigo.transform.position);
+                float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
+                if (distanceToTarget < 1.2f)
                 {
-                    enemigo.quitarVida(this.daño);
+                    float random = Random.Range(0, 10);
+                    if (random < 9f)
+                    {
+                        enemigo.quitarVida(this.daño);
+                    }
+                    else
+                    {
+                        //Debug.Log("Ataque fallido");
+                    }
                 }
                 else
                 {
-                    //Debug.Log("Ataque fallido");
+                    //Debug.Log("no estoy a rango para pegarle");
                 }
             }
             else
             {
-                //Debug.Log("no estoy a rango para pegarle");
+                enemigosCerca.RemoveAt(0);
             }
-        }
-        else
-        {
-            enemigosCerca.RemoveAt(0);
-        }
 
-        if (enemigosCerca.Count == 0)
-        {
-            siguientePosicionExplorar = this.transform.position;
-            Task.current.Succeed();
+            if (enemigosCerca.Count == 0)
+            {
+                siguientePosicionExplorar = this.transform.position;
+                Task.current.Succeed();
+            }
         }
     }
 
