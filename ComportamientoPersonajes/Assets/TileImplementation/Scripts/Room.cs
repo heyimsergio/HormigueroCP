@@ -27,13 +27,13 @@ public class Room
     public enum roomType { STORAGE, EGGROOM, EMPTY, LIVEROOM};
     roomType myType;
 
-    public GameObject roomPrefab;
+    public GameObject[] roomPrefabList;
 
-    public Room(int width, int heigth, GameObject roomPrefab,roomType type)
+    public Room(int width, int heigth, GameObject[] roomPrefabList, roomType type)
     {
         this.width = width;
         this.heigth = heigth;
-        this.roomPrefab = roomPrefab;
+        this.roomPrefabList = roomPrefabList;
         tiles = new GameObject[width, heigth];
         myType = type;
         capacidadTotalRoom = (int)(width * heigth) / 2;
@@ -61,7 +61,8 @@ public class Room
             centroDeLaSala = tile.transform.position;
         }
         tiles[x, y] = tile;
-        tile.GetComponent<TileScript>().changeType(TileScript.type.ROOM, roomPrefab, depth);
+        int idx = (int)Random.Range(0.0f, 6.0f);
+            tile.GetComponent<TileScript>().changeType(TileScript.type.ROOM, roomPrefabList[idx], depth);
         y++;
         if(y >= heigth)
         {

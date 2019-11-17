@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -656,7 +656,7 @@ Transform:
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children: []
   m_Father: {fileID: 1646566902}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &711407351
 SpriteRenderer:
@@ -983,6 +983,85 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300002, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+--- !u!1 &987369102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 987369103}
+  - component: {fileID: 987369104}
+  m_Layer: 0
+  m_Name: reina_bocadillo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &987369103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987369102}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1646566902}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!212 &987369104
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987369102}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 960d3258ed76c93439cd8dde3cb3f5d5, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1007525492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1391,11 +1470,15 @@ MonoBehaviour:
   width: 50
   heigth: 50
   depth: 0
-  prefabOut: {fileID: 727383227572620615, guid: f1c25af39db91e247bfe2ca0fc41426d,
-    type: 3}
+  prefabOutList:
+  - {fileID: 727383227572620615, guid: f1c25af39db91e247bfe2ca0fc41426d, type: 3}
+  - {fileID: 727383227572620615, guid: bd2f19c0c09636e4bae7b3d5a8c02b8a, type: 3}
+  - {fileID: 727383227572620615, guid: 9ead69c7d2f16aa459445bfb4d154b8f, type: 3}
+  - {fileID: 727383227572620615, guid: fa7887c59905271468d9e3487fd78014, type: 3}
+  - {fileID: 727383227572620615, guid: 5727106e510184c4db26d4ce628d6674, type: 3}
   prefabTile: {fileID: 1584391899563105300, guid: b17832778413d9c40be6c5416fdd6b13,
     type: 3}
-  prefabAgujero: {fileID: 2079550690895735533, guid: 194b81d8b9a3b3f418c6fd92672b3f43,
+  prefabAgujero: {fileID: 2079550690895735533, guid: 9ed027229c84996498d3e9187ee5df9b,
     type: 3}
   centro: {x: 0, y: 0, z: 0}
 --- !u!4 &1266031589
@@ -2277,6 +2360,7 @@ Transform:
   m_LocalPosition: {x: 85, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 987369103}
   - {fileID: 711407350}
   m_Father: {fileID: 0}
   m_RootOrder: 12
@@ -2536,15 +2620,25 @@ MonoBehaviour:
   maxRoom: 10
   minCorridor: 5
   maxCorridor: 10
-  prefabGround: {fileID: 3668460757368031271, guid: 46f030820e2d02141bcd8c831578a6eb,
-    type: 3}
-  prefabRoom: {fileID: 2467580837031594972, guid: 361b8e1d806b80c49bd06b8f68afd47a,
-    type: 3}
+  prefabGroundList:
+  - {fileID: 3668460757368031271, guid: 46f030820e2d02141bcd8c831578a6eb, type: 3}
+  - {fileID: 3668460757368031271, guid: b8ccc3001989a5640a0bf21b5d142526, type: 3}
+  - {fileID: 3668460757368031271, guid: 7922e65952aa6804c963c2dbf49d49ca, type: 3}
+  - {fileID: 3668460757368031271, guid: 9e0079d872e06e0409794bdc9fbd5a35, type: 3}
+  - {fileID: 3668460757368031271, guid: 43884ce60d1545f43b71b7255522b924, type: 3}
+  prefabRoomList:
+  - {fileID: 2467580837031594972, guid: 361b8e1d806b80c49bd06b8f68afd47a, type: 3}
+  - {fileID: 2486056645466122379, guid: 2c980f9f99f5d3948895f7250937d3f5, type: 3}
+  - {fileID: 2486056645466122379, guid: f0fdf9d07209cbd40a511d1967293095, type: 3}
+  - {fileID: 2486056645466122379, guid: ce02a1a5d5470ff41ac386f9a0dfeb89, type: 3}
+  - {fileID: 2486056645466122379, guid: 752f379f92c8a854dab57f1b28ca932d, type: 3}
+  - {fileID: 2486056645466122379, guid: a5a77f94b67311244964f2d55c5368db, type: 3}
+  - {fileID: 2486056645466122379, guid: 2e5257b308a59d143ab6a4e0e77ee336, type: 3}
   prefabCorridor: {fileID: 8144170520043494077, guid: 8a4a8d3681924454f834cdfb545f0ee7,
     type: 3}
   prefabTile: {fileID: 1584391899563105300, guid: b17832778413d9c40be6c5416fdd6b13,
     type: 3}
-  prefabAgujero: {fileID: 2079550690895735533, guid: 194b81d8b9a3b3f418c6fd92672b3f43,
+  prefabAgujero: {fileID: 2079550690895735533, guid: f53720b0b42815148a38a78db4a375aa,
     type: 3}
   createRoomBool: 0
 --- !u!4 &1894152932

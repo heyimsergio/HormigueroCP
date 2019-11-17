@@ -188,6 +188,9 @@ public class Reina : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = this.transform.position;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+
     }
 
     // Update is called once per frame
@@ -232,6 +235,7 @@ public class Reina : HormigaGenerica
         SimulateWorld();
         ActualizarPercepcionesHormiguero();
         ActualizarVariablesReina();
+        bocadillo.transform.rotation = Quaternion.Euler(90,-(sprite.transform.rotation.y), 0);
     }
 
     private void SimulateWorld()
@@ -846,6 +850,9 @@ public class Reina : HormigaGenerica
     [Task]
     public void PonerHuevos()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[1];
+        
         if (ponerHuevo)
         {
             if (hormigaAponer == TipoHormiga.NULL)
@@ -931,6 +938,10 @@ public class Reina : HormigaGenerica
     [Task]
     public void Esperar()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[0];
+        
+
         if (this.zonaDondeEsta == 1)
         {
             //Esta fuera, tiene que entrar
@@ -979,7 +990,7 @@ public class Reina : HormigaGenerica
 
                 }
             }
-        }
+        }        
         Task.current.Succeed();
     }
 

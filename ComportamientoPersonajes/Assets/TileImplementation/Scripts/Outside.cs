@@ -13,7 +13,7 @@ public class Outside : MonoBehaviour
     public int depth;
 
     //prefabs
-    public GameObject prefabOut;
+    public GameObject[] prefabOutList = new GameObject[5];
     public GameObject prefabTile;
     public GameObject prefabAgujero;
 
@@ -46,8 +46,7 @@ public class Outside : MonoBehaviour
                 for (int y = 0; y < heigth; y++)
                 {
                     int random = Random.Range(0, 100);
-
-
+                
                     GameObject tileObject = Instantiate(prefabTile, GetComponentInParent<Transform>());
                     tileObject.transform.position = new Vector3(x + posX, this.transform.position.y, y + posZ);
                     TileScript tile = tileObject.GetComponent<TileScript>();
@@ -58,7 +57,8 @@ public class Outside : MonoBehaviour
                     centro = tile.transform.position;
                 } else
                 {
-                    tile.initTile(x, y, depth, x, y, prefabOut);
+                    int idx = (int)Random.Range(0.0f, 5.0f);
+                    tile.initTile(x, y, depth, x, y, prefabOutList[idx]);
                 }
                 
                     level[x, y] = tileObject;
