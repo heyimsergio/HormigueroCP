@@ -109,6 +109,7 @@ public class Nurse : HormigaGenerica
             numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
 
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Add(this);
             if (!enemigosCerca.Contains(aux))
             {
                 reina.recibirAlertaEnemigo(aux);
@@ -162,6 +163,7 @@ public class Nurse : HormigaGenerica
         if (other.tag == "Enemigo")
         {
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Remove(this);
             if (enemigosCerca.Contains(aux))
             {
                 enemigosCerca.Remove(aux);

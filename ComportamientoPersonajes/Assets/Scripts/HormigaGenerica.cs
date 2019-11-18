@@ -414,12 +414,6 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    /*[Task]
-    public void HayHormigaQueCurarCerca()
-    {
-        Task.current.Fail();
-    }*/
-
     [Task]
     public void HayHormigaQueCurarCerca()
     {

@@ -63,7 +63,7 @@ public class Obrera : HormigaGenerica
         reina.numeroDeObrerasTotal++;
         reina.obrerasDesocupadas.Add(this);
 
-        reina.meterHormigaEnSala();
+        miSala = reina.meterHormigaEnSala();
 
         // Prioridades NavMesh
         reina.contPrioridadNavMesh++;

@@ -358,7 +358,6 @@ public class Reina : HormigaGenerica
     #endregion
 
 
-
     // devuelve una sala de cada tipo con espacio
     #region geters de salas libres
     public Room getSalaLibreHormigas()
@@ -398,9 +397,7 @@ public class Reina : HormigaGenerica
     }
     #endregion
 
-
     // Alertas que recibe la reina
-
     public void recibirAlertaComida(Comida comida)
     {
         if (!ComidaVista.Contains(comida) && !comida.laEstanLLevando && !comida.haSidoCogida)
@@ -420,7 +417,6 @@ public class Reina : HormigaGenerica
 
 
     // Tareas de la reina
-
     [Task]
     public void HaySoldadosLibres()
     {
@@ -437,14 +433,13 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayObrerasLibres()
     {
-        /*if(obrerasDesocupadas.Count > 0)
+        if(obrerasDesocupadas.Count > 0)
         {
             Task.current.Succeed();
         } else
         {
             Task.current.Fail();
-        }*/
-        Task.current.Fail();
+        }
     }
 
     [Task]
@@ -645,7 +640,7 @@ public class Reina : HormigaGenerica
     {
         if (huevosQueTienenQueSerCuidados.Count > 0)
         {
-            Debug.Log("Reina: Hay huevos que necesitan cuidados");
+            //Debug.Log("Reina: Hay huevos que necesitan cuidados");
             Task.current.Succeed();
         }
         else
@@ -1051,8 +1046,6 @@ public class Reina : HormigaGenerica
 
 
     // Métodos para el tratamiento de huevos
-    
-
     public void huevoNecesitaCuidado(Huevo miHuevo)
     {
         if (!huevosQueTienenQueSerCuidados.Contains(miHuevo))
@@ -1106,9 +1099,6 @@ public class Reina : HormigaGenerica
     {
         numHormigasAtacando--;
     }
-
-
-
 
 
     // Métodos para el tratamiento de creaciones
