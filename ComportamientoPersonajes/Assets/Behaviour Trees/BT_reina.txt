@@ -48,10 +48,12 @@ tree("Reina")
 							OrdenBuscarComidaNurses()
 			mute
 				sequence
+					NecesitoCrearSala()
 					not
 						HayEspacio()
 					not
 						HayObrerasCavando()
+					HayObrerasLibres()
 					OrdenCavarObreras()
 			mute
 				sequence
@@ -90,13 +92,11 @@ tree("Reina")
 				HayHormigaQueCurarCerca()
 				CurarHormiga()
 			sequence
-				HayHuevosCercaQueNecesitanCuidados()
-				CuidarHuevos()
-			sequence
 				PuedoPonerHuevos()
 				PonerHuevos()
 			sequence
-				ConstruirSala()
+				HayHuevosCercaQueNecesitanCuidados()
+				CuidarHuevos()
 			sequence
 				TengoHambre()
 				HayComida()

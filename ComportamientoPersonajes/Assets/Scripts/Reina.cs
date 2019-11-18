@@ -229,7 +229,6 @@ public class Reina : HormigaGenerica
     private void ActualizarPercepcionesHormiguero()
     {
         actualizarPrioridades();
-        comprobarCreacionSalas();
         checkearNecesidadComida();
     }
 
@@ -278,33 +277,6 @@ public class Reina : HormigaGenerica
         }
     }
 
-    public void comprobarCreacionSalas()
-    {
-        // comprobar si hay que crear Sala de Hormigas, se hace comprobando que haya capacidad para un 20% mas de hormigas
-        if (totalHormigas * umbralCapacidadHormigas >= capacidadTotalDeHormigas - totalHormigas)
-        {
-            HayQueCrearSalasHormigas = true;
-        }
-        if (totalHuevos * umbralCapacidadHuevos >= capacidadTotalDeHuevos - totalHuevos)
-        {
-            HayQueCrearSalasHuevos = true;
-        }
-        if (totalComida * umbralCapacidadComida >= capacidadTotalDeComida - totalComida)
-        {
-            HayQueCrearSalasComida = true;
-        }
-
-        if (HayQueCrearSalasHormigas || HayQueCrearSalasComida || HayQueCrearSalasHuevos)
-        {
-            HayQueCrearSalas = true;
-        }
-        else
-        {
-            HayQueCrearSalas = false;
-        }
-
-
-    }
 
     public void checkearNecesidadComida()
     {
@@ -318,40 +290,6 @@ public class Reina : HormigaGenerica
             {
                 HayQueBuscarComida = false;
             }
-        }
-    }
-
-    public void checkearNecesidadCuidarHuevos()
-    {
-        if(huevosQueTienenQueSerCuidados.Count >= 0)
-        {
-            HayQueCuidarHuevos = true;
-        } else
-        {
-            HayQueCuidarHuevos = false;
-        }
-    }
-
-    public void checkearNecesidadAtacar()
-    {
-        if(enemigosTotales.Count >= 0)
-        {
-            HayQueAtacar = true;
-        } else
-        {
-            HayQueAtacar = false;
-        }
-    }
-
-    // se ha muerto una hormiga
-    public void checkearNecesidadPatrullar()
-    {
-        if (hormigaMuerta)
-        {
-            HayQuePatrullar = true;
-        } else
-        {
-            HayQuePatrullar = false;
         }
     }
 
@@ -635,6 +573,46 @@ public class Reina : HormigaGenerica
         Task.current.Fail();
     }
 
+    [Task]
+    public void NecesitoCrearSala()
+    {
+        // comprobar si hay que crear Sala de Hormigas, se hace comprobando que haya capacidad para un 20% mas de hormigas
+        if (totalHormigas * umbralCapacidadHormigas >= capacidadTotalDeHormigas - totalHormigas)
+        {
+            HayQueCrearSalasHormigas = true;
+            Task.current.Succeed();
+            return;
+        }
+        if (totalHuevos * umbralCapacidadHuevos >= capacidadTotalDeHuevos - totalHuevos)
+        {
+            HayQueCrearSalasHuevos = true;
+            Task.current.Succeed();
+            return;
+        }
+        if (totalComida * umbralCapacidadComida >= capacidadTotalDeComida - totalComida)
+        {
+            HayQueCrearSalasComida = true;
+            Task.current.Succeed();
+            return;
+        }
+
+        if (HayQueCrearSalasHormigas || HayQueCrearSalasComida || HayQueCrearSalasHuevos)
+        {
+            HayQueCrearSalas = true;
+            Task.current.Succeed();
+            return;
+        }
+        else
+        {
+            HayQueCrearSalas = false;
+            Task.current.Fail();
+            return;
+        }
+
+
+    }
+
+
 
     #endregion
 
@@ -898,6 +876,7 @@ public class Reina : HormigaGenerica
     #endregion
 
     // Otros ???
+
 
     // Pasará a ser el cavar de las obreras
     [Task]

@@ -309,6 +309,19 @@ public class HormigaGenerica : PersonajeGenerico
     }
 
     [Task]
+    public void ReinaTieneMuchaHambre()
+    {
+        if (reina.tengoMuchaHambre)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
     public void Comer()
     {
         if (comidaAComer == null)
