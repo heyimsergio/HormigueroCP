@@ -29,6 +29,7 @@ public class HormigaGenerica : PersonajeGenerico
     [HideInInspector]
     protected float tiempoEntreAtaquesMax = 0.5f;
     protected float TiempoActual;
+    public Room miSala;
 
     // Atacar
     [Header("Variables ataque")]
@@ -44,6 +45,7 @@ public class HormigaGenerica : PersonajeGenerico
     public Vector3 siguientePosicionBuscandoComida;
     public Comida comida;
     public Room salaDejarComida = null;
+    public TileScript casillaDejarComida = null;
     Vector3 posDejarComida = Vector3.zero;
     //Orden Buscar Comida
     public bool hayOrdenBuscarComida = false;
@@ -567,7 +569,8 @@ public class HormigaGenerica : PersonajeGenerico
                     if (salaDejarComida == null)
                     {
                         salaDejarComida = reina.getSalaLibreComida();
-                        posDejarComida = salaDejarComida.getRandomPosition();
+                        casillaDejarComida = salaDejarComida.getFreeTile();
+                        posDejarComida = casillaDejarComida.gameObject.transform.position;
                         if (salaDejarComida == null)
                         {
                             comida.laEstanLLevando = false;
@@ -626,6 +629,7 @@ public class HormigaGenerica : PersonajeGenerico
             {
                 //Debug.Log("No estoy fuera");
                 //Debug.Log("No tengo comida");
+                //ESTO ES LO QUE PRESUMIBEMENTE ESTA MAL Y HABRA QUE CORREGIR
                 Vector3 randomDirection;
                 NavMeshHit aux;
                 bool aux2;
@@ -647,12 +651,13 @@ public class HormigaGenerica : PersonajeGenerico
                     if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
                     {
                         //Debug.Log("Comida dejada");
-                        reina.comidaGuardada(comida, salaDejarComida);
+                        reina.comidaGuardada(comida, salaDejarComida,casillaDejarComida);
                         comida.haSidoCogida = true;
                         comida.laEstanLLevando = false;
                         comida.transform.SetParent(null);
                         comida = null;
                         salaDejarComida = null;
+                        casillaDejarComida = null;
                         Task.current.Succeed();
                     }
                     else

@@ -21,7 +21,6 @@ public class TileScript : MonoBehaviour
 
     private void Start()
     {
-        
     }
 
     //Inicializa la casilla:

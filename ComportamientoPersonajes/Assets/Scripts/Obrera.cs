@@ -251,7 +251,8 @@ public class Obrera : HormigaGenerica
     [Task]
     public void HaySuficienteComida()
     {
-        if (reina.totalComida < 5)
+        Debug.Log(reina.umbralComida * reina.totalHormigas);
+        if (reina.totalComida < reina.umbralComida * reina.totalHormigas)
         {
             Task.current.Fail();
         }

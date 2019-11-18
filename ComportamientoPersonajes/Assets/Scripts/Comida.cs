@@ -16,16 +16,21 @@ public class Comida : MonoBehaviour
     public bool haSidoCogida = false;
     public bool laEstanLLevando = false;
 
+    //Variables de ubicacion de la comida;
     public Room misala;
+    public TileScript miTile;
 
     public HormigaGenerica[] hormigasCogiendoLaComida;
 
     Reina reina = null;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
         reina = GameObject.FindObjectOfType<Reina>();
+        miTile = null;
     }
 
     public void initComida(comidaType tipo)
@@ -68,15 +73,21 @@ public class Comida : MonoBehaviour
         return hambreQueRestaura;
     }
 
-    // habria que hacer que la comida fuera con la navMesh a la sala y la hormiga detras
-   public void cogerComida(Room misala)
+    /// <summary>
+    /// Actualiza sala y tile, una vez muerta habrá que liberarlos;
+    /// </summary>
+    /// <param name="misala"> Sala donde se ubica la comida</param>
+    /// <param name="miTile"> Tile donde se ubica la comida</param>
+    /*
+    public void cogerComida(Room misala, TileScript miTile)
     {
         this.misala = misala;
+        this.miTile = miTile;
         haSidoCogida = true;
         this.transform.position = misala.centroDeLaSala;
     }
 
-
+    */
 
 
 }

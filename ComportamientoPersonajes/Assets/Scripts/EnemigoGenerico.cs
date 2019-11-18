@@ -42,13 +42,13 @@ public class EnemigoGenerico : PersonajeGenerico
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Colision enemigo con algo");
+        //Debug.Log("Colision enemigo con algo");
         if (other.gameObject.tag == "Reina" ||
             other.gameObject.tag == "Nurse" ||
             other.gameObject.tag == "Obrera" ||
             other.gameObject.tag == "Soldado")
         {
-            Debug.Log("Colision con hormiga");
+           // Debug.Log("Colision con hormiga");
 
             HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
             if (!hormigasCerca.Contains(aux))

@@ -14,6 +14,7 @@ public class Huevo : MonoBehaviour
     public int umbralDeAvisoCuidarHuevo;
     public int umbralDePoderseCuidar;
     public Room myRoom;
+    public TileScript myTile;
     private Reina miReina;
     Collider huevoCollider;
 
@@ -27,10 +28,11 @@ public class Huevo : MonoBehaviour
         huevoCollider.isTrigger = true;
     }
 
-    public void init(Room aux, Reina.TipoHormiga tipo)
+    public void init(Room aux, Reina.TipoHormiga tipo, TileScript tile)
     {
         myRoom = aux;
         miType = tipo;
+        myTile = tile;
     }
 
     // Update is called once per frame

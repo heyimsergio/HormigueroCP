@@ -385,6 +385,7 @@ MonoBehaviour:
   reinaCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
+  casillaDejarComida: {fileID: 0}
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -620,7 +621,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -2088,6 +2089,7 @@ MonoBehaviour:
   reinaCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
+  casillaDejarComida: {fileID: 0}
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -2168,7 +2170,7 @@ MonoBehaviour:
   umbralCapacidadComida: 0.3
   "tama\xF1oMaxColaConstruccionSalas": 0
   salasEnConstruccion: 0
-  umbralComida: 0.4
+  umbralComida: 1.4
   comidaPrefab: {fileID: 2867959774170439277, guid: 09ba6be01b00b9b46a847381e95dd101,
     type: 3}
   prefabNurse: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
@@ -2301,6 +2303,7 @@ MonoBehaviour:
   reinaCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
+  casillaDejarComida: {fileID: 0}
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -3037,7 +3040,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}

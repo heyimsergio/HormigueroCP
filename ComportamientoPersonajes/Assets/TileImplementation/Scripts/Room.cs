@@ -24,6 +24,8 @@ public class Room
 
     public GameObject[,] tiles;
 
+    public List<TileScript> casillasVacias = new List<TileScript>();
+
     public enum roomType { STORAGE, EGGROOM, EMPTY, LIVEROOM};
     roomType myType;
 
@@ -62,7 +64,12 @@ public class Room
         }
         tiles[x, y] = tile;
         int idx = (int)Random.Range(0.0f, 6.0f);
-            tile.GetComponent<TileScript>().changeType(TileScript.type.ROOM, roomPrefabList[idx], depth);
+        TileScript aux = tile.GetComponent<TileScript>();
+        aux.changeType(TileScript.type.ROOM, roomPrefabList[idx], depth);
+        casillasVacias.Add(aux);
+        // meto a la casilla en la lista de salas libres;
+
+
         y++;
         if(y >= heigth)
         {
@@ -83,6 +90,7 @@ public class Room
         return centroDeLaSala;
     }
 
+
     public void meterCosas()
     {
         llenadoActual++;
@@ -93,8 +101,17 @@ public class Room
     }
 
 
-    public void sacarCosas()
+    public void sacarCosas(TileScript tile)
     {
+
+        if(tile != null)
+        {
+            casillasVacias.Add(tile);
+        } else
+        {
+            Debug.LogWarning("Debió morir una hormiga");
+        }
+
         llenadoActual--;
         if (isFull)
         {
@@ -102,9 +119,31 @@ public class Room
         }
     }
 
-    public Vector3 getRandomPosition()
+    /// <summary>
+    /// Devuelve una de las casillas libres
+    /// </summary>
+    /// <returns> TileScript. casilla libre</returns>
+    public TileScript getFreeTile()
     {
-       return (centroDeLaSala + new Vector3(Random.Range(-width / 2, width / 2), 0, Random.Range(-heigth / 2, heigth / 2)));
+
+        if(casillasVacias.Count >= 0)
+        {
+            Debug.Log(casillasVacias.Count + " Casillas vacias");
+            int indice = Random.Range(0, casillasVacias.Count);
+            Debug.Log(indice + " Casillas vacia a coger");
+            TileScript aux = casillasVacias[indice];
+            casillasVacias.RemoveAt(indice);
+            return aux;
+        } else
+        {
+            Debug.LogError("Error en la gestion de casillas");
+            return null;
+        }
+
+
+        // solo se haria si algo sale mal
+        
+      // return (centroDeLaSala + new Vector3(Random.Range(-width / 2, width / 2), 0, Random.Range(-heigth / 2, heigth / 2)));
     }
 
 
