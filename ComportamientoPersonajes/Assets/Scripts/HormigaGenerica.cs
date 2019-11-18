@@ -83,6 +83,12 @@ public class HormigaGenerica : PersonajeGenerico
     public bool meHanMandadoOrden = false;
     public enum ordenes { ORDEN1, ORDEN2 };
 
+    //Bocadillo
+    [Header("Variables Bocadillo")]
+    public GameObject bocadillo;
+    public GameObject sprite;
+    public List<Sprite> spriteBocadillos = new List<Sprite>();
+
 
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +103,8 @@ public class HormigaGenerica : PersonajeGenerico
         actualizarHambre();
 
         actualizarSiPuedeSerCurada();
+
+        bocadillo.transform.rotation = Quaternion.Euler(90, -(sprite.transform.rotation.y), 0);
     }
 
     public void actualizarHambre()
@@ -164,6 +172,8 @@ public class HormigaGenerica : PersonajeGenerico
 
     public void quitarVida(int damage)
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[0];
         Debug.Log("Hormiga perdiendo vida");
         this.vida -= damage;
         if (vida <= 0)
@@ -220,6 +230,8 @@ public class HormigaGenerica : PersonajeGenerico
             EnemigoGenerico enemigo = enemigosCerca[0];
             if (enemigo != null)
             {
+                bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[3];
                 agente.SetDestination(enemigo.transform.position);
                 float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
                 if (distanceToTarget < 1.2f)
@@ -311,6 +323,8 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void Comer()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[2];
         if (comidaAComer == null)
         {
             comidaAComer = reina.pedirComida();

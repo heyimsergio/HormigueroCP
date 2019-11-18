@@ -402,6 +402,9 @@ MonoBehaviour:
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
+  bocadillo: {fileID: 0}
+  sprite: {fileID: 0}
+  spriteBocadillos: []
   huevosCerca: []
   numeroDeObrerasCerca: 0
   numeroDeSoldadosCerca: 0
@@ -527,6 +530,72 @@ OffMeshLink:
   m_BiDirectional: 1
   m_Activated: 1
   m_AutoUpdatePositions: 0
+--- !u!1 &664661050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 664661053}
+  - component: {fileID: 664661052}
+  - component: {fileID: 664661051}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &664661051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664661050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &664661052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664661050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &664661053
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664661050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &711407349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1120,6 +1189,12 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1021009737 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3253218157363780551, guid: c969fd524db04ce40857f5df2d0b2470,
+    type: 3}
+  m_PrefabInstance: {fileID: 4413783056027939078}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1158231359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,6 +1412,85 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1245063210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245063211}
+  - component: {fileID: 1245063212}
+  m_Layer: 0
+  m_Name: bocadillo_reina
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1245063211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245063210}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 1, y: 0, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1646566902}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!212 &1245063212
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245063210}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 6a12676f041c15c44add95522574047b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1266031587
 GameObject:
   m_ObjectHideFlags: 0
@@ -2106,6 +2260,12 @@ MonoBehaviour:
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
+  bocadillo: {fileID: 1245063210}
+  sprite: {fileID: 711407349}
+  spriteBocadillos:
+  - {fileID: 21300000, guid: 226e8e03fb6356241a1a39187e65077b, type: 3}
+  - {fileID: 21300000, guid: 960d3258ed76c93439cd8dde3cb3f5d5, type: 3}
+  - {fileID: 21300000, guid: a3c77800cda12a24ea8bf4460293c904, type: 3}
   contPrioridadNavMesh: 0
   tiempoQueTardaEnPonerHuevo: 3
   tiempoQueLlevaPoniendoHuevo: 0
@@ -2191,6 +2351,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 711407350}
+  - {fileID: 1245063211}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2320,6 +2481,11 @@ MonoBehaviour:
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
+  bocadillo: {fileID: 1893553926}
+  sprite: {fileID: 1934602680}
+  spriteBocadillos:
+  - {fileID: 21300000, guid: 43645d6868f6a024a9aa3a09e7d0894f, type: 3}
+  - {fileID: 21300000, guid: 520feed834fe25d4daccd5b4c36a60e6, type: 3}
   huevosCerca: []
   numeroDeObrerasCerca: 0
   numeroDeSoldadosCerca: 0
@@ -2400,6 +2566,7 @@ Transform:
   m_Children:
   - {fileID: 1934602681}
   - {fileID: 873575260}
+  - {fileID: 1893553927}
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2417,6 +2584,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   link: {fileID: 0}
+--- !u!1 &1812542052 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4413783054620558173, guid: c969fd524db04ce40857f5df2d0b2470,
+    type: 3}
+  m_PrefabInstance: {fileID: 4413783056027939078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1893553926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1893553927}
+  - component: {fileID: 1893553928}
+  m_Layer: 0
+  m_Name: nurse_bocadillo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1893553927
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893553926}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 1, y: 0, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1664277725}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!212 &1893553928
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893553926}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 520feed834fe25d4daccd5b4c36a60e6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1894152930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2468,7 +2720,7 @@ MonoBehaviour:
   - {fileID: 2486056645466122379, guid: 752f379f92c8a854dab57f1b28ca932d, type: 3}
   - {fileID: 2486056645466122379, guid: a5a77f94b67311244964f2d55c5368db, type: 3}
   - {fileID: 2486056645466122379, guid: 2e5257b308a59d143ab6a4e0e77ee336, type: 3}
-  prefabCorridor: {fileID: 8144170520043494077, guid: 8a4a8d3681924454f834cdfb545f0ee7,
+  prefabCorridor: {fileID: 2467580837031594972, guid: 361b8e1d806b80c49bd06b8f68afd47a,
     type: 3}
   prefabTile: {fileID: 1584391899563105300, guid: b17832778413d9c40be6c5416fdd6b13,
     type: 3}
@@ -3023,6 +3275,33 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 2144260384}
+    - target: {fileID: 4413783055448590807, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: spriteBocadillos.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413783055448590807, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: sprite
+      value: 
+      objectReference: {fileID: 1812542052}
+    - target: {fileID: 4413783055448590807, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: bocadillo
+      value: 
+      objectReference: {fileID: 1021009737}
+    - target: {fileID: 4413783055448590807, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: spriteBocadillos.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 43645d6868f6a024a9aa3a09e7d0894f,
+        type: 3}
+    - target: {fileID: 4413783055448590807, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: spriteBocadillos.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 520feed834fe25d4daccd5b4c36a60e6,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c969fd524db04ce40857f5df2d0b2470, type: 3}
 --- !u!1001 &4576295137146405432

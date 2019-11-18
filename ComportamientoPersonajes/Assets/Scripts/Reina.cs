@@ -44,6 +44,7 @@ public class Reina : HormigaGenerica
     public HormigaGenerica hormigasACurar;
     public HormigaGenerica hormigasDesocupadas;
 
+
     #endregion
 
     #region logica global hormiguero
@@ -171,6 +172,9 @@ public class Reina : HormigaGenerica
         tiempoQueLlevaPoniendoHuevo = 0;
         tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
 
+        //Visualizacion de bocadillos
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
         // Prioridades NavMesh
         contPrioridadNavMesh++;
         if (contPrioridadNavMesh > 99)
@@ -216,6 +220,10 @@ public class Reina : HormigaGenerica
             ConstruirSala();
             crearSala = false;
         }
+
+        //Actualizar bocadillos
+        bocadillo.transform.rotation = Quaternion.Euler(90, -(sprite.transform.rotation.y), 0);
+
         SimulateWorld();
         ActualizarPercepcionesHormiguero();
         ActualizarVariablesReina();
@@ -658,10 +666,12 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCuidarNurses()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[1];
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
-            Debug.Log("Tengo nurse que mandar a cuidar");
+            Debug.Log("Tengo nurse que mandar a cuidar");           
             // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
             aux.hayOrdenCuidarHuevos = true;
             nursesOcupadas.Add(aux);
@@ -752,7 +762,10 @@ public class Reina : HormigaGenerica
 
     [Task]
     public void PonerHuevos()
-    {        
+    {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[0];
+
         if (ponerHuevo)
         {
             if (hormigaAponer == TipoHormiga.NULL)
@@ -842,6 +855,8 @@ public class Reina : HormigaGenerica
     [Task]
     public void Esperar()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+       
 
         if (this.zonaDondeEsta == 1)
         {
@@ -866,6 +881,8 @@ public class Reina : HormigaGenerica
             //
             if (this.zonaDondeEsta == 0)
             {
+                bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[2];
                 //Debug.Log("Estoy dentro, asi que exploro " + siguientePosicionExplorar + " " + transform.position);
                 float distanceToTarget = Vector3.Distance(this.transform.position, siguientePosicionExplorar);
                 //Debug.Log(distanceToTarget);

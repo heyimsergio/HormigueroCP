@@ -75,6 +75,9 @@ public class Nurse : HormigaGenerica
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
 
+        //Visualizacion de bocadillos
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
         // Ataques y Vida
         this.vida = 10;
         this.daño = 2;
@@ -98,6 +101,7 @@ public class Nurse : HormigaGenerica
 
     /*private void Update()
     {
+
     }*/
 
     private void OnTriggerEnter(Collider other)
@@ -274,6 +278,8 @@ public class Nurse : HormigaGenerica
     [Task]
     public void CuidarHuevos()
     {
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        bocadillo.gameObject.GetComponent<SpriteRenderer>().sprite = spriteBocadillos[1];
         if (huevoACuidar != null)
         {
             if (posHuevo == Vector3.zero)
