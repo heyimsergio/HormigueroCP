@@ -229,11 +229,12 @@ public class Floor : MonoBehaviour
                          myTile = tile.GetComponent<TileScript>();
                         if(myTile.tileType == TileScript.type.GROUND)
                         {
-                            if(x > 0 && x < width - 1)
+                            if(x > 0 && x < width - 1) // si no estamos en un extremo
                             {
-                                if (level[x + 1, y].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[x - 1, y].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
+                                if (level[x + 2, i].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[x - 1, i].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
                                 {
                                     myTile.changeType(TileScript.type.CORRIDOR, prefabCorridor,depth);
+                                    level[x + 1, i].GetComponent<TileScript>().changeType(TileScript.type.CORRIDOR, prefabCorridor, depth); // lo hacemos el doble de gordo el camino
                                 }
                             } else
                             {
@@ -279,9 +280,10 @@ public class Floor : MonoBehaviour
                         {
                             if (x > 0 && x < width - 1)
                             {
-                                if (level[x + 1, y].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[x - 1, y].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
+                                if (level[x + 1, i].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[x - 2, i].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
                                 {
                                     myTile.changeType(TileScript.type.CORRIDOR, prefabCorridor,depth);
+                                    level[x -1, i].GetComponent<TileScript>().changeType(TileScript.type.CORRIDOR, prefabCorridor, depth); // lo hacemos el doble de gordo el camino
                                 }
                             }
                             else
@@ -326,9 +328,10 @@ public class Floor : MonoBehaviour
                         {
                             if (y > 0 && y < heigth - 1)
                             {
-                                if (level[x , y+1].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[x , y-1].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
+                                if (level[i , y+2].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[i , y-1].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
                                 {
                                     myTile.changeType(TileScript.type.CORRIDOR, prefabCorridor,depth);
+                                    level[i, y + 1].GetComponent<TileScript>().changeType(TileScript.type.CORRIDOR, prefabCorridor, depth);
                                 }
                             }
                             else
@@ -373,9 +376,10 @@ public class Floor : MonoBehaviour
                         {
                             if (y > 0 && y < heigth - 1)
                             {
-                                if (level[x, y + 1].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[x, y - 1].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
+                                if (level[i, y + 1].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR && level[i, y - 2].GetComponent<TileScript>().tileType != TileScript.type.CORRIDOR)
                                 {
                                     myTile.changeType(TileScript.type.CORRIDOR, prefabCorridor,depth);
+                                    level[i, y - 1].GetComponent<TileScript>().changeType(TileScript.type.CORRIDOR, prefabCorridor, depth);
                                 }
                             }
                             else
