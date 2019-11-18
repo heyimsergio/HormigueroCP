@@ -6,10 +6,11 @@ using UnityEngine.AI;
 
 public class EnemigoGenerico : PersonajeGenerico
 {
-
     //Agente Navmesh
     NavMeshAgent agente;
     PandaBehaviour pb;
+
+    Reina reina = null;
 
     public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
     protected int tiempoParaIrse;
@@ -31,6 +32,7 @@ public class EnemigoGenerico : PersonajeGenerico
         this.siguientePosicion = this.transform.position;
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
         tiempoEntreAtaques = tiempoEntreAtaquesMax;
+        reina = GameObject.FindObjectOfType<Reina>();
     }
 
     // Update is called once per frame
@@ -135,6 +137,7 @@ public class EnemigoGenerico : PersonajeGenerico
         this.vida -= damage;
         if (vida <= 0)
         {
+            reina.EnemigoHaMuerto(this);
             Destroy(this.gameObject);
         }
     }

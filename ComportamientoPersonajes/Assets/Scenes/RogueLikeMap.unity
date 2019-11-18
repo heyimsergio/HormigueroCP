@@ -373,6 +373,10 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hambre: 200
+  umbralHambre: 500
+  tengoHambre: 0
+  umbralHambreMaximo: 500
+  tengoMuchaHambre: 0
   pesoQuePuedenTransportar: 0
   estaLuchando: 0
   enemigosCerca: []
@@ -612,6 +616,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Obrera (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -2067,6 +2076,10 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hambre: 200
+  umbralHambre: 500
+  tengoHambre: 0
+  umbralHambreMaximo: 500
+  tengoMuchaHambre: 0
   pesoQuePuedenTransportar: 0
   estaLuchando: 0
   enemigosCerca: []
@@ -2244,7 +2257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1664277720
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2276,6 +2289,10 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hambre: 200
+  umbralHambre: 500
+  tengoHambre: 0
+  umbralHambreMaximo: 500
+  tengoMuchaHambre: 0
   pesoQuePuedenTransportar: 0
   estaLuchando: 0
   enemigosCerca: []
@@ -2938,6 +2955,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nurse (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3011,6 +3033,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Obrera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}

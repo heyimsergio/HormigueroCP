@@ -55,18 +55,15 @@ public class Huevo : MonoBehaviour
         if(tiempoQueAguantaSinCuidar < 0)
         {
             Debug.Log("Huevo Muerto");
-            miReina.huevoMuerto(this);
-            myRoom.sacarCosas();
+            miReina.HuevoHaMuerto(this);
             Destroy(this.gameObject);
         }
-
         tiempoQueAguantaSinCuidar -= Time.deltaTime;
 
         // Nace Huevo
         if (tiempoParaNacer < 0)
         {
-            myRoom.sacarCosas();
-            miReina.NaceHuevo(this);
+            miReina.NaceHormiga(this);
             Destroy(this.gameObject);
         }
         tiempoParaNacer -= Time.deltaTime;

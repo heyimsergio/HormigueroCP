@@ -184,14 +184,17 @@ public class Reina : HormigaGenerica
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
 
+        // Hambre
+        hambre = 400;
+        umbralHambre = 230;
+        umbralHambreMaximo = 120;
+
         // Cuidar huevos
         tiempoCuidandoHuevos = 10.0f;
         TiempoActual = tiempoCuidandoHuevos;
 
         // Explorar
         siguientePosicionExplorar = this.transform.position;
-
-
     }
 
     // Update is called once per frame
@@ -201,30 +204,7 @@ public class Reina : HormigaGenerica
         actualizarHambre();
 
         // Actualizar si tiene vida suficiente o no
-        if (puedeCurarse())
-        {
-            puedeSerCurada = true;
-        }
-        else
-        {
-            puedeSerCurada = false;
-        }
-
-        if (necesitaCurarse())
-        {
-            necesitaSerCurada = true;
-            if (!reina.hormigasHeridas.Contains(this))
-            {
-                if (siendoCuradaPor == null)
-                {
-                    reina.hormigasHeridas.Add(this);
-                }
-            }
-        }
-        else
-        {
-            necesitaSerCurada = false;
-        }
+        actualizarSiPuedeSerCurada();
 
         // Actualización del hormiguero y creación de salas
         actualTime = Time.time - initTime;
@@ -240,7 +220,7 @@ public class Reina : HormigaGenerica
 
     private void SimulateWorld()
     {
-        crearComida();
+        CrearComida();
     }
 
     private void ActualizarPercepcionesHormiguero()
@@ -258,31 +238,6 @@ public class Reina : HormigaGenerica
             ponerHuevo = true;
         }
     }
-
-    /// <summary>
-    /// Funciones de simulacion del mundo
-    /// </summary>
-    #region Funciones simulacion mundo
-
-    public void crearComida()
-    {
-        int saleComida = Random.RandomRange(0, MaxProbComida + 1);
-        if (saleComida < probComida)
-        {
-            Vector3 centro = afueras.centro;
-            float posX = Random.RandomRange(-(afueras.width / 2), (afueras.width / 2));
-            float posZ = Random.RandomRange(-(afueras.heigth / 2), (afueras.heigth / 2));
-
-            centro.x += posX;
-            centro.z += posZ;
-
-            GameObject aux = Instantiate(comidaPrefab, centro, Quaternion.identity);
-            aux.GetComponent<Comida>().initComida(Comida.comidaType.Trigo);
-
-        }
-    }
-
-    #endregion
 
     /// <summary>
     /// Prioridades de la reina al poner un huevo
@@ -399,62 +354,7 @@ public class Reina : HormigaGenerica
 
     #endregion
 
-    // Devuelve la sala porque sera necesario asignarsela a las homirmigas comidas y huevos para manejarlas
-    #region Meter Cosas en salas
-    public Room meterComidaEnSala()
-    {
-        Room sala = getSalaLibreComida();
-        if(sala != null)
-        {
-            sala.meterCosas();
-            totalComida++;
-        }
-        return sala; 
-    }
 
-    public Room meterHormigaEnSala()
-    {
-        Room sala = getSalaLibreHormigas();
-        if (sala != null)
-        {
-            sala.meterCosas();
-            totalHormigas++;
-        }
-        return sala;
-    }
-
-    public Room meterHuevosEnSala(Room sala)
-    {
-        if(sala != null)
-        {
-            sala.meterCosas();
-            totalHuevos++;
-        }
-        return sala;
-    }
-    #endregion
-
-    #region Metodos para sacar cosas de las salas
-    // necesitamos la sala dode se guardan las cosas
-    public void sacarHormigaSala(Room sala)
-    {
-        sala.sacarCosas();
-        totalHormigas--;
-    }
-
-    public void sacarComidaSala(Room sala, Comida comida)
-    {
-        ComidaTotal.Remove(comida);
-        sala.sacarCosas();
-        totalComida--;
-    }
-
-    public void sacarHuevosSala(Room sala)
-    {
-        sala.sacarCosas();
-        totalHuevos--;
-    }
-    #endregion
 
     // devuelve una sala de cada tipo con espacio
     #region geters de salas libres
@@ -818,8 +718,8 @@ public class Reina : HormigaGenerica
 
     #region Tareas De La Reina
 
-    //HayEnemigosCerca()
-    //Atacar()
+    // HayEnemigosCerca()
+    // Atacar()
     // TengoMuchaHambre()
     // TengoHambre()
     // HayComida()
@@ -1144,39 +1044,7 @@ public class Reina : HormigaGenerica
 
 
     // Métodos para el tratamiento de huevos
-    public void NaceHuevo(Huevo huevo)
-    {
-        totalHuevos--;
-        huevosTotal.Remove(huevo);
-        if (huevosQueTienenQueSerCuidados.Contains(huevo))
-        {
-            huevosQueTienenQueSerCuidados.Remove(huevo);
-        }
-        switch (huevo.miType)
-        {
-            case TipoHormiga.NURSE:
-                //numeroDeNursesTotal++;
-                //totalHormigas++;
-                Vector3 posNurse = huevo.transform.position;
-                GameObject aux = Instantiate(prefabNurse, posNurse, Quaternion.identity);
-                //aux.transform.position = huevo.transform.position;
-                //nursesDesocupadas.Add(aux.GetComponent<Nurse>());
-                
-                //Se instanciaria el objeto de hormiga
-                break;
-            case TipoHormiga.OBRERA:
-                //numeroDeObrerasTotal++;
-                //totalHormigas++;
-                Vector3 posObrera = huevo.transform.position;
-                GameObject aux2 = Instantiate(prefabObrera, posObrera, Quaternion.identity);
-                // se instanciaria
-                break;
-            case TipoHormiga.SOLDADO:
-                numeroDeSoldadosTotal++;
-                totalHormigas++;
-                break;
-        }
-    }
+    
 
     public void huevoNecesitaCuidado(Huevo miHuevo)
     {
@@ -1192,14 +1060,7 @@ public class Reina : HormigaGenerica
         huevosQueTienenQueSerCuidados.Remove(miHuevo);
     }
 
-    public void huevoMuerto(Huevo miHuevo)
-    {
-        huevosQueTienenQueSerCuidados.Remove(miHuevo);
-        huevosTotal.Remove(miHuevo);
-    }
-
     // Métodos para el tratamiento de la comida
-
     public void comidaGuardada(Comida comida, Room sala)
     {
         if (!ComidaTotal.Contains(comida))
@@ -1215,14 +1076,14 @@ public class Reina : HormigaGenerica
     {
         if(ComidaTotal.Count > 0)
         {
-            return ComidaTotal[0];
+            Comida c = ComidaTotal[0];
+            ComidaTotal.RemoveAt(0);
+            return c;
         }
-
         return null;
     }
 
     // Métodos para el tratamiento de los ataques
-
     public void HormigaAtacando()
     {
         numHormigasAtacando++;
@@ -1233,5 +1094,216 @@ public class Reina : HormigaGenerica
     {
         numHormigasAtacando--;
     }
-    
+
+
+
+
+
+    // Métodos para el tratamiento de creaciones
+    public void NaceHormiga(Huevo huevo)
+    {
+        HuevoHaMuerto(huevo);
+        switch (huevo.miType)
+        {
+            case TipoHormiga.NURSE:
+                //numeroDeNursesTotal++;
+                //totalHormigas++;
+                Debug.Log("Nurse nace");
+                Vector3 posNurse = huevo.transform.position;
+                GameObject aux = Instantiate(prefabNurse, posNurse, Quaternion.identity);
+                //aux.transform.position = huevo.transform.position;
+                //nursesDesocupadas.Add(aux.GetComponent<Nurse>());
+                //Se instanciaria el objeto de hormiga
+                break;
+            case TipoHormiga.OBRERA:
+                //numeroDeObrerasTotal++;
+                //totalHormigas++;
+                Debug.Log("Obrera nace");
+                Vector3 posObrera = huevo.transform.position;
+                GameObject aux2 = Instantiate(prefabObrera, posObrera, Quaternion.identity);
+                // se instanciaria
+                break;
+            case TipoHormiga.SOLDADO:
+                Debug.Log("Soldado nace");
+                //numeroDeSoldadosTotal++;
+                //totalHormigas++;
+                break;
+        }
+    }
+
+    public void CrearComida()
+    {
+        int saleComida = Random.RandomRange(0, MaxProbComida + 1);
+        if (saleComida < probComida)
+        {
+            Vector3 centro = afueras.centro;
+            float posX = Random.RandomRange(-(afueras.width / 2), (afueras.width / 2));
+            float posZ = Random.RandomRange(-(afueras.heigth / 2), (afueras.heigth / 2));
+
+            centro.x += posX;
+            centro.z += posZ;
+
+            GameObject aux = Instantiate(comidaPrefab, centro, Quaternion.identity);
+            aux.GetComponent<Comida>().initComida(Comida.comidaType.Trigo);
+        }
+    }
+
+        // Tarea Poner Huevo de Reina
+
+    // Devuelve la sala porque sera necesario asignarsela a las homirmigas comidas y huevos para manejarlas
+    #region Meter Cosas en salas
+    public Room meterComidaEnSala()
+    {
+        Room sala = getSalaLibreComida();
+        if (sala != null)
+        {
+            sala.meterCosas();
+            totalComida++;
+        }
+        return sala;
+    }
+
+    public Room meterHormigaEnSala()
+    {
+        Room sala = getSalaLibreHormigas();
+        if (sala != null)
+        {
+            sala.meterCosas();
+        }
+        return sala;
+    }
+
+    public Room meterHuevosEnSala(Room sala)
+    {
+        if (sala != null)
+        {
+            sala.meterCosas();
+            totalHuevos++;
+        }
+        return sala;
+    }
+    #endregion
+
+
+
+
+    // Métodos para el tratamiento de muertos
+    public void HormigaHaMuerto(HormigaGenerica hormiga)
+    {
+        totalHormigas--;
+        Debug.Log("Hormiga A Muerto");
+        // Eliminar a la hormiga de todas las listas
+        if (hormigasHeridas.Contains(hormiga))
+        {
+            hormigasHeridas.Remove(hormiga);
+        }
+        if (hormiga.GetType().Equals("Nurse"))
+        {
+            Nurse hormigaNurse = (Nurse)hormiga;
+            if (nursesDesocupadas.Contains(hormigaNurse))
+            {
+                nursesDesocupadas.Remove(hormigaNurse);
+            }
+            else if (nursesOcupadas.Contains(hormigaNurse))
+            {
+                nursesOcupadas.Remove(hormigaNurse);
+            }
+        }
+        else if (hormiga.GetType().Equals("Obrera"))
+        {
+            Obrera hormigaObrera = (Obrera)hormiga;
+            if (obrerasDesocupadas.Contains(hormigaObrera))
+            {
+                obrerasDesocupadas.Remove(hormigaObrera);
+            }
+            else if (obrerasOcupadas.Contains(hormigaObrera))
+            {
+                obrerasOcupadas.Remove(hormigaObrera);
+            }
+        }
+        else if (hormiga.GetType().Equals("Soldado"))
+        {
+            /*Soldado hormigaSoldado = (Soldado)hormiga;
+            if (soldadosDesocupadas.Contains(hormigaSoldado))
+            {
+                soldadosDesocupadas.Remove(hormigaSoldado);
+            }
+            else if (soldadosOcupadas.Contains(hormigaSoldado))
+            {
+                soldadosOcupadas.Remove(hormigaSoldado);
+            }*/
+        }
+        else
+        {
+            // Si es la reina, sería fin de la simulación
+        }
+
+        // Si la hormiga muere mientras cura a otra
+        if (hormiga.hormigaACurar != null)
+        {
+            reina.hormigasHeridas.Add(hormiga.hormigaACurar);
+        }
+        // Si la hormiga muere mientras cuida un huevo
+        if (hormiga.huevoACuidar != null)
+        {
+            if (hormiga.huevoACuidar.necesitaCuidados == true && !reina.huevosQueTienenQueSerCuidados.Contains(hormiga.huevoACuidar))
+            {
+                reina.huevosQueTienenQueSerCuidados.Add(hormiga.huevoACuidar);
+            }
+        }
+        // Si la hormiga está siendo curada por alguien
+        hormiga.siendoCuradaPor = null;
+    }
+
+    public void EnemigoHaMuerto(EnemigoGenerico enemigo)
+    {
+        if (enemigosTotales.Contains(enemigo))
+        {
+            enemigosTotales.Remove(enemigo);
+        }
+    }
+
+    public void ComidaHaMuerto(Comida comida)
+    {
+        if (ComidaTotal.Contains(comida))
+        {
+            sacarComidaSala(comida.misala, comida);
+        }
+        if (ComidaVista.Contains(comida))
+        {
+            ComidaVista.Remove(comida);
+        }
+    }
+
+    public void HuevoHaMuerto(Huevo miHuevo)
+    {
+        sacarHuevosSala(miHuevo.myRoom, miHuevo);
+        if (huevosQueTienenQueSerCuidados.Contains(miHuevo))
+            huevosQueTienenQueSerCuidados.Remove(miHuevo);
+    }
+
+    #region Metodos para sacar cosas de las salas
+    // necesitamos la sala dode se guardan las cosas ???
+    public void sacarHormigaSala(Room sala)
+    {
+        sala.sacarCosas();
+        totalHormigas--;
+    }
+
+    public void sacarComidaSala(Room sala, Comida comida)
+    {
+        ComidaTotal.Remove(comida);
+        sala.sacarCosas();
+        totalComida--;
+    }
+
+    public void sacarHuevosSala(Room sala, Huevo huevo)
+    {
+        huevosTotal.Remove(huevo);
+        sala.sacarCosas();
+        totalHuevos--;
+    }
+
+    #endregion
+
 }

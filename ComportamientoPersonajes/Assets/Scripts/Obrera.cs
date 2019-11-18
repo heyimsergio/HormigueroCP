@@ -51,7 +51,7 @@ public class Obrera : HormigaGenerica
     void Start()
     {
         // Inicialización
-        //this.zonaDondeEsta = 0;
+        this.zonaDondeEsta = 0;
 
         // Respecto al hormiguero
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
@@ -62,6 +62,8 @@ public class Obrera : HormigaGenerica
         reina.totalHormigas++;
         reina.numeroDeObrerasTotal++;
         reina.obrerasDesocupadas.Add(this);
+
+        reina.meterHormigaEnSala();
 
         // Prioridades NavMesh
         reina.contPrioridadNavMesh++;
@@ -76,6 +78,11 @@ public class Obrera : HormigaGenerica
         this.daño = 2;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
+
+        // Hambre
+        hambre = 300;
+        umbralHambre = 200;
+        umbralHambreMaximo = 80;
 
         // Explorar
         siguientePosicionExplorar = this.transform.position;

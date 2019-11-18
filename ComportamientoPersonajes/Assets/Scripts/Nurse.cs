@@ -65,6 +65,8 @@ public class Nurse : HormigaGenerica
         reina.numeroDeNursesTotal++;
         reina.nursesDesocupadas.Add(this);
 
+        reina.meterHormigaEnSala();
+
         // Prioridades NavMesh
         reina.contPrioridadNavMesh++;
         if (reina.contPrioridadNavMesh > 99)
@@ -78,6 +80,11 @@ public class Nurse : HormigaGenerica
         this.daño = 2;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
+
+        // Hambre
+        hambre = 300;
+        umbralHambre = 200;
+        umbralHambreMaximo = 80;
 
         // Cuidar huevos
         tiempoCuidandoHuevos = 10.0f;
@@ -132,7 +139,6 @@ public class Nurse : HormigaGenerica
             if (!huevosCerca.Contains(aux))
             {
                 huevosCerca.Add(aux);
-                Debug.Log("Añado huevo a la lista");
             }
         }
         else if (other.tag == "Reina")
@@ -179,7 +185,6 @@ public class Nurse : HormigaGenerica
             if (huevosCerca.Contains(aux))
             {
                 huevosCerca.Remove(aux);
-                Debug.Log("Elimino huevo de la lista");
             }
         }
         else if (other.tag == "Reina")

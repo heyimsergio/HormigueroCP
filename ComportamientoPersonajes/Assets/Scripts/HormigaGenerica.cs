@@ -18,7 +18,11 @@ public class HormigaGenerica : PersonajeGenerico
 
     // Atributos de las hormigas generales
     [Header ("Atributos generales hormiga")]
-    public float hambre = 200;
+    public float hambre = 300;
+    public float umbralHambre = 200;
+    public bool tengoHambre = false;
+    public float umbralHambreMaximo = 100;
+    public bool tengoMuchaHambre = false;
     public float pesoQuePuedenTransportar;
     public bool estaLuchando = false;
     protected float tiempoEntreAtaques;
@@ -90,6 +94,36 @@ public class HormigaGenerica : PersonajeGenerico
     {
         actualizarHambre();
 
+        actualizarSiPuedeSerCurada();
+    }
+
+    public void actualizarHambre()
+    {
+        hambre -= Time.deltaTime;
+        if (hambre >= umbralHambre)
+        {
+            tengoHambre = false;
+            tengoMuchaHambre = false;
+        }
+        if (hambre < umbralHambre)
+        {
+            tengoHambre = true;
+            tengoMuchaHambre = false;
+        }
+        if (hambre < umbralHambreMaximo)
+        {
+            tengoHambre = true;
+            tengoMuchaHambre = true;
+        }
+        if (hambre < 0)
+        {
+            reina.HormigaHaMuerto(this);
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void actualizarSiPuedeSerCurada()
+    {
         if (puedeCurarse())
         {
             puedeSerCurada = true;
@@ -104,7 +138,8 @@ public class HormigaGenerica : PersonajeGenerico
             necesitaSerCurada = true;
             if (!reina.hormigasHeridas.Contains(this))
             {
-                if (siendoCuradaPor == null){
+                if (siendoCuradaPor == null)
+                {
                     reina.hormigasHeridas.Add(this);
                 }
             }
@@ -115,9 +150,14 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    public void actualizarHambre()
+    private bool puedeCurarse()
     {
-        hambre -= Time.deltaTime;
+        return (this.vida < 8);
+    }
+
+    private bool necesitaCurarse()
+    {
+        return (this.vida < 4);
     }
 
     public void quitarVida(int damage)
@@ -126,6 +166,7 @@ public class HormigaGenerica : PersonajeGenerico
         this.vida -= damage;
         if (vida <= 0)
         {
+            reina.HormigaHaMuerto(this);
             Destroy(this.gameObject);
         }
     }
@@ -138,15 +179,7 @@ public class HormigaGenerica : PersonajeGenerico
             this.vida = 10;
     }
 
-    public bool puedeCurarse()
-    {
-        return (this.vida < 8);
-    }
-
-    public bool necesitaCurarse()
-    {
-        return (this.vida < 4);
-    }
+    
 
 
     #region Tareas Globales Hormigas
@@ -237,7 +270,7 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void TengoHambre()
     {
-        if (this.hambre <= 75)
+        if (tengoHambre)
         {
             Task.current.Succeed();
         }
@@ -250,7 +283,7 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void TengoMuchaHambre()
     {
-        if (this.hambre <= 30)
+        if (tengoMuchaHambre)
         {
             Task.current.Succeed();
         }
@@ -294,13 +327,6 @@ public class HormigaGenerica : PersonajeGenerico
             {
                 Debug.Log("He llegado a la comida");
                 hambre += comidaAComer.comer();
-                if (comidaAComer.usosDeLaComida == 0)
-                {
-                    reina.sacarComidaSala(comidaAComer.misala, comidaAComer);
-                    Destroy(comidaAComer.gameObject);
-                    comidaAComer = null;
-                    Debug.Log("Comida destruida");
-                }
                 Task.current.Succeed();
             }
         }

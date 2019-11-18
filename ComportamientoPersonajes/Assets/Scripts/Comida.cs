@@ -20,10 +20,12 @@ public class Comida : MonoBehaviour
 
     public HormigaGenerica[] hormigasCogiendoLaComida;
 
+    Reina reina = null;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        reina = GameObject.FindObjectOfType<Reina>();
     }
 
     public void initComida(comidaType tipo)
@@ -33,9 +35,8 @@ public class Comida : MonoBehaviour
             case comidaType.Trigo:
                 peso = 1;
                 tiempoVida = 100;
-                hambreQueRestaura = Random.Range(40,70);
+                hambreQueRestaura = Random.Range(100,200);
                 usosDeLaComida = 1;
-
                 break;
 
         }
@@ -50,8 +51,14 @@ public class Comida : MonoBehaviour
             tiempoVida -= Time.deltaTime;
             if (tiempoVida <= 0)
             {
+                reina.ComidaHaMuerto(this);
                 Destroy(this.gameObject);
             }
+        }
+        if (usosDeLaComida <= 0)
+        {
+            reina.ComidaHaMuerto(this);
+            Destroy(this.gameObject);
         }
     }
 
