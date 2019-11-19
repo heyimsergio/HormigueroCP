@@ -21,7 +21,7 @@ public class Obrera : HormigaGenerica
     // bool hayOrdenDeAtacar;
     // bool hayOrdenCurarHormiga
     // bool hayOrdenBuscarComida
-    public bool hayOrdenDeCavar = false;
+    // bool hayOrdenDeCavar = false;
 
     // Curar A Una Hormiga
     // HormigaGenerica hormigaACurar
@@ -66,12 +66,12 @@ public class Obrera : HormigaGenerica
         miSala = reina.meterHormigaEnSala();
 
         // Prioridades NavMesh
-        reina.contPrioridadNavMesh++;
         if (reina.contPrioridadNavMesh > 99)
         {
             reina.contPrioridadNavMesh = 0;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
+        reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
         this.vida = 10;
@@ -102,6 +102,7 @@ public class Obrera : HormigaGenerica
             numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
 
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Add(this);
             if (!enemigosCerca.Contains(aux))
             {
                 reina.recibirAlertaEnemigo(aux);
@@ -146,6 +147,7 @@ public class Obrera : HormigaGenerica
         if (other.tag == "Enemigo")
         {
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Remove(this);
             if (enemigosCerca.Contains(aux))
             {
                 enemigosCerca.Remove(aux);
@@ -251,7 +253,7 @@ public class Obrera : HormigaGenerica
     [Task]
     public void HaySuficienteComida()
     {
-        Debug.Log(reina.umbralComida * reina.totalHormigas);
+        //Debug.Log(reina.umbralComida * reina.totalHormigas);
         if (reina.totalComida < reina.umbralComida * reina.totalHormigas)
         {
             Task.current.Fail();

@@ -90,7 +90,7 @@ public class EnemigoGenerico : PersonajeGenerico
     [Task]
     public void Atacar()
     {
-        if (hormigasCerca != null)
+        if (hormigasCerca.Count > 0)
         {
             HormigaGenerica hormigaCerca = hormigasCerca[0];
             if (hormigaCerca != null)

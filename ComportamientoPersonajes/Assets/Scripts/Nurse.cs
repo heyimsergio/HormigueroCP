@@ -20,7 +20,7 @@ public class Nurse : HormigaGenerica
 
     // Orden de la reina
     // bool meHanMandadoOrden
-    public bool hayOrdenCuidarHuevos = false;
+    // bool hayOrdenCuidarHuevos = false;
     // bool hayOrdenCurarHormiga
     // bool hayOrdenBuscarComida
 
@@ -68,12 +68,12 @@ public class Nurse : HormigaGenerica
         miSala = reina.meterHormigaEnSala();
 
         // Prioridades NavMesh
-        reina.contPrioridadNavMesh++;
         if (reina.contPrioridadNavMesh > 99)
         {
             reina.contPrioridadNavMesh = 0;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
+        reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
         this.vida = 10;
@@ -92,8 +92,6 @@ public class Nurse : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = this.transform.position;
-
-
     }
 
     /*private void Update()

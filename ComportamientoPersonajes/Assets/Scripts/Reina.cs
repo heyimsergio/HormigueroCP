@@ -172,12 +172,12 @@ public class Reina : HormigaGenerica
         tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
 
         // Prioridades NavMesh
-        contPrioridadNavMesh++;
         if (contPrioridadNavMesh > 99)
         {
             contPrioridadNavMesh = 0;
         }
         agente.avoidancePriority = contPrioridadNavMesh;
+        contPrioridadNavMesh++;
 
         // Ataques y Vida
         this.vida = 10;
@@ -675,25 +675,84 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayHormigasHeridas()
     {
-        Task.current.Fail();
+        if (hormigasHeridas.Count > 0)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
     [Task]
     public void OrdenCurarSoldado()
     {
-        Task.current.Fail();
+        /*Soldado aux = soldadosDesocupadas[0];
+        if (aux != null)
+        {
+            Debug.Log("Tengo nurse que mandar a cuidar");
+            // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
+            aux.hayOrdenCuidarHuevos = true;
+            nursesOcupadas.Add(aux);
+            nursesDesocupadas.Remove(aux);
+            aux.huevoACuidar = huevosQueTienenQueSerCuidados[0];
+            aux.huevoACuidar.siendoCuidadoPor = aux;
+            huevosQueTienenQueSerCuidados.RemoveAt(0);
+            Task.current.Succeed();
+        }*/
     }
 
     [Task]
     public void OrdenCurarObreras()
     {
-        Task.current.Fail();
+        Obrera aux = obrerasDesocupadas[0];
+        HormigaGenerica aux2 = hormigasHeridas[0];
+        if (aux == aux2)
+        {
+            if (obrerasDesocupadas.Count > 1)
+            {
+                aux = obrerasDesocupadas[1];
+            }
+            else if (hormigasHeridas.Count > 1)
+            {
+                aux2 = hormigasHeridas[1];
+            }
+            else
+            {
+                // La hormiga herida y la obrera son la misma y no hay más
+                Task.current.Fail();
+                return;
+            }
+        }
+        if (aux != null && aux != aux2)
+        {
+            Debug.Log("Tengo obrera que mandar a curar");
+            aux.hayOrdenCurarHormiga = true;
+            obrerasOcupadas.Add(aux);
+            obrerasDesocupadas.Remove(aux);
+            aux.hormigaACurar = aux2;
+            aux2.siendoCuradaPor = this;
+            hormigasHeridas.Remove(aux2);
+            Task.current.Succeed();
+        }
     }
 
     [Task]
     public void OrdenCurarNurses()
     {
-        Task.current.Fail();
+        Nurse aux = nursesDesocupadas[0];
+        if (aux != null)
+        {
+            Debug.Log("Tengo nurse que mandar a curar");
+            aux.hayOrdenCurarHormiga = true;
+            nursesOcupadas.Add(aux);
+            nursesDesocupadas.Remove(aux);
+            aux.hormigaACurar = hormigasHeridas[0];
+            aux.hormigaACurar.siendoCuradaPor = this;
+            hormigasHeridas.RemoveAt(0);
+            Task.current.Succeed();
+        }
     }
 
     #endregion
@@ -1104,7 +1163,7 @@ public class Reina : HormigaGenerica
     // Métodos para el tratamiento de creaciones
     public void NaceHormiga(Huevo huevo)
     {
-        HuevoHaMuerto(huevo);
+        //HuevoHaMuerto(huevo);
         switch (huevo.miType)
         {
             case TipoHormiga.NURSE:
@@ -1187,12 +1246,9 @@ public class Reina : HormigaGenerica
     #endregion
 
 
-
-
     // Métodos para el tratamiento de muertos
     public void HormigaHaMuerto(HormigaGenerica hormiga)
     {
-        totalHormigas--;
         sacarHormigaSala(hormiga.miSala);
         Debug.Log("Hormiga A Muerto");
         // Eliminar a la hormiga de todas las listas
@@ -1241,12 +1297,15 @@ public class Reina : HormigaGenerica
             // Si es la reina, sería fin de la simulación
         }
 
-        // Si la hormiga muere mientras cura a otra
+        // Si la hormiga muere mientras cura a otra, o tiene orden de curar a hormiga
         if (hormiga.hormigaACurar != null)
         {
-            reina.hormigasHeridas.Add(hormiga.hormigaACurar);
+            if (hormiga.hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormiga.hormigaACurar))
+            {
+                reina.hormigasHeridas.Add(hormiga.hormigaACurar);
+            }
         }
-        // Si la hormiga muere mientras cuida un huevo
+        // Si la hormiga muere mientras cuida un huevo, o tiene orden de cuidar huevo
         if (hormiga.huevoACuidar != null)
         {
             if (hormiga.huevoACuidar.necesitaCuidados == true && !reina.huevosQueTienenQueSerCuidados.Contains(hormiga.huevoACuidar))
@@ -1282,7 +1341,9 @@ public class Reina : HormigaGenerica
     {
         sacarHuevosSala(miHuevo.myRoom, miHuevo);
         if (huevosQueTienenQueSerCuidados.Contains(miHuevo))
+        {
             huevosQueTienenQueSerCuidados.Remove(miHuevo);
+        }
     }
 
     #region Metodos para sacar cosas de las salas

@@ -83,6 +83,13 @@ tree("Reina")
 				HayEnemigosCerca()
 				Atacar()
 			sequence
+				EstaMuyHerida()
+				NoMoverse()
+			sequence
+				EstaHerida()
+				EstaSiendoCurada()
+				NoMoverse()
+			sequence
 				TengoMuchaHambre()
 				HayComida()
 				Comer()
