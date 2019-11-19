@@ -42,14 +42,16 @@ public class EnemigoGenerico : PersonajeGenerico
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Colision enemigo con algo");
-        if (other.gameObject.tag == "Reina" ||
-            other.gameObject.tag == "Nurse" ||
-            other.gameObject.tag == "Obrera" ||
-            other.gameObject.tag == "Soldado")
+        if (other.tag == "Obrera")
         {
-           // Debug.Log("Colision con hormiga");
+            Debug.Log("Colision con hormiga");
+        }
 
+        if (other.tag == "Reina" ||
+            other.tag == "Nurse" ||
+            other.tag == "Obrera" ||
+            other.tag == "Soldado")
+        {
             HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
             if (!hormigasCerca.Contains(aux))
             {
@@ -60,10 +62,10 @@ public class EnemigoGenerico : PersonajeGenerico
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Reina" ||
-            other.gameObject.tag == "Nurse" ||
-            other.gameObject.tag == "Obrera" ||
-            other.gameObject.tag == "Soldado")
+        if (other.tag == "Reina" ||
+            other.tag == "Nurse" ||
+            other.tag == "Obrera" ||
+            other.tag == "Soldado")
         {
             HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
             if (hormigasCerca.Contains(aux))
@@ -88,7 +90,7 @@ public class EnemigoGenerico : PersonajeGenerico
     [Task]
     public void Atacar()
     {
-        if (hormigasCerca != null)
+        if (hormigasCerca.Count > 0)
         {
             HormigaGenerica hormigaCerca = hormigasCerca[0];
             if (hormigaCerca != null)
@@ -138,6 +140,10 @@ public class EnemigoGenerico : PersonajeGenerico
         if (vida <= 0)
         {
             reina.EnemigoHaMuerto(this);
+            foreach (HormigaGenerica h in hormigasCerca)
+            {
+                h.enemigosCerca.Remove(this);
+            }
             Destroy(this.gameObject);
         }
     }

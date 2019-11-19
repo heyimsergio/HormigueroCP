@@ -17,7 +17,7 @@ public class HormigaGenerica : PersonajeGenerico
     // ATRIBUTOS ////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Atributos de las hormigas generales
-    [Header ("Atributos generales hormiga")]
+    [Header("Atributos generales hormiga")]
     public float hambre = 300;
     public float umbralHambre = 200;
     public bool tengoHambre = false;
@@ -60,6 +60,8 @@ public class HormigaGenerica : PersonajeGenerico
     public int cantidadDeCura = 3;
     public bool puedeSerCurada = false;
     public bool necesitaSerCurada = false;
+    public int umbralPuedeCurarse = 9;
+    public int umbralNecesitaCurarse = 3;
     //Orden Curar Hormiga
     public bool hayOrdenCurarHormiga = false;
 
@@ -67,6 +69,8 @@ public class HormigaGenerica : PersonajeGenerico
     public float tiempoCuidandoHuevos = 10.0f;
     public Huevo huevoACuidar = null;
     public Vector3 posHuevo = Vector3.zero;
+    // Orden Cuidar Huevos
+    public bool hayOrdenCuidarHuevos = false;
 
     //Explorar
     protected Vector3 siguientePosicionExplorar;
@@ -87,6 +91,8 @@ public class HormigaGenerica : PersonajeGenerico
     int numRayosExtra = 3;
     int numRayosFijos = 4;
     int RayDistance = 10;
+    // Cavar
+    public bool hayOrdenDeCavar = false;
 
 
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,6 +235,39 @@ public class HormigaGenerica : PersonajeGenerico
             necesitaSerCurada = true;
             if (!reina.hormigasHeridas.Contains(this))
             {
+                if (this.GetType().Equals("Nurse"))
+                {
+                    Nurse a = (Nurse)this;
+                    reina.nursesDesocupadas.Remove(a);
+                    if (!reina.nursesOcupadas.Contains(a))
+                    {
+                        reina.nursesOcupadas.Add(a);
+                    }
+                    
+                }
+                else if (this.GetType().Equals("Obrera"))
+                {
+                    Obrera a = (Obrera)this;
+                    reina.obrerasDesocupadas.Remove(a);
+                    if (!reina.obrerasOcupadas.Contains(a))
+                    {
+                        reina.obrerasOcupadas.Add(a);
+                    }
+                }
+                else if (this.GetType().Equals("Soldado"))
+                {
+                    /*Soldado a = (Soldado)this;
+                    reina.soldadosDesocupadas.Remove(a);
+                    if (!reina.soldadosOcupadas.Contains(a))
+                    {
+                        reina.soldadosOcupadas.Add(a);
+                    }*/
+                }
+                else
+                {
+                    // Es la reina
+                }
+
                 if (siendoCuradaPor == null)
                 {
                     reina.hormigasHeridas.Add(this);
@@ -243,12 +282,12 @@ public class HormigaGenerica : PersonajeGenerico
 
     private bool puedeCurarse()
     {
-        return (this.vida < 8);
+        return (this.vida < umbralPuedeCurarse);
     }
 
     private bool necesitaCurarse()
     {
-        return (this.vida < 4);
+        return (this.vida < umbralNecesitaCurarse);
     }
 
     public void quitarVida(int damage)
@@ -267,10 +306,54 @@ public class HormigaGenerica : PersonajeGenerico
         Debug.Log("Hormiga ganando vida");
         this.vida += cantidadDeCura;
         if (this.vida > 10)
+        {
             this.vida = 10;
+        }
+
+        if (vida > umbralNecesitaCurarse)
+        {
+            necesitaSerCurada = false;
+            if (!this.hayOrdenBuscarComida || !this.hayOrdenCurarHormiga || 
+                !this.hayOrdenDeAtacar || this.hayOrdenCuidarHuevos || this.hayOrdenDeCavar)
+            {
+                if (this.GetType().Equals("Nurse"))
+                {
+                    Nurse a = (Nurse)this;
+                    reina.nursesOcupadas.Remove(a);
+                    if (!reina.nursesDesocupadas.Contains(a))
+                    {
+                        reina.nursesDesocupadas.Add(a);
+                    }
+
+                }
+                else if (this.GetType().Equals("Obrera"))
+                {
+                    Obrera a = (Obrera)this;
+                    reina.obrerasOcupadas.Remove(a);
+                    if (!reina.obrerasDesocupadas.Contains(a))
+                    {
+                        reina.obrerasDesocupadas.Add(a);
+                    }
+                }
+                else if (this.GetType().Equals("Soldado"))
+                {
+                    /*Soldado a = (Soldado)this;
+                    reina.soldadosOcupadas.Remove(a);
+                    if (!reina.soldadosDesocupadas.Contains(a))
+                    {
+                        reina.soldadosDesocupadas.Add(a);
+                    }*/
+                }
+                else
+                {
+                    // Es la reina
+                }
+            }
+        }
+
     }
 
-    
+
 
 
     #region Tareas Globales Hormigas
@@ -313,19 +396,25 @@ public class HormigaGenerica : PersonajeGenerico
                 float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
                 if (distanceToTarget < 1.2f)
                 {
-                    float random = Random.Range(0, 10);
-                    if (random < 9f)
+                    if (tiempoEntreAtaques <= 0)
                     {
-                        enemigo.quitarVida(this.daño);
+                        float random = Random.Range(0, 10);
+                        if (random < 9f)
+                        {
+                            enemigo.quitarVida(this.daño);
+                        }
+                        else
+                        {
+                            //Debug.Log("Ataque fallido");
+                        }
                     }
                     else
                     {
-                        //Debug.Log("Ataque fallido");
+                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigo.transform.position;
+                        agente.SetDestination(randomDirection);
+                        tiempoEntreAtaques -= Time.deltaTime;
                     }
-                }
-                else
-                {
-                    //Debug.Log("no estoy a rango para pegarle");
+
                 }
             }
             else
@@ -356,6 +445,51 @@ public class HormigaGenerica : PersonajeGenerico
             Task.current.Succeed();
         }
         Debug.Log("Huir");
+    }
+
+    [Task]
+    public void EstaHerida()
+    {
+        if (puedeSerCurada)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void EstaMuyHerida()
+    {
+        if (necesitaSerCurada)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void EstaSiendoCurada()
+    {
+        if (siendoCuradaPor != null)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void NoMoverse()
+    {
+        Task.current.Succeed();
     }
 
     [Task]
@@ -516,12 +650,6 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    /*[Task]
-    public void HayHormigaQueCurarCerca()
-    {
-        Task.current.Fail();
-    }*/
-
     [Task]
     public void HayHormigaQueCurarCerca()
     {
@@ -552,8 +680,8 @@ public class HormigaGenerica : PersonajeGenerico
 
             if (hormigaACurar != null)
             {
-                Task.current.Succeed();
                 Debug.Log("Hay Hormiga Cerca que necesita curarse");
+                Task.current.Succeed();
             }
             else
             {
@@ -597,9 +725,8 @@ public class HormigaGenerica : PersonajeGenerico
                     if (TiempoActual <= 0)
                     {
                         hormigaACurar.sumarVida();
-                        Debug.Log("Huevo Cuidado");
+                        Debug.Log("Hormiga Curada");
                         TiempoActual = 20.0f;
-                        posHerida = Vector3.zero;
                         if (hayOrdenCurarHormiga == true)
                         {
                             hayOrdenCurarHormiga = false;
@@ -608,6 +735,7 @@ public class HormigaGenerica : PersonajeGenerico
                         hormigaACurar = null;
                         posHerida = Vector3.zero;
                         Task.current.Succeed();
+                        return;
                     }
                 }
                 else
@@ -616,6 +744,7 @@ public class HormigaGenerica : PersonajeGenerico
                     hormigaACurar = null;
                     posHerida = Vector3.zero;
                     Task.current.Fail();
+                    return;
                 }
             }
         }
@@ -764,7 +893,7 @@ public class HormigaGenerica : PersonajeGenerico
                     if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
                     {
                         //Debug.Log("Comida dejada");
-                        reina.comidaGuardada(comida, salaDejarComida,casillaDejarComida);
+                        reina.comidaGuardada(comida, salaDejarComida, casillaDejarComida);
                         comida.haSidoCogida = true;
                         comida.laEstanLLevando = false;
                         comida.transform.SetParent(null);

@@ -16,6 +16,13 @@ tree("Nurse")
 					Atacar()
 				Huir()
 		sequence
+			EstaMuyHerida()
+			NoMoverse()
+		sequence
+			EstaHerida()
+			EstaSiendoCurada()
+			NoMoverse()
+		sequence
 			TengoMuchaHambre()
 			HayComida()
 			Comer()

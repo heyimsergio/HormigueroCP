@@ -21,7 +21,7 @@ public class Obrera : HormigaGenerica
     // bool hayOrdenDeAtacar;
     // bool hayOrdenCurarHormiga
     // bool hayOrdenBuscarComida
-    public bool hayOrdenDeCavar = false;
+    // bool hayOrdenDeCavar = false;
 
     // Curar A Una Hormiga
     // HormigaGenerica hormigaACurar
@@ -68,15 +68,15 @@ public class Obrera : HormigaGenerica
         reina.numeroDeObrerasTotal++;
         reina.obrerasDesocupadas.Add(this);
 
-        reina.meterHormigaEnSala();
+        miSala = reina.meterHormigaEnSala();
 
         // Prioridades NavMesh
-        reina.contPrioridadNavMesh++;
         if (reina.contPrioridadNavMesh > 99)
         {
-            reina.contPrioridadNavMesh = 0;
+            reina.contPrioridadNavMesh = 1;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
+        reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
         this.vida = 10;
@@ -105,8 +105,9 @@ public class Obrera : HormigaGenerica
         if (other.tag == "Enemigo")
         {
             numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
-
+            Debug.Log("Colision con enemigo");
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Add(this);
             if (!enemigosCerca.Contains(aux))
             {
                 reina.recibirAlertaEnemigo(aux);
@@ -152,6 +153,8 @@ public class Obrera : HormigaGenerica
         if (other.tag == "Enemigo")
         {
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Remove(this);
+            Debug.Log("Enemigo eliminado");
             if (enemigosCerca.Contains(aux))
             {
                 enemigosCerca.Remove(aux);
@@ -173,14 +176,6 @@ public class Obrera : HormigaGenerica
         {
             reinaCerca = false;
             Debug.Log("Reina cerca");
-        }
-        else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Remove(aux);
-            }
         }
     }
 

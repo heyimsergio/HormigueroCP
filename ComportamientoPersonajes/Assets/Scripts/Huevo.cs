@@ -22,7 +22,6 @@ public class Huevo : MonoBehaviour
     void Start()
     {
         miReina = GameObject.FindObjectOfType<Reina>();
-        miReina.huevosTotal.Add(this);
         tiempoQueAguantaSinCuidar = maxTimeParaCuidar;
         huevoCollider = GetComponent<Collider>();
         huevoCollider.isTrigger = true;
@@ -66,6 +65,7 @@ public class Huevo : MonoBehaviour
         if (tiempoParaNacer < 0)
         {
             miReina.NaceHormiga(this);
+            miReina.HuevoHaMuerto(this);
             Destroy(this.gameObject);
         }
         tiempoParaNacer -= Time.deltaTime;
