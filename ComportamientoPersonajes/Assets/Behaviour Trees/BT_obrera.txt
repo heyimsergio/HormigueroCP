@@ -37,6 +37,7 @@ tree("Obrera")
 			HayHormigaQueCurarCerca()
 			CurarHormiga()
 		sequence
+			HayHuecoParaDejarComida()
 			not 
 				HaySuficienteComida()
 			BuscarComida()

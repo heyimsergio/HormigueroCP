@@ -128,9 +128,9 @@ public class Room
 
         if(casillasVacias.Count >= 0)
         {
-            Debug.Log(casillasVacias.Count + " Casillas vacias");
+            //Debug.Log(casillasVacias.Count + " Casillas vacias");
             int indice = Random.Range(0, casillasVacias.Count);
-            Debug.Log(indice + " Casillas vacia a coger");
+            //Debug.Log(indice + " Casillas vacia a coger");
             TileScript aux = casillasVacias[indice];
             casillasVacias.RemoveAt(indice);
             return aux;

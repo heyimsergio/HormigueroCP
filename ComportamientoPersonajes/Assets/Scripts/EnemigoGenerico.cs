@@ -133,7 +133,7 @@ public class EnemigoGenerico : PersonajeGenerico
 
     public void quitarVida(int damage)
     {
-        Debug.Log("Enemigo perdiendo vida");
+        //Debug.Log("Enemigo perdiendo vida");
         this.vida -= damage;
         if (vida <= 0)
         {

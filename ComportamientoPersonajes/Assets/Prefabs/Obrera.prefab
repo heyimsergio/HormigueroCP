@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &4576295136801005747
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4576295135805120242}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300002, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
 --- !u!1 &4576295136347872411
 GameObject:
   m_ObjectHideFlags: 0
@@ -17,7 +31,7 @@ GameObject:
   - component: {fileID: 4576295136347872412}
   m_Layer: 0
   m_Name: Obrera
-  m_TagString: Nurse
+  m_TagString: Obrera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,6 +146,10 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hambre: 200
+  umbralHambre: 200
+  tengoHambre: 0
+  umbralHambreMaximo: 100
+  tengoMuchaHambre: 0
   pesoQuePuedenTransportar: 0
   estaLuchando: 0
   enemigosCerca: []
@@ -140,6 +158,7 @@ MonoBehaviour:
   reinaCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
+  casillaDejarComida: {fileID: 0}
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -160,6 +179,7 @@ MonoBehaviour:
   reinaEstaCerca: 0
   hayOrdenDeCavar: 0
   tiempoParaHacerTunel: 0
+  tiempoQueLlevaHaciendoElTunel: 0
   posicionInicialTunel: {x: 0, y: 0, z: 0}
   posicionFinalTunel: {x: 0, y: 0, z: 0}
 --- !u!114 &4576295136347872412
@@ -176,20 +196,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   link: {fileID: 0}
---- !u!64 &4576295136801005747
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4576295135805120242}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300002, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
 --- !u!1 &4576295137068443871
 GameObject:
   m_ObjectHideFlags: 0

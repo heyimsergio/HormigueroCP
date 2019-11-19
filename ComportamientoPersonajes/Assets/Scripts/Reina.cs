@@ -78,10 +78,11 @@ public class Reina : HormigaGenerica
     public int tiempoQueQuedaParaQueLlueva;
     public int tiempoQueLlueve;
     public int tiempoGlobal;
+    public bool espacioLlenoHormiguero = false;
 
     //FALTA ESTRUCTURA DE DATOS DEL MAPA
     [Header("Otros")]
-    private Floor hormiguero;
+    public Floor hormiguero;
     private Outside afueras;
     public List<Room> salasHormigas = new List<Room>();
     public List<Room> salasComida = new List<Room>();
@@ -108,10 +109,10 @@ public class Reina : HormigaGenerica
     //NECESIDADES DEL HORMIGUERO
     // MandarHordenes
     enum tipoOrden {CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA}
-    private bool HayQueCrearSalasHormigas = false;
-    private bool HayQueCrearSalasComida = false;
-    private bool HayQueCrearSalasHuevos = false;
-    private bool HayQueCrearSalas = false;
+    public bool HayQueCrearSalasHormigas = false;
+    public bool HayQueCrearSalasComida = false;
+    public bool HayQueCrearSalasHuevos = false;
+    public bool HayQueCrearSalas = false;
 
     public bool HayQueBuscarComida = false;
     private bool HayQueAtacar = false;
@@ -375,14 +376,15 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayObrerasLibres()
     {
-        /*if(obrerasDesocupadas.Count > 0)
+       if(obrerasDesocupadas.Count > 0)
         {
             Task.current.Succeed();
+            return;
         } else
         {
             Task.current.Fail();
-        }*/
-        Task.current.Fail();
+            return;
+        }
     }
 
     [Task]
@@ -558,18 +560,38 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayEspacio()
     {
+        if (espacioLlenoHormiguero)
+        {
+            Task.current.Succeed();
+            return;
+        }
         Task.current.Fail();
     }
 
     [Task]
     public void HayObrerasCavando()
     {
+        if(numHormigasCavandoTuneles > 0)
+        {
+            Task.current.Succeed();
+            return;
+        }
         Task.current.Fail();
     }
 
     [Task]
     public void OrdenCavarObreras()
     {
+        Obrera aux = obrerasDesocupadas[0];
+        if(aux != null)
+        {
+            aux.hayOrdenDeCavar = true;
+            obrerasOcupadas.Add(aux);
+            obrerasDesocupadas.Remove(aux);
+            numHormigasCavandoTuneles++;
+            Task.current.Succeed();
+            return;
+        }
         Task.current.Fail();
     }
 
@@ -610,6 +632,114 @@ public class Reina : HormigaGenerica
         }
 
 
+    }
+
+
+    // Pasará a ser el cavar de las obreras
+    [Task]
+    public void ConstruirSala()
+    {
+        int min = -1;
+
+
+        int capacidadRestanteHormigas = capacidadTotalDeHormigas - totalHormigas;
+        int capacidadRestanteComida = capacidadTotalDeComida - totalComida;
+        int capacidadRestanteHuevos = capacidadTotalDeHuevos - totalHuevos;
+
+
+        if (HayQueCrearSalasComida && HayQueCrearSalasHuevos && HayQueCrearSalasHormigas)
+        {
+            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, importanciaComida, importanciaHuevos);
+        }
+        else if (HayQueCrearSalasHormigas && HayQueCrearSalasHuevos)
+        {
+            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, importanciaComida, 0);
+        }
+        else if (HayQueCrearSalasHormigas && HayQueCrearSalasComida)
+        {
+            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, 0, importanciaHuevos);
+        }
+        else if (HayQueCrearSalasComida && HayQueCrearSalasHuevos)
+        {
+            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, 0, importanciaComida, importanciaHuevos);
+        }
+        else if (HayQueCrearSalasHormigas)
+        {
+            min = 0;
+        }
+        else if (HayQueCrearSalasComida)
+        {
+            min = 1;
+        }
+        else if (HayQueCrearSalasHuevos)
+        {
+            min = 2;
+        }
+
+
+
+        Room aux;
+        switch (min)
+        {
+            // no es necesario crear ninguna Sala;
+            case -1:
+                Task.current.Fail();
+                break;
+            case 0:
+                aux = hormiguero.createCorridor(Room.roomType.LIVEROOM);
+                if (aux != null)
+                {
+                    capacidadTotalDeHormigas += aux.capacidadTotalRoom;
+                    salasHormigas.Add(aux);
+                    HayQueCrearSalasHormigas = false;
+                    //Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
+                    Task.current.Succeed();
+                }
+                else
+                {
+                    espacioLlenoHormiguero = true;
+                    Task.current.Fail();
+                }
+
+                break;
+            case 1:
+
+                aux = hormiguero.createCorridor(Room.roomType.STORAGE);
+                if (aux != null)
+                {
+                    salasComida.Add(aux);
+                    capacidadTotalDeComida += aux.capacidadTotalRoom;
+                    HayQueCrearSalasComida = false;
+                    //Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
+                    Task.current.Succeed();
+                }
+                else
+                {
+                    espacioLlenoHormiguero = true;
+                    Task.current.Fail();
+                }
+                break;
+            case 2:
+
+                aux = hormiguero.createCorridor(Room.roomType.STORAGE);
+
+                if (aux != null)
+                {
+                    salasHuevos.Add(aux);
+                    capacidadTotalDeHuevos += aux.capacidadTotalRoom;
+                    HayQueCrearSalasHuevos = false;
+                    //Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
+                    Task.current.Succeed();
+                }
+                else
+                {
+                    espacioLlenoHormiguero = true;
+                    Task.current.Fail();
+                }
+
+
+                break;
+        }
     }
 
 
@@ -878,103 +1008,6 @@ public class Reina : HormigaGenerica
     // Otros ???
 
 
-    // Pasará a ser el cavar de las obreras
-    [Task]
-    public void ConstruirSala()
-    {
-        int min = -1;
-
-
-        int capacidadRestanteHormigas = capacidadTotalDeHormigas - totalHormigas;
-        int capacidadRestanteComida = capacidadTotalDeComida - totalComida;
-        int capacidadRestanteHuevos = capacidadTotalDeHuevos - totalHuevos;
-
-
-        if (HayQueCrearSalasComida && HayQueCrearSalasHuevos && HayQueCrearSalasHormigas)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, importanciaComida, importanciaHuevos);
-        } else if(HayQueCrearSalasHormigas && HayQueCrearSalasHuevos)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, importanciaComida, 0);
-        } else if(HayQueCrearSalasHormigas && HayQueCrearSalasComida)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, 0, importanciaHuevos);
-        } else if (HayQueCrearSalasComida && HayQueCrearSalasHuevos)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, 0, importanciaComida, importanciaHuevos);
-        } else if (HayQueCrearSalasHormigas)
-        {
-            min = 0;
-        } else if (HayQueCrearSalasComida)
-        {
-            min = 1;
-        } else if(HayQueCrearSalasHuevos)
-        {
-            min = 2;
-        }
-
-
-
-        Room aux;
-        switch (min)
-        {
-            // no es necesario crear ninguna Sala;
-            case -1:
-                Task.current.Fail();
-                break;
-            case 0:
-                aux = hormiguero.createCorridor(Room.roomType.LIVEROOM);
-                if (aux != null)
-                {
-                    capacidadTotalDeHormigas += aux.capacidadTotalRoom;
-                    salasHormigas.Add(aux);
-                    HayQueCrearSalasHormigas = false;
-                    //Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
-                    Task.current.Succeed();
-                }
-                else
-                {
-                    Task.current.Fail();
-                }
-
-                break;
-            case 1:
-
-                aux = hormiguero.createCorridor(Room.roomType.STORAGE);
-                if (aux != null)
-                {
-                    salasComida.Add(aux);
-                    capacidadTotalDeComida += aux.capacidadTotalRoom;
-                    HayQueCrearSalasComida = false;
-                    //Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
-                    Task.current.Succeed();
-                }
-                else
-                {
-                    Task.current.Fail();
-                }
-                break;
-            case 2:
-
-                aux = hormiguero.createCorridor(Room.roomType.STORAGE);
-
-                if (aux != null)
-                {
-                    salasHuevos.Add(aux);
-                    capacidadTotalDeHuevos += aux.capacidadTotalRoom;
-                    HayQueCrearSalasHuevos = false;
-                    //Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
-                    Task.current.Succeed();
-                }
-                else
-                {
-                    Task.current.Fail();
-                }
-
-
-                break;
-        }
-    }
 
     public static int CompareLess3(int num1, int num2, int num3, float importancia1, float importancia2 , float importancia3)
     {
@@ -1177,7 +1210,7 @@ public class Reina : HormigaGenerica
 
 
 
-
+    #region Manejar cosas Muertas
     // Métodos para el tratamiento de muertos
     public void HormigaHaMuerto(HormigaGenerica hormiga)
     {
@@ -1274,9 +1307,11 @@ public class Reina : HormigaGenerica
             huevosQueTienenQueSerCuidados.Remove(miHuevo);
     }
 
+    #endregion
+
     #region Metodos para sacar cosas de las salas
     // necesitamos la sala dode se guardan las cosas ???
-    
+
     public void sacarHormigaSala(Room sala)
     {
         sala.sacarCosas(null);

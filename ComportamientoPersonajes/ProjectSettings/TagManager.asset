@@ -12,6 +12,7 @@ TagManager:
   - Obrera
   - Soldado
   - Reina
+  - Cubito
   layers:
   - Default
   - TransparentFX

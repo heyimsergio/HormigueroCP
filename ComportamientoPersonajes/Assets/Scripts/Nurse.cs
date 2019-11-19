@@ -148,6 +148,7 @@ public class Nurse : HormigaGenerica
         }
         else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
         {
+            Debug.Log("Hormiga detectada");
             HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
             if (!hormigasCerca.Contains(aux))
             {

@@ -217,6 +217,10 @@ PrefabInstance:
       propertyPath: m_Icon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_TagString
+      value: Cubito
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -292,8 +296,8 @@ GameObject:
   - component: {fileID: 451619047}
   - component: {fileID: 451619049}
   - component: {fileID: 451619048}
-  - component: {fileID: 451619050}
   - component: {fileID: 451619051}
+  - component: {fileID: 451619050}
   m_Layer: 0
   m_Name: Nurse
   m_TagString: Nurse
@@ -309,7 +313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451619044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 85, y: 0, z: 25}
+  m_LocalPosition: {x: 85, y: 0, z: 26.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2085257191}
@@ -428,22 +432,27 @@ MonoBehaviour:
     breakPointStatuses: 
     collapsedLines: 
     btScript: 
---- !u!54 &451619050
-Rigidbody:
+--- !u!50 &451619050
+Rigidbody2D:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451619044}
-  serializedVersion: 2
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
   m_Mass: 1
-  m_Drag: 0
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_Constraints: 0
+  m_SleepingMode: 1
   m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &451619051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,7 +460,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451619044}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
   m_Name: 
@@ -623,6 +632,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_TagString
+      value: Obrera
+      objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -683,6 +697,21 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 2144260384}
+    - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: tiempoParaHacerTunel
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295135805120242, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_TagString
+      value: Cubito
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ca0848ee4d2c5842b758f9e71d03198, type: 3}
 --- !u!1 &828022725
@@ -1120,6 +1149,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1150814148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 6f231378bc6845f478803e81d4c9b294,
+    type: 3}
+  m_PrefabInstance: {fileID: 1694178321}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1150814149 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294,
+    type: 3}
+  m_PrefabInstance: {fileID: 1694178321}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1150814150
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150814148}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300002, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
 --- !u!1 &1158231359
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,6 +2205,8 @@ MonoBehaviour:
   tiempoQueQuedaParaQueLlueva: 0
   tiempoQueLlueve: 0
   tiempoGlobal: 0
+  espacioLlenoHormiguero: 0
+  hormiguero: {fileID: 0}
   probComida: 50
   MaxProbComida: 5000
   importanciaHormigas: 3
@@ -2158,6 +2215,10 @@ MonoBehaviour:
   importanciaNurses: 0
   importanciaObreras: 0
   importanciaSoldados: 0
+  HayQueCrearSalasHormigas: 0
+  HayQueCrearSalasComida: 0
+  HayQueCrearSalasHuevos: 0
+  HayQueCrearSalas: 0
   HayQueBuscarComida: 0
   hormigaMuerta: 0
   umbralHormigasAtacando: 0
@@ -2191,6 +2252,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 711407350}
+  - {fileID: 1150814149}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2417,6 +2479,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   link: {fileID: 0}
+--- !u!1001 &1694178321
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1646566902}
+    m_Modifications:
+    - target: {fileID: 100000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_Name
+      value: cono vision
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
 --- !u!1 &1894152930
 GameObject:
   m_ObjectHideFlags: 0
@@ -3042,6 +3165,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_TagString
+      value: Obrera
+      objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3102,5 +3230,20 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 2144260384}
+    - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: tiempoParaHacerTunel
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295135805120242, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: m_TagString
+      value: Cubito
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ca0848ee4d2c5842b758f9e71d03198, type: 3}

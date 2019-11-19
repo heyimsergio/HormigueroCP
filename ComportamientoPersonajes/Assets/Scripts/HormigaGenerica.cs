@@ -83,6 +83,11 @@ public class HormigaGenerica : PersonajeGenerico
     public bool meHanMandadoOrden = false;
     public enum ordenes { ORDEN1, ORDEN2 };
 
+    // sistema de vision
+    int numRayosExtra = 3;
+    int numRayosFijos = 4;
+    int RayDistance = 10;
+
 
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +102,90 @@ public class HormigaGenerica : PersonajeGenerico
         actualizarHambre();
 
         actualizarSiPuedeSerCurada();
+
+        SistemaDeVision();
+    }
+
+
+    public void SistemaDeVision()
+    {
+        hormigasCerca = new List<HormigaGenerica>();
+        RaycastHit hit;
+
+        Vector3 dir  = Vector3.zero;
+
+        // Rayos fijos
+        for (int i = 0; i < numRayosFijos; i++)
+        {
+            switch (i)
+            {
+                case 0:// delante
+                    dir =  transform.TransformDirection(Vector3.forward);
+                    break;
+                case 1: // detras
+                    dir = transform.TransformDirection(Vector3.back);
+                    break;
+                case 2: // izq
+                    dir = transform.TransformDirection(Vector3.left);
+                    break;
+                case 3: //der
+                    dir = transform.TransformDirection(Vector3.right);
+                    break;
+            }
+
+            if (Physics.Raycast(transform.position, dir, out hit, RayDistance))
+            {
+                GameObject objetoColision = hit.collider.gameObject;
+
+                if (objetoColision.transform.parent != null)
+                {
+                    if (objetoColision.transform.parent.gameObject != this.gameObject)
+                    {
+                        hormigasCerca.Add(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>());
+                        Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
+                    }
+
+                    else
+                    {
+                        //Debug.Log("Chocandote contigo mismo");
+                    }
+                }
+
+
+                Debug.DrawRay(transform.position, dir* RayDistance, Color.magenta);
+            }
+
+        }
+
+
+        // Rayos Móviles
+
+
+
+        for(int j = 0; j < numRayosExtra; j++)
+        {
+            dir = new Vector3(Random.Range(-100, 101), 0, Random.Range(-100, 101));
+            dir = dir.normalized;
+            if (Physics.Raycast(transform.position, dir, out hit, RayDistance))
+            {
+                GameObject objetoColision = hit.collider.gameObject;
+
+                if (objetoColision.transform.parent != null)
+                {
+                    if (objetoColision.transform.parent.gameObject != this.gameObject)
+                    {
+                        hormigasCerca.Add(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>());
+                        Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
+                    }
+
+                    else
+                    {
+                        //Debug.Log("Chocandote contigo mismo");
+                    }
+                }
+                Debug.DrawRay(transform.position, dir * RayDistance, Color.magenta);
+            }
+        }
     }
 
     public void actualizarHambre()
@@ -568,6 +657,17 @@ public class HormigaGenerica : PersonajeGenerico
             return;
 
         }
+
+        if(this.GetType().Equals("Obrera"))
+        {
+            Obrera aux = (Obrera)this;
+            if (aux.hayOrdenDeCavar)
+            {
+                Task.current.Fail();
+                return;
+            }
+        }
+
         //Debug.Log("buscar comida");
         if (this.zonaDondeEsta == 1)
         {
