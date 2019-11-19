@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Reina : HormigaGenerica
 {
 
-    public enum TipoHormiga { NURSE, OBRERA,SOLDADO,NULL};
+    public enum TipoHormiga {NURSE,OBRERA,SOLDADO,NULL};
 
     #region atributos propios de la reina
 
@@ -23,7 +23,6 @@ public class Reina : HormigaGenerica
     private TipoHormiga hormigaAponer = TipoHormiga.NULL;
     private Room salaDondePonerHuevo = null;
     private TileScript casillaDondePonerHuevo = null;
-    public GameObject PrefabHuevo;
     public Vector3 posicionParaColocarHuevo;
     public bool puedePonerHuevo;
     public int tiempoMaximoParaPonerHuevo;
@@ -144,6 +143,7 @@ public class Reina : HormigaGenerica
 
     #region prefabs
     public GameObject comidaPrefab;
+    public GameObject PrefabHuevo;
     public GameObject prefabNurse;
     public GameObject prefabObrera;
     #endregion
@@ -272,7 +272,6 @@ public class Reina : HormigaGenerica
 
         }
     }
-
 
     public void checkearNecesidadComida()
     {
@@ -1261,11 +1260,24 @@ public class Reina : HormigaGenerica
     {
         sacarHormigaSala(hormiga.miSala);
         Debug.Log("Hormiga A Muerto");
+        // Actualizamos a todos los enemigos que tenga
+        foreach (EnemigoGenerico enem in enemigosCercanos)
+        {
+            enem.hormigasCerca.Remove(this);
+        }
+        // Actualizamos a todos los huevos que tenga
+        foreach (Huevo huevo in huevosCerca)
+        {
+            huevo.hormigasCerca.Remove(this);
+        }
+
         // Eliminar a la hormiga de todas las listas
         if (hormigasHeridas.Contains(hormiga))
         {
             hormigasHeridas.Remove(hormiga);
         }
+
+        // Depende de la hormiga que sea, se saca de una lista u otra
         if (hormiga.GetType().Equals("Nurse"))
         {
             Nurse hormigaNurse = (Nurse)hormiga;
@@ -1307,28 +1319,43 @@ public class Reina : HormigaGenerica
             // Si es la reina, sería fin de la simulación
         }
 
-        // Si la hormiga muere mientras cura a otra, o tiene orden de curar a hormiga
+        // Si la hormiga muere mientras cura a otra
         if (hormiga.hormigaACurar != null)
         {
+            // Si la hormiga que estaba siendo curada necesita ser curada y no está en hormigasHeridas, se añade
             if (hormiga.hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormiga.hormigaACurar))
             {
                 reina.hormigasHeridas.Add(hormiga.hormigaACurar);
             }
+            hormiga.hormigaACurar.siendoCuradaPor = null;
+            hormiga.hormigaACurar = null;
         }
-        // Si la hormiga muere mientras cuida un huevo, o tiene orden de cuidar huevo
+        // Si la hormiga muere mientras cuida un huevo
         if (hormiga.huevoACuidar != null)
         {
             if (hormiga.huevoACuidar.necesitaCuidados == true && !reina.huevosQueTienenQueSerCuidados.Contains(hormiga.huevoACuidar))
             {
                 reina.huevosQueTienenQueSerCuidados.Add(hormiga.huevoACuidar);
             }
+            hormiga.huevoACuidar.siendoCuidadoPor = null;
+            hormiga.huevoACuidar = null;
         }
-        // Si la hormiga está siendo curada por alguien
-        hormiga.siendoCuradaPor = null;
+        // Si la hormiga está siendo curada por alguien y muere
+        if (hormiga.siendoCuradaPor != null)
+        {
+            hormiga.siendoCuradaPor.hormigaACurar = null;
+            hormiga.siendoCuradaPor = null;
+        }
     }
 
     public void EnemigoHaMuerto(EnemigoGenerico enemigo)
     {
+        // Avisamos a la hormiga de que el enemigo ha muerto
+        foreach (HormigaGenerica h in hormigasCerca)
+        {
+            h.enemigosCerca.Remove(enemigo);
+        }
+        // Eliminamos al enemigo de la lista de enemigosTotales de la reina
         if (enemigosTotales.Contains(enemigo))
         {
             enemigosTotales.Remove(enemigo);
@@ -1349,7 +1376,19 @@ public class Reina : HormigaGenerica
 
     public void HuevoHaMuerto(Huevo miHuevo)
     {
+        // Sacamos el huevo de la sala
         sacarHuevosSala(miHuevo.myRoom, miHuevo);
+        // Si el huevo estaba siendo curado, avisamos a la hormiga que lo curaba
+        if (miHuevo.siendoCuidadoPor != null)
+        {
+            miHuevo.siendoCuidadoPor.huevoACuidar = null;
+        }
+        // Actualizamos a todas las hormigas cercanas a este huevo
+        foreach (HormigaGenerica h in miHuevo.hormigasCerca)
+        {
+            h.huevosCerca.Remove(miHuevo);
+        }
+        // Si el huevo estaba en la lista de NECESITA ser cuidado, se elimina
         if (huevosQueTienenQueSerCuidados.Contains(miHuevo))
         {
             huevosQueTienenQueSerCuidados.Remove(miHuevo);
@@ -1363,7 +1402,10 @@ public class Reina : HormigaGenerica
 
     public void sacarHormigaSala(Room sala)
     {
-        sala.sacarCosas(null);
+        if (sala != null)
+        {
+            sala.sacarCosas(null);
+        }
         totalHormigas--;
     }
 

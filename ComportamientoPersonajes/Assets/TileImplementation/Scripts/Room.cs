@@ -107,11 +107,11 @@ public class Room
         if(tile != null)
         {
             casillasVacias.Add(tile);
-        } else
+        }
+        else
         {
             Debug.LogWarning("Debió morir una hormiga");
         }
-
         llenadoActual--;
         if (isFull)
         {

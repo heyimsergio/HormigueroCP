@@ -39,6 +39,8 @@ public class HormigaGenerica : PersonajeGenerico
     public bool hayOrdenDeAtacar = false;
     public EnemigoGenerico enemigoAlQueAtacar = null;
     public bool reinaCerca = false;
+    public bool obrerasCerca = false;
+    public bool soldadosCerca = false;
 
     //Buscar Comida
     [Header("Variables Búsqueda Comida")]
@@ -69,6 +71,7 @@ public class HormigaGenerica : PersonajeGenerico
     public float tiempoCuidandoHuevos = 10.0f;
     public Huevo huevoACuidar = null;
     public Vector3 posHuevo = Vector3.zero;
+    public List<Huevo> huevosCerca = new List<Huevo>();
     // Orden Cuidar Huevos
     public bool hayOrdenCuidarHuevos = false;
 
@@ -116,6 +119,9 @@ public class HormigaGenerica : PersonajeGenerico
     public void SistemaDeVision()
     {
         hormigasCerca = new List<HormigaGenerica>();
+        obrerasCerca = false;
+        soldadosCerca = false;
+        reinaCerca = false;
         RaycastHit hit;
 
         Vector3 dir  = Vector3.zero;
@@ -148,26 +154,30 @@ public class HormigaGenerica : PersonajeGenerico
                     if (objetoColision.transform.parent.gameObject != this.gameObject)
                     {
                         hormigasCerca.Add(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>());
-                        Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
+                        //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
+                        if (objetoColision.transform.parent.gameObject.GetType().Equals("Obrera"))
+                        {
+                            obrerasCerca = true;
+                        }
+                        if (objetoColision.transform.parent.gameObject.GetType().Equals("Soldado"))
+                        {
+                            soldadosCerca = true;
+                        }
+                        if (objetoColision.transform.parent.gameObject.GetType().Equals("Reina"))
+                        {
+                            reinaCerca = true;
+                        }
                     }
-
                     else
                     {
                         //Debug.Log("Chocandote contigo mismo");
                     }
                 }
-
-
-                Debug.DrawRay(transform.position, dir* RayDistance, Color.magenta);
             }
 
         }
 
-
         // Rayos Móviles
-
-
-
         for(int j = 0; j < numRayosExtra; j++)
         {
             dir = new Vector3(Random.Range(-100, 101), 0, Random.Range(-100, 101));
@@ -181,7 +191,7 @@ public class HormigaGenerica : PersonajeGenerico
                     if (objetoColision.transform.parent.gameObject != this.gameObject)
                     {
                         hormigasCerca.Add(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>());
-                        Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
+                        //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
                     }
 
                     else
@@ -189,7 +199,6 @@ public class HormigaGenerica : PersonajeGenerico
                         //Debug.Log("Chocandote contigo mismo");
                     }
                 }
-                Debug.DrawRay(transform.position, dir * RayDistance, Color.magenta);
             }
         }
     }
@@ -374,12 +383,14 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void ReinaEnPeligro()
     {
-        if (reina.enemigosCerca.Count != 0)
+        if (reina.enemigosCerca.Count != 0 && reinaCerca == true)
         {
+            enemigoAlQueAtacar = reina.enemigosCerca[0];
             Task.current.Succeed();
         }
         else
         {
+            enemigoAlQueAtacar = null;
             Task.current.Fail();
         }
     }
@@ -389,11 +400,15 @@ public class HormigaGenerica : PersonajeGenerico
     {
         if (enemigosCerca.Count > 0)
         {
-            EnemigoGenerico enemigo = enemigosCerca[0];
-            if (enemigo != null)
+            if (enemigoAlQueAtacar == null)
             {
-                agente.SetDestination(enemigo.transform.position);
-                float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
+                enemigoAlQueAtacar = enemigosCerca[0];
+            }
+            
+            if (enemigoAlQueAtacar != null)
+            {
+                agente.SetDestination(enemigoAlQueAtacar.transform.position);
+                float distanceToTarget = Vector3.Distance(transform.position, enemigoAlQueAtacar.transform.position);
                 if (distanceToTarget < 1.2f)
                 {
                     if (tiempoEntreAtaques <= 0)
@@ -401,16 +416,17 @@ public class HormigaGenerica : PersonajeGenerico
                         float random = Random.Range(0, 10);
                         if (random < 9f)
                         {
-                            enemigo.quitarVida(this.daño);
+                            enemigoAlQueAtacar.quitarVida(this.daño);
                         }
                         else
                         {
                             //Debug.Log("Ataque fallido");
                         }
+                        tiempoEntreAtaques = tiempoEntreAtaquesMax;
                     }
                     else
                     {
-                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigo.transform.position;
+                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigoAlQueAtacar.transform.position;
                         agente.SetDestination(randomDirection);
                         tiempoEntreAtaques -= Time.deltaTime;
                     }
@@ -421,30 +437,41 @@ public class HormigaGenerica : PersonajeGenerico
             {
                 enemigosCerca.RemoveAt(0);
             }
-
+            // Aún pueden quedarte enemigos a los que atacar
             if (enemigosCerca.Count == 0)
             {
                 siguientePosicionExplorar = this.transform.position;
                 Task.current.Succeed();
             }
         }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
     [Task]
     public void Huir()
     {
-        EnemigoGenerico enemigoCerca = enemigosCerca[0];
-        if (enemigoCerca != null)
+        if (enemigosCerca.Count > 0)
         {
-            Vector3 direccionEnemigo = enemigoCerca.transform.position - this.transform.position;
-            Vector3 direccionContraria = direccionEnemigo * -1;
-            agente.SetDestination(this.transform.position + direccionContraria);
+            EnemigoGenerico enemigoCerca = enemigosCerca[0];
+            if (enemigoCerca != null)
+            {
+                Vector3 direccionEnemigo = enemigoCerca.transform.position - this.transform.position;
+                Vector3 direccionContraria = direccionEnemigo * -1;
+                agente.SetDestination(this.transform.position + direccionContraria);
+            }
+            else
+            {
+                Task.current.Succeed();
+            }
+            Debug.Log("Huir");
         }
         else
         {
-            Task.current.Succeed();
+            Task.current.Fail();
         }
-        Debug.Log("Huir");
     }
 
     [Task]
@@ -689,7 +716,7 @@ public class HormigaGenerica : PersonajeGenerico
             }
         }
 
-        foreach (HormigaGenerica h in hormigasCerca)
+        /*foreach (HormigaGenerica h in hormigasCerca)
         {
             if (h.vida < 75)
             {
@@ -700,7 +727,7 @@ public class HormigaGenerica : PersonajeGenerico
             {
                 Task.current.Fail();
             }
-        }
+        }*/
     }
 
     [Task]

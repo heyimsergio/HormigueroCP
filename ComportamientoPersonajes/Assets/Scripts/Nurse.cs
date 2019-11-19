@@ -9,9 +9,9 @@ public class Nurse : HormigaGenerica
     #region Variables Nurse
     //Atacar
     // List<EnemigoGenerico> enemigosCerca
-    public List<Huevo> huevosCerca = new List<Huevo>();
-    public int numeroDeObrerasCerca = 0;
-    public int numeroDeSoldadosCerca = 0;
+    // List<Huevo> huevosCerca = new List<Huevo>();
+    // int numeroDeObrerasCerca = 0;
+    // int numeroDeSoldadosCerca = 0;
     // bool reinaCerca = false;
 
     // Comer
@@ -103,11 +103,13 @@ public class Nurse : HormigaGenerica
         // Si encuentras un enemigo y no está en la lista de enemigos
         if (other.tag == "Enemigo")
         {
-            numeroDeObrerasCerca = GameObject.FindGameObjectsWithTag("Obrera").Length;
-            numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
-
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
-            aux.hormigasCerca.Add(this);
+            // Actualizas al enemigo de que hay hormiga cerca
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
+            // Actualizas a la hormiga y avisas a la reina de este enemigo
             if (!enemigosCerca.Contains(aux))
             {
                 reina.recibirAlertaEnemigo(aux);
@@ -135,23 +137,15 @@ public class Nurse : HormigaGenerica
         else if (other.tag == "Huevo")
         {
             Huevo aux = other.GetComponent<Huevo>();
+            // Actualizas al huevo de las hormigas que tiene cerca
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
+            // Actualizas la lista de huevos cerca
             if (!huevosCerca.Contains(aux))
             {
                 huevosCerca.Add(aux);
-            }
-        }
-        else if (other.tag == "Reina")
-        {
-            reinaCerca = true;
-            Debug.Log("Reina cerca");
-        }
-        else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
-        {
-            Debug.Log("Hormiga detectada");
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (!hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Add(aux);
             }
         }
     }
@@ -163,15 +157,7 @@ public class Nurse : HormigaGenerica
         {
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
             aux.hormigasCerca.Remove(this);
-            if (enemigosCerca.Contains(aux))
-            {
-                enemigosCerca.Remove(aux);
-            }
-            // Si no hay más enemigos
-            if (enemigosCerca.Count == 0)
-            {
-                siguientePosicionExplorar = this.transform.position;
-            }
+            enemigosCerca.Remove(aux);
         }
         else if (other.tag == "Trigo")
         {
@@ -183,23 +169,8 @@ public class Nurse : HormigaGenerica
         else if (other.tag == "Huevo")
         {
             Huevo aux = other.GetComponent<Huevo>();
-            if (huevosCerca.Contains(aux))
-            {
-                huevosCerca.Remove(aux);
-            }
-        }
-        else if (other.tag == "Reina")
-        {
-            reinaCerca = false;
-            Debug.Log("Reina cerca");
-        }
-        else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Remove(aux);
-            }
+            huevosCerca.Remove(aux);
+            aux.hormigasCerca.Remove(this);
         }
     }
 
@@ -223,7 +194,7 @@ public class Nurse : HormigaGenerica
     [Task]
     public void HayObrerasOSoldadosCerca()
     {
-        if (numeroDeObrerasCerca > 0 || numeroDeSoldadosCerca > 0)
+        if (obrerasCerca || soldadosCerca)
         {
             Task.current.Succeed();
         }
@@ -277,54 +248,40 @@ public class Nurse : HormigaGenerica
     {
         if (huevoACuidar != null)
         {
+            // Si es la primera vez, no tengo asignada la posicion del huevo
             if (posHuevo == Vector3.zero)
             {
                 Debug.Log("Se asigna la posicion del huevo a curar");
                 posHuevo = huevoACuidar.transform.position;
                 agente.SetDestination(huevoACuidar.transform.position);
+                Task.current.Succeed();
+                return;
             }
+            // Cuando la distancia al huevo sea pequeña
             if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
             {
-                // Si el huevo no ha muerto
-                if (huevoACuidar.puedeSerCuidado)
+                TiempoActual -= Time.deltaTime;
+                // Si ha pasado el tiempo de cura
+                if (TiempoActual <= 0)
                 {
-                    TiempoActual -= Time.deltaTime;
-                    if (TiempoActual <= 0)
-                    {
-                        huevoACuidar.cuidar();
-                        Debug.Log("Huevo Cuidado");
-                        TiempoActual = tiempoCuidandoHuevos;
-                        posHuevo = Vector3.zero;
-                        if (hayOrdenCuidarHuevos == true)
-                        {
-                            hayOrdenCuidarHuevos = false;
-                        }
-                        huevoACuidar.siendoCuidadoPor = null;
-                        huevoACuidar = null;
-                        posHuevo = Vector3.zero;
-
-                        if (hayOrdenCuidarHuevos == true)
-                        {
-                            hayOrdenCuidarHuevos = false;
-                        }
-
-                        Task.current.Succeed();
-                    }
-                }
-                else
-                {
+                    huevoACuidar.Cuidar();
+                    Debug.Log("Huevo Cuidado");
+                    // Reseteas todos los valores
                     TiempoActual = tiempoCuidandoHuevos;
-                    huevoACuidar = null;
                     posHuevo = Vector3.zero;
+                    huevoACuidar.siendoCuidadoPor = null;
+                    huevoACuidar = null;
+                    // Si se trataba de una orden de cuidar huevos
                     if (hayOrdenCuidarHuevos == true)
                     {
                         hayOrdenCuidarHuevos = false;
                     }
-                    Task.current.Fail();
                 }
             }
+            Task.current.Succeed();
+            return;
         }
-        // Si el huevo ha muerto o nacido
+        // Si el huevo ha muerto o nacido, se devuelve Fail para que siga haciendo cosas del BT
         else
         {
             TiempoActual = tiempoCuidandoHuevos;
@@ -335,6 +292,7 @@ public class Nurse : HormigaGenerica
                 hayOrdenCuidarHuevos = false;
             }
             Task.current.Fail();
+            return;
         }
     }
 
@@ -348,43 +306,29 @@ public class Nurse : HormigaGenerica
     {
         if (hayOrdenCuidarHuevos == false)
         {
-            bool encontrado = false;
-            for (int i = 0; i < huevosCerca.Count; i++)
+            // Si no tengo ningun huevo asignado, miro los que hay alrededor
+            if (huevoACuidar == null)
             {
-                if (huevosCerca[i] == null)
+                // Recorremos la lista de huevos cercanos
+                foreach (Huevo h in huevosCerca)
                 {
-                    huevosCerca.RemoveAt(i);
-                    i--;
-                }
-                else if (huevosCerca[i].puedeSerCuidado && huevosCerca[i].siendoCuidadoPor == null && encontrado == false)
-                {
-                    encontrado = true;
-                    huevoACuidar = huevosCerca[i];
-                    huevosCerca[i].siendoCuidadoPor = this;
-
-                    // Notifico a la reina de que va a cuidar ese huevo
-                    if (reina.huevosQueTienenQueSerCuidados.Contains(huevoACuidar))
+                    // Si algun huevo PUEDE ser cuidado y no tiene a nadie asignado, se lo asigno e indico al huevo quien lo cuida
+                    if (h.siendoCuidadoPor == null && h.puedeSerCuidado)
                     {
+                        huevoACuidar = h;
+                        h.siendoCuidadoPor = this;
+                        // Si la reina lo tiene en su lista de huevos que necesitan cuidados, lo borro
                         reina.huevosQueTienenQueSerCuidados.Remove(huevoACuidar);
+                        Task.current.Succeed();
+                        Debug.Log("Hay Huevo Cerca que puede ser o necesita cuidados");
+                        return;
                     }
-                    //break;
                 }
             }
+        }
 
-            if (huevoACuidar != null)
-            {
-                Task.current.Succeed();
-                Debug.Log("Hay Huevo Cerca que puede ser o necesita cuidados");
-            }
-            else
-            {
-                Task.current.Fail();
-            }
-        }
-        else
-        {
-            Task.current.Fail();
-        }
+        // Si no encuentra huevo, o tiene orden
+        Task.current.Fail();
     }
 
     // HayHormigaQueCurarCerca()

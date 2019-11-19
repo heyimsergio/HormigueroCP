@@ -9,8 +9,7 @@ public class Obrera : HormigaGenerica
     #region Variables Obrera
     // Atacar
     // bool hayEnemigosCerca
-    public int numeroDeSoldadosCerca = 0;
-    public bool reinaEstaCerca = false;
+    // int numeroDeSoldadosCerca = 0;
 
     // Comer
     // float hambre
@@ -104,10 +103,13 @@ public class Obrera : HormigaGenerica
         // Si encuentras un enemigo y no está en la lista de enemigos
         if (other.tag == "Enemigo")
         {
-            numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
-            Debug.Log("Colision con enemigo");
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
-            aux.hormigasCerca.Add(this);
+            // Actualizas al enemigo de que hay hormiga cerca
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
+            // Actualizas a la hormiga y avisas a la reina de este enemigo
             if (!enemigosCerca.Contains(aux))
             {
                 reina.recibirAlertaEnemigo(aux);
@@ -132,19 +134,6 @@ public class Obrera : HormigaGenerica
                 reina.recibirAlertaComida(other.GetComponent<Comida>());
             }
         }
-        else if (other.tag == "Reina")
-        {
-            reinaCerca = true;
-        }
-        else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (!hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Add(aux);
-            }
-        }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -154,16 +143,7 @@ public class Obrera : HormigaGenerica
         {
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
             aux.hormigasCerca.Remove(this);
-            Debug.Log("Enemigo eliminado");
-            if (enemigosCerca.Contains(aux))
-            {
-                enemigosCerca.Remove(aux);
-            }
-            // Si no hay más enemigos
-            if (enemigosCerca.Count == 0)
-            {
-                siguientePosicionExplorar = this.transform.position;
-            }
+            enemigosCerca.Remove(aux);
         }
         else if (other.tag == "Trigo")
         {
@@ -192,7 +172,7 @@ public class Obrera : HormigaGenerica
     [Task]
     public void HaySoldadosCerca()
     {
-        if (numeroDeSoldadosCerca > 0)
+        if (soldadosCerca)
         {
             Task.current.Succeed();
         }

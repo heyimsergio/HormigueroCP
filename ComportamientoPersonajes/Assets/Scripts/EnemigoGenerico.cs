@@ -124,11 +124,12 @@ public class EnemigoGenerico : PersonajeGenerico
             else
             {
                 hormigasCerca.RemoveAt(0);
-                if (hormigasCerca.Count == 0)
-                {
-                    siguientePosicion = this.transform.position;
-                    Task.current.Succeed();
-                }
+            }
+
+            if (hormigasCerca.Count == 0)
+            {
+                siguientePosicion = this.transform.position;
+                Task.current.Succeed();
             }
         }
     }
@@ -140,10 +141,6 @@ public class EnemigoGenerico : PersonajeGenerico
         if (vida <= 0)
         {
             reina.EnemigoHaMuerto(this);
-            foreach (HormigaGenerica h in hormigasCerca)
-            {
-                h.enemigosCerca.Remove(this);
-            }
             Destroy(this.gameObject);
         }
     }

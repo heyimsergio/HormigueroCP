@@ -387,6 +387,8 @@ MonoBehaviour:
   hayOrdenDeAtacar: 0
   enemigoAlQueAtacar: {fileID: 0}
   reinaCerca: 0
+  obrerasCerca: 0
+  soldadosCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
@@ -399,17 +401,18 @@ MonoBehaviour:
   cantidadDeCura: 3
   puedeSerCurada: 0
   necesitaSerCurada: 0
+  umbralPuedeCurarse: 9
+  umbralNecesitaCurarse: 3
   hayOrdenCurarHormiga: 0
   tiempoCuidandoHuevos: 0
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
+  huevosCerca: []
+  hayOrdenCuidarHuevos: 0
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
-  huevosCerca: []
-  numeroDeObrerasCerca: 0
-  numeroDeSoldadosCerca: 0
-  hayOrdenCuidarHuevos: 0
+  hayOrdenDeCavar: 0
 --- !u!114 &451619049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1472,7 +1475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1285418714
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1705,7 +1708,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1459647999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1947,7 +1950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1546281722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2142,6 +2145,8 @@ MonoBehaviour:
   hayOrdenDeAtacar: 0
   enemigoAlQueAtacar: {fileID: 0}
   reinaCerca: 0
+  obrerasCerca: 0
+  soldadosCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
@@ -2154,19 +2159,22 @@ MonoBehaviour:
   cantidadDeCura: 3
   puedeSerCurada: 0
   necesitaSerCurada: 0
+  umbralPuedeCurarse: 9
+  umbralNecesitaCurarse: 3
   hayOrdenCurarHormiga: 0
   tiempoCuidandoHuevos: 10
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
+  huevosCerca: []
+  hayOrdenCuidarHuevos: 0
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
+  hayOrdenDeCavar: 0
   contPrioridadNavMesh: 0
   tiempoQueTardaEnPonerHuevo: 3
   tiempoQueLlevaPoniendoHuevo: 0
   estaPoniendoHuevo: 0
-  PrefabHuevo: {fileID: 1489546582499747470, guid: 36cebf16d8691e24c8c986527498073c,
-    type: 3}
   posicionParaColocarHuevo: {x: 0, y: 0, z: 0}
   puedePonerHuevo: 0
   tiempoMaximoParaPonerHuevo: 3
@@ -2233,6 +2241,8 @@ MonoBehaviour:
   salasEnConstruccion: 0
   umbralComida: 1.4
   comidaPrefab: {fileID: 2867959774170439277, guid: 09ba6be01b00b9b46a847381e95dd101,
+    type: 3}
+  PrefabHuevo: {fileID: 1489546582499747470, guid: 36cebf16d8691e24c8c986527498073c,
     type: 3}
   prefabNurse: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
     type: 3}
@@ -2363,6 +2373,8 @@ MonoBehaviour:
   hayOrdenDeAtacar: 0
   enemigoAlQueAtacar: {fileID: 0}
   reinaCerca: 0
+  obrerasCerca: 0
+  soldadosCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
@@ -2375,17 +2387,18 @@ MonoBehaviour:
   cantidadDeCura: 3
   puedeSerCurada: 0
   necesitaSerCurada: 0
+  umbralPuedeCurarse: 9
+  umbralNecesitaCurarse: 3
   hayOrdenCurarHormiga: 0
   tiempoCuidandoHuevos: 0
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
+  huevosCerca: []
+  hayOrdenCuidarHuevos: 0
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
-  huevosCerca: []
-  numeroDeObrerasCerca: 0
-  numeroDeSoldadosCerca: 0
-  hayOrdenCuidarHuevos: 0
+  hayOrdenDeCavar: 0
 --- !u!114 &1664277722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2634,7 +2647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1922200433
 MonoBehaviour:
   m_ObjectHideFlags: 0

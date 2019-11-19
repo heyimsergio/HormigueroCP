@@ -17,6 +17,7 @@ public class Huevo : MonoBehaviour
     public TileScript myTile;
     private Reina miReina;
     Collider huevoCollider;
+    public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
 
     // Start is called before the first frame update
     void Start()
@@ -78,7 +79,7 @@ public class Huevo : MonoBehaviour
         }
     */
 
-    public void cuidar()
+    public void Cuidar()
     {
         if (necesitaCuidados)
         {
