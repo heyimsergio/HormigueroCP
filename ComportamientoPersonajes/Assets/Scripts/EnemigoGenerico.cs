@@ -140,6 +140,10 @@ public class EnemigoGenerico : PersonajeGenerico
         if (vida <= 0)
         {
             reina.EnemigoHaMuerto(this);
+            foreach (HormigaGenerica h in hormigasCerca)
+            {
+                h.enemigosCerca.Remove(this);
+            }
             Destroy(this.gameObject);
         }
     }

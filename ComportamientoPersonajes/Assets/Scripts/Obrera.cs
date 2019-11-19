@@ -68,7 +68,7 @@ public class Obrera : HormigaGenerica
         // Prioridades NavMesh
         if (reina.contPrioridadNavMesh > 99)
         {
-            reina.contPrioridadNavMesh = 0;
+            reina.contPrioridadNavMesh = 1;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
         reina.contPrioridadNavMesh++;
@@ -100,7 +100,7 @@ public class Obrera : HormigaGenerica
         if (other.tag == "Enemigo")
         {
             numeroDeSoldadosCerca = GameObject.FindGameObjectsWithTag("Soldado").Length;
-
+            Debug.Log("Colision con enemigo");
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
             aux.hormigasCerca.Add(this);
             if (!enemigosCerca.Contains(aux))
@@ -131,14 +131,6 @@ public class Obrera : HormigaGenerica
         {
             reinaCerca = true;
         }
-        else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (!hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Add(aux);
-            }
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -148,6 +140,7 @@ public class Obrera : HormigaGenerica
         {
             EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
             aux.hormigasCerca.Remove(this);
+            Debug.Log("Enemigo eliminado");
             if (enemigosCerca.Contains(aux))
             {
                 enemigosCerca.Remove(aux);
@@ -169,14 +162,6 @@ public class Obrera : HormigaGenerica
         {
             reinaCerca = false;
             Debug.Log("Reina cerca");
-        }
-        else if (other.tag == "Nurse" || other.tag == "Obrera" || other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Remove(aux);
-            }
         }
     }
 

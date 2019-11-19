@@ -70,7 +70,7 @@ public class Nurse : HormigaGenerica
         // Prioridades NavMesh
         if (reina.contPrioridadNavMesh > 99)
         {
-            reina.contPrioridadNavMesh = 0;
+            reina.contPrioridadNavMesh = 1;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
         reina.contPrioridadNavMesh++;

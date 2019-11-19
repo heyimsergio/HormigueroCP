@@ -12,7 +12,7 @@ public class Reina : HormigaGenerica
     #region atributos propios de la reina
 
     // NavMesh
-    public int contPrioridadNavMesh = 0;
+    public int contPrioridadNavMesh = 1;
 
     //Poner huevos
     [Header("Variables Poner Huevos Reina")]
@@ -172,12 +172,7 @@ public class Reina : HormigaGenerica
         tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
 
         // Prioridades NavMesh
-        if (contPrioridadNavMesh > 99)
-        {
-            contPrioridadNavMesh = 0;
-        }
-        agente.avoidancePriority = contPrioridadNavMesh;
-        contPrioridadNavMesh++;
+        agente.avoidancePriority = 0;
 
         // Ataques y Vida
         this.vida = 10;
