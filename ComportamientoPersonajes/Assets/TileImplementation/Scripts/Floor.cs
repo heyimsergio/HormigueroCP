@@ -44,10 +44,11 @@ public class Floor : MonoBehaviour
 
 
     int numSalas = 0;
+    public Vector3 centro;
 
     void Start()
     {
-
+        centro = this.transform.position + new Vector3(heigth / 2, 0, width / 2);
         posX = +(int)this.transform.position.x;
         posZ = +(int)this.transform.position.z;
         level = new GameObject[(int)width, (int)heigth];

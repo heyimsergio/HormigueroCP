@@ -462,7 +462,7 @@ public class HormigaGenerica : PersonajeGenerico
             // Aún pueden quedarte enemigos a los que atacar
             if (enemigosCerca.Count == 0)
             {
-                siguientePosicionExplorar = this.transform.position;
+                //siguientePosicionExplorar = this.transform.position;
                 Task.current.Succeed();
             }
         }
@@ -538,7 +538,8 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void NoMoverse()
     {
-        siguientePosicionExplorar = this.transform.position;
+        //siguientePosicionExplorar = this.transform.position;
+        agente.SetDestination(this.transform.position);
         Task.current.Succeed();
     }
 
@@ -620,72 +621,6 @@ public class HormigaGenerica : PersonajeGenerico
         }
 
     }
-
-    /*[Task]
-    public void TengoOrdenDeLaReina()
-    {
-        /*EnemigoGenerico enemigo = enemigosCerca[0];
-        if (enemigo != null)
-        {
-            if (!estaLuchando)
-            {
-                reina.HormigaAtacando();
-            }
-            estaLuchando = true;
-            
-            //Debug.Log("Hay enemigo");
-            agente.SetDestination(enemigo.transform.position);
-            float distanceToTarget = Vector3.Distance(transform.position, enemigo.transform.position);
-            //Debug.Log(distanceToTarget);
-            if (distanceToTarget < 1.2f)
-            {
-                Debug.Log("Tiempo entre ataques: " + tiempoEntreAtaques);
-                if (tiempoEntreAtaques <= 0)
-                {
-                    Debug.Log("Ataque");
-                    float random = Random.Range(0, 10);
-                    if (random < 9f)
-                    {
-                        Debug.Log("Ataque acertado");
-                        enemigo.quitarVida(this.daño);
-                    }
-                    else
-                    {
-                        Debug.Log("Ataque fallido");
-                    }
-                    tiempoEntreAtaques = tiempoEntreAtaquesMax;
-                }
-                else 
-                {
-                    Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigo.transform.position;
-                    agente.SetDestination(randomDirection);
-                    tiempoEntreAtaques -= Time.deltaTime;
-                }
-            } else
-            {
-                //Debug.Log("no estoy a rango para pegarle");
-            }
-        } else
-        {
-            if (estaLuchando)
-            {
-                reina.HomirgaDejaDeAtacar();
-            }
-            estaLuchando = false;
-            //Debug.Log("No hay enemigo");
-            enemigosCerca.RemoveAt(0);
-            if (enemigosCerca.Count == 0)
-            {
-                hayEnemigosCerca = false;
-                siguientePosicionExplorar = this.transform.position;
-            }
-        }
-        Task.current.Succeed();
-        
-        Task.current.Fail();
-
-    }
-*/
 
     [Task]
     public void TengoOrdenDeCurarHormiga()
@@ -838,6 +773,13 @@ public class HormigaGenerica : PersonajeGenerico
                 }
                 else
                 {
+                    comida.transform.SetParent(null);
+                    posDejarComida = Vector3.zero;
+                    salaDejarComida = null;
+                    casillaDejarComida = null;
+                    posComida = Vector3.zero;
+                    Debug.Log("No hay sala para dejar comida");
+                    comida = null;
                     Task.current.Fail();
                     return;
                 }
@@ -881,10 +823,8 @@ public class HormigaGenerica : PersonajeGenerico
             // si soy yo quien lleva la comida pongo el destino
             if (comida.hormigaQueLLevaLaComida == this)
             {
-                Debug.Log("Soy yo quien lleva la comida");
                 if (posDejarComida == Vector3.zero)
                 {
-                    Debug.Log("Posicion de dejar la comida es 0");
                     posDejarComida = casillaDejarComida.transform.position;
                     agente.SetDestination(posDejarComida);
                     Task.current.Succeed();
@@ -893,11 +833,9 @@ public class HormigaGenerica : PersonajeGenerico
                 else if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
                 {
                     // comida guardada
-                    Debug.Log("Llego a la pos de dejar la comida");
                     reina.comidaGuardada(comida, salaDejarComida, casillaDejarComida);
                     comida.haSidoCogida = true;
                     comida.transform.SetParent(null);
-                    Debug.Log("Comida dejada");
                     comida = null;
                     salaDejarComida = null;
                     casillaDejarComida = null;
@@ -907,7 +845,6 @@ public class HormigaGenerica : PersonajeGenerico
                     return;
                 } else
                 {
-                    Debug.Log("Yendo");
                     //agente.SetDestination(posDejarComida);
                     Task.current.Succeed();
                     return;
@@ -916,7 +853,6 @@ public class HormigaGenerica : PersonajeGenerico
             else
             {
                 // esa comida ya la lleva alguien, reseteo todo
-                Debug.Log("La comida la lleva alguien qu eno soy yo");
                 posDejarComida = Vector3.zero;
                 salaDejarComida = null;
                 casillaDejarComida = null;

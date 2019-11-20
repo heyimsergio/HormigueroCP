@@ -93,7 +93,7 @@ public class Nurse : HormigaGenerica
         tiempoParaCurar = 10.0f;
 
         // Explorar
-        siguientePosicionExplorar = this.transform.position;
+        siguientePosicionExplorar = Vector3.zero;
     }
 
     /*private void Update()
@@ -351,57 +351,44 @@ public class Nurse : HormigaGenerica
     [Task]
     public void Explorar()
     {
-        if (this.zonaDondeEsta == 1)
+
+        if(zonaDondeEsta == 1)
         {
-            //Esta fuera, tiene que entrar
-            //Debug.Log("Estoy fuera ais que tengo que entrar");
+            siguientePosicionExplorar = Vector3.zero;
             Vector3 randomDirection;
             NavMeshHit aux;
             bool aux2;
             do
             {
-                randomDirection = UnityEngine.Random.insideUnitSphere * 100 + this.transform.position;
+                randomDirection = UnityEngine.Random.insideUnitSphere * 10 + reina.hormiguero.centro;
                 aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-            } while (aux.position.x < (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2)) || !aux2);
-            //Debug.Log("Salir hacia: " + aux.position);
-            //saliendo = true;
-            agente.SetDestination(aux.position);
-            siguientePosicionExplorar = aux.position;
-            //
-        }
-        else
+            } while (!aux2);
+            siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+            Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+            agente.SetDestination(siguientePosicionExplorar);
+        } else
         {
-            //
-            if (this.zonaDondeEsta == 0)
+            if(siguientePosicionExplorar == Vector3.zero)
             {
-                //Debug.Log("Estoy dentro, asi que exploro " + siguientePosicionExplorar + " " + transform.position);
-                float distanceToTarget = Vector3.Distance(this.transform.position, siguientePosicionExplorar);
-                //Debug.Log(distanceToTarget);
-                if (distanceToTarget < 1.8f)
+                Vector3 randomDirection;
+                NavMeshHit aux;
+                bool aux2;
+                do
                 {
-                    //Debug.Log("Esta cerca");
-                    Vector3 randomDirection;
-                    NavMeshHit aux;
-                    bool aux2;
-                    do
-                    {
-                        randomDirection = UnityEngine.Random.insideUnitSphere * 10 + this.transform.position;
-                        aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-                    } while (!aux2 || (aux.position.x < (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2))));
-                    //saliendo = true;
-                    agente.SetDestination(aux.position);
-                    siguientePosicionExplorar = aux.position;
-                }
-                else
-                {
-                    //Debug.Log("Esta lejos, voy hacia el");
-                    agente.SetDestination(siguientePosicionExplorar);
-
-                }
+                    randomDirection = UnityEngine.Random.insideUnitSphere * (reina.hormiguero.heigth/2-5) + reina.hormiguero.centro;
+                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
+                } while (!aux2);
+                siguientePosicionExplorar = new Vector3(aux.position.x,0,aux.position.z);
+                Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+                agente.SetDestination(siguientePosicionExplorar);
+            } else if(Vector3.Distance(this.transform.position,siguientePosicionExplorar)< 0.5f)
+            {
+                siguientePosicionExplorar = Vector3.zero;
             }
         }
         Task.current.Succeed();
     }
 
     #endregion
+
 }

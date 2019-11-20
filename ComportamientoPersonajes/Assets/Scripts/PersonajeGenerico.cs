@@ -13,7 +13,6 @@ public class PersonajeGenerico : MonoBehaviour
     //Radio del circulo que hace de campo de vision
     protected float areaVision;
 
-    protected Vector3 siguientePosicion;
 
     public int zonaDondeEsta; //0: dentro, 1: fuera: 2 entrando, 3: saliendo
 
