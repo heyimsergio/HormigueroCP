@@ -1187,6 +1187,7 @@ public class Reina : HormigaGenerica
     // Métodos para el tratamiento de creaciones
     public void NaceHormiga(Huevo huevo)
     {
+        return;
         //HuevoHaMuerto(huevo);
         switch (huevo.miType)
         {
@@ -1395,6 +1396,14 @@ public class Reina : HormigaGenerica
         {
             sacarComidaSala(comida.misala, comida, comida.miTile);
         }
+
+        if(comida.hormigaQueLLevaLaComida != null)
+        {
+
+            comida.hormigaQueLLevaLaComida.comida = null;
+            comida.hormigaQueLLevaLaComida = null;
+        }
+
         // Avisamos a las hormigas de que la comida ha muerto
         foreach (HormigaGenerica h in comida.hormigasCerca)
         {

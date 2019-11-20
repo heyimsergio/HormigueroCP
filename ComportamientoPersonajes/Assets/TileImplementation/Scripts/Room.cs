@@ -126,7 +126,7 @@ public class Room
     public TileScript getFreeTile()
     {
 
-        if(casillasVacias.Count >= 0)
+        if(casillasVacias.Count > 0)
         {
             //Debug.Log(casillasVacias.Count + " Casillas vacias");
             int indice = Random.Range(0, casillasVacias.Count);

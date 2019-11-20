@@ -118,9 +118,15 @@ public class Obrera : HormigaGenerica
         }
         else if (other.tag == "Trigo")
         {
+
             Comida aux = other.gameObject.GetComponent<Comida>();
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
             if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
             {
+                reina.recibirAlertaComida(aux);
                 comidaQueHayCerca.Add(aux);
             }
         }
@@ -139,6 +145,7 @@ public class Obrera : HormigaGenerica
         {
             Comida aux = other.gameObject.GetComponent<Comida>();
             comidaQueHayCerca.Remove(aux);
+            aux.hormigasCerca.Remove(this);
         }
         else if (other.tag == "Reina")
         {
@@ -365,7 +372,6 @@ public class Obrera : HormigaGenerica
             salaDejarComida = null;
             casillaDejarComida = null;
             posComida = Vector3.zero;
-            Debug.Log("No hay sala para dejar comida");
             comida = null;
             Task.current.Fail();
         } else
@@ -403,11 +409,8 @@ public class Obrera : HormigaGenerica
 
         if (!hayOrdenBuscarComida)
         {
-            Debug.Log("No hay orden");
             if(comida == null)
             {
-                Debug.Log("No Tengo comida");
-                Debug.Log("Comida en los alrededores: " + comidaQueHayCerca.Count);
                 foreach (Comida comidaAux in comidaQueHayCerca)
                 {
                     if(comidaAux.hormigaQueLLevaLaComida == null && !comidaAux.haSidoCogida)

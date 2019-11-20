@@ -48,7 +48,7 @@ tree("Obrera")
 			not 
 				HaySuficienteComida()
 			HayComidaParaLlevar()
-			BuscarComida1()
+			BuscarComida()
 		sequence
 			TengoHambre()
 			HayComida()

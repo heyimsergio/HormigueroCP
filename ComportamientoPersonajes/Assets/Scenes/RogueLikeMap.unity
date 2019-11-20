@@ -162,7 +162,7 @@ PrefabInstance:
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -209,7 +209,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &434455673
 GameObject:
@@ -271,262 +271,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &464846956
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_Name
-      value: Nurse (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 84.98842
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.20028469
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 24.871202
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6f231378bc6845f478803e81d4c9b294, type: 3}
---- !u!1 &451619044
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 451619045}
-  - component: {fileID: 451619046}
-  - component: {fileID: 451619047}
-  - component: {fileID: 451619049}
-  - component: {fileID: 451619048}
-  - component: {fileID: 451619051}
-  - component: {fileID: 451619050}
-  m_Layer: 0
-  m_Name: Nurse
-  m_TagString: Nurse
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &451619045
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 85, y: 0, z: 26.17}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2085257191}
-  - {fileID: 962223010}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &451619046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6583be440ff4b24ca8215b79d6f6072, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 2144260384}
-  agent: {fileID: 451619047}
-  hormiga_sprite: {fileID: 0}
-  hormiga_colisiones: {fileID: 0}
-  haEntradoAlCamino: 0
-  linkMultiplayer: 1
-  link: {fileID: 0}
---- !u!195 &451619047
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_Enabled: 1
-  m_AgentTypeID: -1372625422
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 51
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &451619048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bab787997bf0f748a5e485ec27cd89b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vida: 0
-  zonaDondeEsta: 0
-  hambre: 200
-  umbralHambre: 500
-  tengoHambre: 0
-  umbralHambreMaximo: 500
-  tengoMuchaHambre: 0
-  pesoQuePuedenTransportar: 0
-  estaLuchando: 0
-  enemigosCerca: []
-  hayOrdenDeAtacar: 0
-  enemigoAlQueAtacar: {fileID: 0}
-  reinaCerca: 0
-  siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
-  comida: {fileID: 0}
-  casillaDejarComida: {fileID: 0}
-  posComida: {x: 0, y: 0, z: 0}
-  posDejarComida: {x: 0, y: 0, z: 0}
-  comidaQueHayCerca: []
-  hayOrdenBuscarComida: 0
-  hormigaACurar: {fileID: 0}
-  tiempoParaCurar: 0
-  siendoCuradaPor: {fileID: 0}
-  posHerida: {x: 0, y: 0, z: 0}
-  hormigasCerca: []
-  cantidadDeCura: 3
-  puedeSerCurada: 0
-  necesitaSerCurada: 0
-  hayOrdenCurarHormiga: 0
-  tiempoCuidandoHuevos: 0
-  huevoACuidar: {fileID: 0}
-  posHuevo: {x: 0, y: 0, z: 0}
-  comidaAComer: {fileID: 0}
-  reina: {fileID: 0}
-  meHanMandadoOrden: 0
-  huevosCerca: []
-  numeroDeObrerasCerca: 0
-  numeroDeSoldadosCerca: 0
-  hayOrdenCuidarHuevos: 0
---- !u!114 &451619049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e43e7170fb45b4b81dcd16d0ff55d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scripts:
-  - {fileID: 4900000, guid: dcb956e20789b2240a11b53a3f78ba20, type: 3}
-  autoReset: 1
-  tickOn: 0
-  sourceInfos:
-  - isFoldout: 1
-    breakPoints: 
-    breakPointStatuses: 
-    collapsedLines: 
-    btScript: 
---- !u!50 &451619050
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &451619051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451619044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  link: {fileID: 0}
 --- !u!1 &534962857
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,7 +390,7 @@ PrefabInstance:
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -804,7 +548,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -1906,7 +1650,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!191 &1482372615
 OffMeshLink:
@@ -2265,164 +2009,9 @@ Transform:
   - {fileID: 711407350}
   - {fileID: 1150814149}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &1646566903
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1646566900}
-  m_Enabled: 1
-  m_AgentTypeID: -1372625422
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &1646566904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1646566900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e43e7170fb45b4b81dcd16d0ff55d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scripts:
-  - {fileID: 4900000, guid: ac1833a5f2d086043b7bec61cd2f8814, type: 3}
-  autoReset: 1
-  tickOn: 0
-  sourceInfos:
-  - isFoldout: 1
-    breakPoints: 
-    breakPointStatuses: 
-    collapsedLines: 
-    btScript: 
---- !u!1 &1664277719
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1664277725}
-  - component: {fileID: 1664277724}
-  - component: {fileID: 1664277723}
-  - component: {fileID: 1664277722}
-  - component: {fileID: 1664277721}
-  - component: {fileID: 1664277720}
-  - component: {fileID: 1664277726}
-  m_Layer: 0
-  m_Name: Nurse (2)
-  m_TagString: Nurse
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!54 &1664277720
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664277719}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &1664277721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664277719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bab787997bf0f748a5e485ec27cd89b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vida: 0
-  zonaDondeEsta: 0
-  hambre: 200
-  umbralHambre: 500
-  tengoHambre: 0
-  umbralHambreMaximo: 500
-  tengoMuchaHambre: 0
-  pesoQuePuedenTransportar: 0
-  estaLuchando: 0
-  enemigosCerca: []
-  hayOrdenDeAtacar: 0
-  enemigoAlQueAtacar: {fileID: 0}
-  reinaCerca: 0
-  siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
-  comida: {fileID: 0}
-  casillaDejarComida: {fileID: 0}
-  posComida: {x: 0, y: 0, z: 0}
-  posDejarComida: {x: 0, y: 0, z: 0}
-  comidaQueHayCerca: []
-  hayOrdenBuscarComida: 0
-  hormigaACurar: {fileID: 0}
-  tiempoParaCurar: 0
-  siendoCuradaPor: {fileID: 0}
-  posHerida: {x: 0, y: 0, z: 0}
-  hormigasCerca: []
-  cantidadDeCura: 3
-  puedeSerCurada: 0
-  necesitaSerCurada: 0
-  hayOrdenCurarHormiga: 0
-  tiempoCuidandoHuevos: 0
-  huevoACuidar: {fileID: 0}
-  posHuevo: {x: 0, y: 0, z: 0}
-  comidaAComer: {fileID: 0}
-  reina: {fileID: 0}
-  meHanMandadoOrden: 0
-  huevosCerca: []
-  numeroDeObrerasCerca: 0
-  numeroDeSoldadosCerca: 0
-  hayOrdenCuidarHuevos: 0
---- !u!114 &1664277722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664277719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e43e7170fb45b4b81dcd16d0ff55d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scripts:
-  - {fileID: 4900000, guid: dcb956e20789b2240a11b53a3f78ba20, type: 3}
-  autoReset: 1
-  tickOn: 0
-  sourceInfos:
-  - isFoldout: 1
-    breakPoints: 
-    breakPointStatuses: 
-    collapsedLines: 
-    btScript: 
---- !u!195 &1664277723
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2800,7 +2389,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2144260382
 GameObject:
@@ -2958,7 +2547,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -2983,7 +2572,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: tiempoParaHacerTunel
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
