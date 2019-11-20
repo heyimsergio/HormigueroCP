@@ -72,13 +72,6 @@ public class Huevo : MonoBehaviour
         tiempoParaNacer -= Time.deltaTime;
     }
 
-    /*   public void quitarHuevo()
-        {
-            myRoom.sacarCosas();
-            miReina.NaceHuevo(this);
-        }
-    */
-
     public void Cuidar()
     {
         if (necesitaCuidados)

@@ -16,15 +16,14 @@ public class Comida : MonoBehaviour
     public bool haSidoCogida = false;
     public bool laEstanLLevando = false;
 
+    public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
+
     //Variables de ubicacion de la comida;
     public Room misala;
     public TileScript miTile;
 
-    public HormigaGenerica[] hormigasCogiendoLaComida;
 
     Reina reina = null;
-
-    
 
     // Start is called before the first frame update
     void Start()

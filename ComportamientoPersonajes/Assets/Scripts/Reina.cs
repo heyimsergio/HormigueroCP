@@ -838,6 +838,7 @@ public class Reina : HormigaGenerica
             aux2.siendoCuradaPor = this;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
+            return;
         }
     }
 
@@ -845,16 +846,35 @@ public class Reina : HormigaGenerica
     public void OrdenCurarNurses()
     {
         Nurse aux = nursesDesocupadas[0];
-        if (aux != null)
+        HormigaGenerica aux2 = hormigasHeridas[0];
+        if (aux == aux2)
         {
-            Debug.Log("Tengo nurse que mandar a curar");
+            if (nursesDesocupadas.Count > 1)
+            {
+                aux = nursesDesocupadas[1];
+            }
+            else if (hormigasHeridas.Count > 1)
+            {
+                aux2 = hormigasHeridas[1];
+            }
+            else
+            {
+                // La hormiga herida y la nurse son la misma y no hay más
+                Task.current.Fail();
+                return;
+            }
+        }
+        if (aux != null && aux != aux2)
+        {
+            Debug.Log("Tengo obrera que mandar a curar");
             aux.hayOrdenCurarHormiga = true;
             nursesOcupadas.Add(aux);
             nursesDesocupadas.Remove(aux);
-            aux.hormigaACurar = hormigasHeridas[0];
-            aux.hormigaACurar.siendoCuradaPor = this;
-            hormigasHeridas.RemoveAt(0);
+            aux.hormigaACurar = aux2;
+            aux2.siendoCuradaPor = this;
+            hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
+            return;
         }
     }
 
@@ -984,10 +1004,7 @@ public class Reina : HormigaGenerica
                     tiempoQueLlevaPoniendoHuevo = 0;
                     Task.current.Succeed();
                 }
-
             }
-
-
         }
         else
         {
@@ -1261,12 +1278,12 @@ public class Reina : HormigaGenerica
         sacarHormigaSala(hormiga.miSala);
         Debug.Log("Hormiga A Muerto");
         // Actualizamos a todos los enemigos que tenga
-        foreach (EnemigoGenerico enem in enemigosCercanos)
+        foreach (EnemigoGenerico enem in hormiga.enemigosCerca)
         {
             enem.hormigasCerca.Remove(this);
         }
         // Actualizamos a todos los huevos que tenga
-        foreach (Huevo huevo in huevosCerca)
+        foreach (Huevo huevo in hormiga.huevosCerca)
         {
             huevo.hormigasCerca.Remove(this);
         }
@@ -1364,14 +1381,14 @@ public class Reina : HormigaGenerica
 
     public void ComidaHaMuerto(Comida comida)
     {
+        // Sacamos la comida solo si haSidoCogida
         if (comida.haSidoCogida)
         {
             sacarComidaSala(comida.misala, comida, comida.miTile);
         }
-        if (ComidaVista.Contains(comida))
-        {
-            ComidaVista.Remove(comida);
-        } 
+        // Si la reina tenia esa comida como vista en su lista, se elimina
+        ComidaVista.Remove(comida);
+
     }
 
     public void HuevoHaMuerto(Huevo miHuevo)
@@ -1389,10 +1406,8 @@ public class Reina : HormigaGenerica
             h.huevosCerca.Remove(miHuevo);
         }
         // Si el huevo estaba en la lista de NECESITA ser cuidado, se elimina
-        if (huevosQueTienenQueSerCuidados.Contains(miHuevo))
-        {
-            huevosQueTienenQueSerCuidados.Remove(miHuevo);
-        }
+        huevosQueTienenQueSerCuidados.Remove(miHuevo);
+
     }
 
     #endregion

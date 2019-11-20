@@ -88,7 +88,9 @@ public class Nurse : HormigaGenerica
 
         // Cuidar huevos
         tiempoCuidandoHuevos = 10.0f;
-        TiempoActual = tiempoCuidandoHuevos;
+
+        // Curar Hormigas
+        tiempoParaCurar = 10.0f;
 
         // Explorar
         siguientePosicionExplorar = this.transform.position;
@@ -235,6 +237,18 @@ public class Nurse : HormigaGenerica
     {
         if (hayOrdenCuidarHuevos)
         {
+            // Todo lo que esté haciendo si tengo una orden más prioritaria, lo corto
+            // Si estabas curando a una hormiga
+            if (hormigaACurar != null)
+            {
+                hormigaACurar.siendoCuradaPor = null;
+                if (hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormigaACurar))
+                {
+                    reina.hormigasHeridas.Add(hormigaACurar);
+                }
+            }
+            hormigaACurar = null;
+            posHerida = Vector3.zero;
             Task.current.Succeed();
         }
         else
@@ -252,6 +266,7 @@ public class Nurse : HormigaGenerica
             if (posHuevo == Vector3.zero)
             {
                 Debug.Log("Se asigna la posicion del huevo a curar");
+                TiempoActual = tiempoCuidandoHuevos;
                 posHuevo = huevoACuidar.transform.position;
                 agente.SetDestination(huevoACuidar.transform.position);
                 Task.current.Succeed();
@@ -261,7 +276,7 @@ public class Nurse : HormigaGenerica
             if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
             {
                 TiempoActual -= Time.deltaTime;
-                // Si ha pasado el tiempo de cura
+                // Si ha pasado el tiempo de cuidar
                 if (TiempoActual <= 0)
                 {
                     huevoACuidar.Cuidar();
@@ -324,6 +339,11 @@ public class Nurse : HormigaGenerica
                         return;
                     }
                 }
+            }
+            else
+            {
+                Task.current.Succeed();
+                return;
             }
         }
 
