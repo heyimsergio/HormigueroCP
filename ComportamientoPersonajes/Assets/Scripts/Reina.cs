@@ -82,7 +82,7 @@ public class Reina : HormigaGenerica
     //FALTA ESTRUCTURA DE DATOS DEL MAPA
     [Header("Otros")]
     public Floor hormiguero;
-    private Outside afueras;
+    public Outside afueras;
     public List<Room> salasHormigas = new List<Room>();
     public List<Room> salasComida = new List<Room>();
     public List<Room> salasHuevos = new List<Room>();
@@ -1363,6 +1363,15 @@ public class Reina : HormigaGenerica
             hormiga.siendoCuradaPor.hormigaACurar = null;
             hormiga.siendoCuradaPor = null;
         }
+
+        // Actualizamos a todos las comidas que tenga
+        foreach (Comida comida in hormiga.comidaQueHayCerca)
+        {
+            comida.hormigasCerca.Remove(this);
+        }
+
+        // Si la hormiga está siendo curada por alguien
+        hormiga.siendoCuradaPor = null;
     }
 
     public void EnemigoHaMuerto(EnemigoGenerico enemigo)
@@ -1386,9 +1395,13 @@ public class Reina : HormigaGenerica
         {
             sacarComidaSala(comida.misala, comida, comida.miTile);
         }
+        // Avisamos a las hormigas de que la comida ha muerto
+        foreach (HormigaGenerica h in comida.hormigasCerca)
+        {
+            h.comidaQueHayCerca.Remove(comida);
+        }
         // Si la reina tenia esa comida como vista en su lista, se elimina
         ComidaVista.Remove(comida);
-
     }
 
     public void HuevoHaMuerto(Huevo miHuevo)

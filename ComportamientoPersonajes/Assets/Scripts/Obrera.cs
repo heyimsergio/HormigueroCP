@@ -118,20 +118,10 @@ public class Obrera : HormigaGenerica
         }
         else if (other.tag == "Trigo")
         {
-            if (comida == null)
+            Comida aux = other.gameObject.GetComponent<Comida>();
+            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
             {
-                Comida aux = other.GetComponent<Comida>();
-                if (!aux.laEstanLLevando && !aux.haSidoCogida)
-                {
-                    reina.recibirAlertaComida(aux);
-                    comida = aux;
-                    aux.laEstanLLevando = true;
-                }
-
-            }
-            else
-            {
-                reina.recibirAlertaComida(other.GetComponent<Comida>());
+                comidaQueHayCerca.Add(aux);
             }
         }
     }
@@ -147,10 +137,8 @@ public class Obrera : HormigaGenerica
         }
         else if (other.tag == "Trigo")
         {
-            if (comida == other)
-            {
-                comida = null;
-            }
+            Comida aux = other.gameObject.GetComponent<Comida>();
+            comidaQueHayCerca.Remove(aux);
         }
         else if (other.tag == "Reina")
         {
@@ -369,6 +357,16 @@ public class Obrera : HormigaGenerica
     {
         if (reina.totalComida >= reina.capacidadTotalDeComida)
         {
+            if(comida != null)
+            {
+                comida.transform.SetParent(null);
+            }
+            posDejarComida = Vector3.zero;
+            salaDejarComida = null;
+            casillaDejarComida = null;
+            posComida = Vector3.zero;
+            Debug.Log("No hay sala para dejar comida");
+            comida = null;
             Task.current.Fail();
         } else
         {
@@ -386,8 +384,51 @@ public class Obrera : HormigaGenerica
         }
         else
         {
+            if (comida != null)
+            {
+                comida.transform.SetParent(null);
+                comida = null;
+                posDejarComida = Vector3.zero;
+                salaDejarComida = null;
+                casillaDejarComida = null;
+                posComida = Vector3.zero;
+            }
             Task.current.Succeed();
         }
+    }
+
+    [Task]
+    public void HayComidaParaLlevar()
+    {
+
+        if (!hayOrdenBuscarComida)
+        {
+            Debug.Log("No hay orden");
+            if(comida == null)
+            {
+                Debug.Log("No Tengo comida");
+                Debug.Log("Comida en los alrededores: " + comidaQueHayCerca.Count);
+                foreach (Comida comidaAux in comidaQueHayCerca)
+                {
+                    if(comidaAux.hormigaQueLLevaLaComida == null && !comidaAux.haSidoCogida)
+                    {
+                        //comida.hormigaQueLLevaLaComida = this;
+                        comida = comidaAux;
+                        reina.ComidaVista.Remove(comidaAux);
+                        Task.current.Succeed();
+                        return;
+                    }
+                }
+            } else
+            {
+                Task.current.Succeed();
+                return;
+            }
+        } 
+
+        Task.current.Fail();
+        return;
+        
     }
 
     [Task]
