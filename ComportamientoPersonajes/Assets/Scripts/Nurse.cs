@@ -292,7 +292,6 @@ public class Nurse : HormigaGenerica
                     if (TiempoActual <= 0)
                     {
                         huevoACuidar.cuidar();
-                        Debug.Log("Huevo Cuidado");
                         TiempoActual = tiempoCuidandoHuevos;
                         posHuevo = Vector3.zero;
                         if (hayOrdenCuidarHuevos == true)

@@ -390,6 +390,9 @@ MonoBehaviour:
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
+  posComida: {x: 0, y: 0, z: 0}
+  posDejarComida: {x: 0, y: 0, z: 0}
+  comidaQueHayCerca: []
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -630,7 +633,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -2145,6 +2148,9 @@ MonoBehaviour:
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
+  posComida: {x: 0, y: 0, z: 0}
+  posDejarComida: {x: 0, y: 0, z: 0}
+  comidaQueHayCerca: []
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -2207,6 +2213,7 @@ MonoBehaviour:
   tiempoGlobal: 0
   espacioLlenoHormiguero: 0
   hormiguero: {fileID: 0}
+  afueras: {fileID: 0}
   probComida: 50
   MaxProbComida: 5000
   importanciaHormigas: 3
@@ -2366,6 +2373,9 @@ MonoBehaviour:
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
+  posComida: {x: 0, y: 0, z: 0}
+  posDejarComida: {x: 0, y: 0, z: 0}
+  comidaQueHayCerca: []
   hayOrdenBuscarComida: 0
   hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
@@ -3233,7 +3243,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: tiempoParaHacerTunel
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}

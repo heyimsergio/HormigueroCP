@@ -16,6 +16,9 @@ public class Comida : MonoBehaviour
     public bool haSidoCogida = false;
     public bool laEstanLLevando = false;
 
+    public HormigaGenerica hormigaQueLLevaLaComida = null;
+    public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
+
     //Variables de ubicacion de la comida;
     public Room misala;
     public TileScript miTile;
