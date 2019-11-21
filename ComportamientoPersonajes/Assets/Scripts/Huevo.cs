@@ -49,7 +49,10 @@ public class Huevo : MonoBehaviour
             necesitaCuidados = true;
             if (siendoCuidadoPor == null)
             {
-                miReina.huevoNecesitaCuidado(this);
+                if (!miReina.huevosQueTienenQueSerCuidados.Contains(this))
+                {
+                    miReina.huevosQueTienenQueSerCuidados.Add(this);
+                }
             }
         }
 
@@ -77,7 +80,7 @@ public class Huevo : MonoBehaviour
         if (necesitaCuidados)
         {
             necesitaCuidados = false;
-            miReina.huevoCuidado(this);
+            miReina.huevosQueTienenQueSerCuidados.Remove(this);
         }
         puedeSerCuidado = false;
         tiempoQueAguantaSinCuidar = maxTimeParaCuidar;

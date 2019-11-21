@@ -91,7 +91,6 @@ public class HormigaGenerica : PersonajeGenerico
     protected Vector3 posicionReina;
     //Ordenes de la reina
     public bool meHanMandadoOrden = false;
-    public enum ordenes { ORDEN1, ORDEN2 };
 
     // sistema de vision
     int numRayosExtra = 3;
@@ -100,7 +99,6 @@ public class HormigaGenerica : PersonajeGenerico
 
     // Cavar
     public bool hayOrdenDeCavar = false;
-
 
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -378,7 +376,6 @@ public class HormigaGenerica : PersonajeGenerico
     }
 
 
-
     #region Tareas Globales Hormigas
 
     [Task]
@@ -412,6 +409,92 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void Atacar()
     {
+        if (enemigoAlQueAtacar == null)
+        {
+            if (enemigosCerca.Count > 0)
+            {
+                enemigoAlQueAtacar = enemigosCerca[0];
+                Task.current.Succeed();
+                return;
+            }
+            else
+            {
+                // No hay enemigo al que atacar
+                Task.current.Fail();
+                return;
+            }
+        }
+        else
+        {
+            // Suelto la comida si tengo
+            if (comida != null)
+            {
+                comida.transform.SetParent(null);
+                comida.laEstanLLevando = false;
+                reina.SacarComidaSala(salaDejarComida, comida, casillaDejarComida);
+                comida.hormigaQueLlevaLaComida = null;
+                comida = null;
+                salaDejarComida = null;
+                casillaDejarComida = null;
+                posComida = Vector3.zero;
+                posDejarComida = Vector3.zero;
+                if (reina.comidaVista.Contains(comida))
+                {
+                    reina.comidaVista.Add(comida);
+                }
+            }
+            // Dejo de curar a una hormiga si tengo
+            if (hormigaACurar != null)
+            {
+                if (hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormigaACurar))
+                {
+                    reina.hormigasHeridas.Add(hormigaACurar);
+                }
+                hormigaACurar.siendoCuradaPor = null;
+                hormigaACurar = null;
+            }
+
+            // Asigno la posición a la que hay que ir
+            agente.SetDestination(enemigoAlQueAtacar.transform.position);
+
+            // En el momento que esté cerca
+            if (Vector3.Distance(transform.position, enemigoAlQueAtacar.transform.position) < 1.2f)
+            {
+                if (tiempoEntreAtaques <= 0)
+                {
+                    float random = Random.Range(0, 10);
+                    if (random < 9f)
+                    {
+                        enemigoAlQueAtacar.quitarVida(this.daño);
+                    }
+                    else
+                    {
+                        //Debug.Log("Ataque fallido");
+                    }
+                    tiempoEntreAtaques = tiempoEntreAtaquesMax;
+                    Task.current.Succeed();
+                    return;
+                }
+                else
+                {
+                    Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigoAlQueAtacar.transform.position;
+                    agente.SetDestination(randomDirection);
+                    tiempoEntreAtaques -= Time.deltaTime;
+                    Task.current.Succeed();
+                    return;
+                }
+            }
+            else
+            {
+                // Te estás acercando al enemigo
+                agente.SetDestination(enemigoAlQueAtacar.transform.position);
+                Task.current.Succeed();
+                return;
+            }
+        }
+
+
+        /*
         if (enemigosCerca.Count > 0)
         {
             if (enemigoAlQueAtacar == null)
@@ -471,6 +554,7 @@ public class HormigaGenerica : PersonajeGenerico
         {
             Task.current.Fail();
         }
+        */
     }
 
     [Task]
@@ -485,15 +569,13 @@ public class HormigaGenerica : PersonajeGenerico
                 Vector3 direccionContraria = direccionEnemigo * -1;
                 agente.SetDestination(this.transform.position + direccionContraria);
             }
-            else
-            {
-                Task.current.Succeed();
-            }
-            Debug.Log("Huir");
+            Task.current.Succeed();
+            return;
         }
         else
         {
             Task.current.Fail();
+            return;
         }
     }
 
@@ -573,7 +655,7 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void HayComida()
     {
-        if (reina.ComidaTotal.Count <= 0)
+        if (reina.comidaTotal.Count <= 0)
         {
             Task.current.Fail();
         }
@@ -603,10 +685,10 @@ public class HormigaGenerica : PersonajeGenerico
         {
             //Debug.Log("No tengo comida aun ");
             //comidaAComer = reina.pedirComida();
-            if (reina.ComidaTotal.Count > 0)
+            if (reina.comidaTotal.Count > 0)
             {
                 //Debug.Log("Hay comida");
-                comidaAComer = reina.ComidaTotal[Random.Range(0,reina.ComidaTotal.Count)];
+                comidaAComer = reina.comidaTotal[Random.Range(0, reina.comidaTotal.Count)];
                 //reina.ComidaTotal.Remove(comidaAComer);
             }
             // Comprobamos si podemos o no acceder a comida
@@ -633,7 +715,8 @@ public class HormigaGenerica : PersonajeGenerico
                 comidaAComer = null;
                 Task.current.Succeed();
                 return;
-            } else
+            }
+            else
             {
                 agente.SetDestination(comidaAComer.transform.position);
                 //Debug.Log("Posicion comida a comer: " + comidaAComer.transform.position);
@@ -650,18 +733,6 @@ public class HormigaGenerica : PersonajeGenerico
     {
         if (hayOrdenCurarHormiga)
         {
-            // Todo lo que esté haciendo si tengo una orden más prioritaria, lo corto
-            // Si estabas cuidando un huevo
-            if (huevoACuidar != null)
-            {
-                huevoACuidar.siendoCuidadoPor = null;
-                if (huevoACuidar.necesitaCuidados && !reina.huevosQueTienenQueSerCuidados.Contains(huevoACuidar))
-                {
-                    reina.huevosQueTienenQueSerCuidados.Add(huevoACuidar);
-                }
-            }
-            huevoACuidar = null;
-            posHuevo = Vector3.zero;
             Task.current.Succeed();
         }
         else
@@ -745,6 +816,10 @@ public class HormigaGenerica : PersonajeGenerico
                 }
 
             }
+            else
+            {
+                agente.SetDestination(hormigaACurar.transform.position);
+            }
             Task.current.Succeed();
             return;
         }
@@ -766,13 +841,27 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void TengoOrdenDeBuscarComida()
     {
-        Task.current.Fail();
+        if (hayOrdenBuscarComida)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
     [Task]
     public void TengoOrdenDeAtacar()
     {
-        Task.current.Fail();
+        if (hayOrdenDeAtacar)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
     [Task]
@@ -803,6 +892,7 @@ public class HormigaGenerica : PersonajeGenerico
                 else
                 {
                     // Te sigues acercando a la comida
+                    agente.SetDestination(posComida);
                     Task.current.Succeed();
                     return;
                 }
@@ -821,7 +911,7 @@ public class HormigaGenerica : PersonajeGenerico
                 // Cuando llego a la casilla, suelto la comida y actualizo el haSidoCogida
                 if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
                 {
-                    reina.comidaGuardada(comida, salaDejarComida, casillaDejarComida);
+                    reina.ComidaGuardada(comida, salaDejarComida, casillaDejarComida);
                     comida.haSidoCogida = true;
                     comida.transform.SetParent(null);
                     comida.hormigaQueLlevaLaComida = null;
@@ -837,6 +927,7 @@ public class HormigaGenerica : PersonajeGenerico
                 else
                 {
                     // Te sigues acercando a la comida
+                    agente.SetDestination(posDejarComida);
                     Task.current.Succeed();
                     return;
                 }

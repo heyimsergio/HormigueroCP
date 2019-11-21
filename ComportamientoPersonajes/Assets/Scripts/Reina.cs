@@ -30,18 +30,18 @@ public class Reina : HormigaGenerica
 
     //Cuidar huevos
     [Header("Variables Cuidar Huevos Reina")]
-    public int numeroDeNurses;
+    //public int numeroDeNurses;
     public List<Huevo> huevosQueTienenQueSerCuidados = new List<Huevo>();
 
     //Atacar
     [Header("Variables Atacar Reina")]
-    public EnemigoGenerico[] enemigosCercanos;
-    public int numEnemigosCerca;
+    //public EnemigoGenerico[] enemigosCercanos;
+    //public int numEnemigosCerca;
 
     //Curar
     [Header("Variables Curar Hormiga Reina")]
-    public HormigaGenerica hormigasACurar;
-    public HormigaGenerica hormigasDesocupadas;
+    //public HormigaGenerica hormigasACurar;
+    //public HormigaGenerica hormigasDesocupadas;
 
     #endregion
 
@@ -56,12 +56,14 @@ public class Reina : HormigaGenerica
     public int capacidadTotalDeHormigas;
     public int capacidadTotalDeComida;
     public int capacidadTotalDeHuevos;
-    public int totalHormigas;                           // Esto para que ??
+    public int totalHormigas;
     //public int totalComida;                             // Esto para que ??
-    public int totalHuevos;                             // Esto para que ??
+    //public int totalHuevos;                             // Esto para que ??
     public int numeroDeNursesTotal;
     public int numeroDeObrerasTotal;
     public int numeroDeSoldadosTotal;
+
+    // ?????????????????????????????????????????????????????????
     public int numHormigasCuidandoHuevos;
     public int numHormigasAtacando;
     public int numHormigasBuscandoComida;
@@ -70,13 +72,20 @@ public class Reina : HormigaGenerica
     public int numHormigasCurando;
     public int numHormigasAbriendoHormiguero;
     public int numHormigasAbriendoCerrandoHormiguero;
-    public List<EnemigoGenerico> enemigosTotales = new List<EnemigoGenerico>();
-    public List<Comida> ComidaTotal = new List<Comida>();
+    // ?????????????????????????????????????????????????????????
+
+    public List<EnemigoGenerico> enemigosTotal = new List<EnemigoGenerico>();
+    public List<Comida> comidaTotal = new List<Comida>();
+    public List<Comida> comidaVista = new List<Comida>();
     public List<Huevo> huevosTotal = new List<Huevo>();
     public List<HormigaGenerica> hormigasHeridas = new List<HormigaGenerica>();
+
+    // ?????????????????????????????????????????????????????????
     public int tiempoQueQuedaParaQueLlueva;
     public int tiempoQueLlueve;
     public int tiempoGlobal;
+    // ?????????????????????????????????????????????????????????
+
     public bool espacioLlenoHormiguero = false;
 
     //FALTA ESTRUCTURA DE DATOS DEL MAPA
@@ -93,9 +102,6 @@ public class Reina : HormigaGenerica
     float initTime;
     float actualTime;
 
-    // CosasVistas
-    public List<Comida> ComidaVista = new List<Comida>();
-
     //IMPORTANCIA DE OBJETIVOS
     public float importanciaHormigas;
     public float importanciaHuevos;
@@ -107,16 +113,16 @@ public class Reina : HormigaGenerica
 
     //NECESIDADES DEL HORMIGUERO
     // MandarHordenes
-    enum tipoOrden {CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA}
-    public bool HayQueCrearSalasHormigas = false;
-    public bool HayQueCrearSalasComida = false;
-    public bool HayQueCrearSalasHuevos = false;
-    public bool HayQueCrearSalas = false;
+    //enum tipoOrden {CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA}
+    public bool hayQueCrearSalasHormigas = false;
+    public bool hayQueCrearSalasComida = false;
+    public bool hayQueCrearSalasHuevos = false;
+    public bool hayQueCrearSalas = false;
 
-    public bool HayQueBuscarComida = false;
+    /*public bool HayQueBuscarComida = false;
     private bool HayQueAtacar = false;
     private bool HayQuePatrullar = false;
-    private bool HayQueCuidarHuevos = false;
+    private bool HayQueCuidarHuevos = false;*/
 
     //para ver si hay que mandar patrullar
     public bool hormigaMuerta = false;
@@ -221,7 +227,7 @@ public class Reina : HormigaGenerica
     private void ActualizarPercepcionesHormiguero()
     {
         actualizarPrioridades();
-        checkearNecesidadComida();
+        //checkearNecesidadComida();
     }
 
     private void ActualizarVariablesReina()
@@ -269,11 +275,11 @@ public class Reina : HormigaGenerica
         }
     }
 
-    public void checkearNecesidadComida()
+    /*public void checkearNecesidadComida()
     {
-        if(totalHormigas * umbralComida  > ComidaTotal.Count)
+        if(totalHormigas * umbralComida  > comidaTotal.Count)
         {
-            if(ComidaTotal.Count < capacidadTotalDeComida)
+            if(comidaTotal.Count < capacidadTotalDeComida)
             {
                 HayQueBuscarComida = true;
             }
@@ -282,24 +288,24 @@ public class Reina : HormigaGenerica
                 HayQueBuscarComida = false;
             }
         }
-    }
+    }*/
 
     #endregion
 
     // Alertas que recibe la reina
-    public void recibirAlertaComida(Comida comida)
+    public void RecibirAlertaComida(Comida comida)
     {
-        if (!ComidaVista.Contains(comida) && !comida.laEstanLLevando && !comida.haSidoCogida)
+        if (!comidaVista.Contains(comida) && !comida.laEstanLLevando && !comida.haSidoCogida)
         {
-            ComidaVista.Add(comida);
+            comidaVista.Add(comida);
         }
     }
 
-    public void recibirAlertaEnemigo(EnemigoGenerico enemigo)
+    public void RecibirAlertaEnemigo(EnemigoGenerico enemigo)
     {
-        if (!enemigosTotales.Contains(enemigo))
+        if (!enemigosTotal.Contains(enemigo))
         {
-            enemigosTotales.Add(enemigo);
+            enemigosTotal.Add(enemigo);
         }
     }
 
@@ -347,14 +353,15 @@ public class Reina : HormigaGenerica
     [Task]
     public void SiendoAtacados()
     {
-        if (HayQueAtacar)
+        /*if (HayQueAtacar)
         {
             Task.current.Succeed();
         }
         else
         {
             Task.current.Fail();
-        }
+        }*/
+        Task.current.Fail();
     }
 
     [Task]
@@ -411,7 +418,6 @@ public class Reina : HormigaGenerica
     #endregion
 
     #region Ordenes Llover
-
     [Task]
     public void VaALlover()
     {
@@ -455,9 +461,9 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayComidaSuficiente()
     {
-        if (totalHormigas * umbralComida > ComidaTotal.Count)
+        if (totalHormigas * umbralComida > comidaTotal.Count)
         {
-            if (ComidaTotal.Count < capacidadTotalDeComida)
+            if (comidaTotal.Count < capacidadTotalDeComida)
             {
                 Task.current.Fail();
             }
@@ -500,7 +506,6 @@ public class Reina : HormigaGenerica
     #endregion
 
     #region Ordenes Cavar
-
     [Task]
     public void HayEspacio()
     {
@@ -545,147 +550,38 @@ public class Reina : HormigaGenerica
         // comprobar si hay que crear Sala de Hormigas, se hace comprobando que haya capacidad para un 20% mas de hormigas
         if (totalHormigas * umbralCapacidadHormigas >= capacidadTotalDeHormigas - totalHormigas)
         {
-            HayQueCrearSalasHormigas = true;
+            hayQueCrearSalasHormigas = true;
             Task.current.Succeed();
             return;
         }
-        if (totalHuevos * umbralCapacidadHuevos >= capacidadTotalDeHuevos - totalHuevos)
+        if (huevosTotal.Count * umbralCapacidadHuevos >= capacidadTotalDeHuevos - huevosTotal.Count)
         {
-            HayQueCrearSalasHuevos = true;
+            hayQueCrearSalasHuevos = true;
             Task.current.Succeed();
             return;
         }
-        if (ComidaTotal.Count * umbralCapacidadComida >= capacidadTotalDeComida - ComidaTotal.Count)
+        if (comidaTotal.Count * umbralCapacidadComida >= capacidadTotalDeComida - comidaTotal.Count)
         {
-            HayQueCrearSalasComida = true;
+            hayQueCrearSalasComida = true;
             Task.current.Succeed();
             return;
         }
 
-        if (HayQueCrearSalasHormigas || HayQueCrearSalasComida || HayQueCrearSalasHuevos)
+        if (hayQueCrearSalasHormigas || hayQueCrearSalasComida || hayQueCrearSalasHuevos)
         {
-            HayQueCrearSalas = true;
+            hayQueCrearSalas = true;
             Task.current.Succeed();
             return;
         }
         else
         {
-            HayQueCrearSalas = false;
+            hayQueCrearSalas = false;
             Task.current.Fail();
             return;
         }
 
 
     }
-
-
-    // Pasará a ser el cavar de las obreras
-    [Task]
-    public void ConstruirSala()
-    {
-        int min = -1;
-
-
-        int capacidadRestanteHormigas = capacidadTotalDeHormigas - totalHormigas;
-        int capacidadRestanteComida = capacidadTotalDeComida - ComidaTotal.Count;
-        int capacidadRestanteHuevos = capacidadTotalDeHuevos - totalHuevos;
-
-
-        if (HayQueCrearSalasComida && HayQueCrearSalasHuevos && HayQueCrearSalasHormigas)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, importanciaComida, importanciaHuevos);
-        }
-        else if (HayQueCrearSalasHormigas && HayQueCrearSalasHuevos)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, importanciaComida, 0);
-        }
-        else if (HayQueCrearSalasHormigas && HayQueCrearSalasComida)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, importanciaHormigas, 0, importanciaHuevos);
-        }
-        else if (HayQueCrearSalasComida && HayQueCrearSalasHuevos)
-        {
-            min = CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, 0, importanciaComida, importanciaHuevos);
-        }
-        else if (HayQueCrearSalasHormigas)
-        {
-            min = 0;
-        }
-        else if (HayQueCrearSalasComida)
-        {
-            min = 1;
-        }
-        else if (HayQueCrearSalasHuevos)
-        {
-            min = 2;
-        }
-
-
-
-        Room aux;
-        switch (min)
-        {
-            // no es necesario crear ninguna Sala;
-            case -1:
-                Task.current.Fail();
-                break;
-            case 0:
-                aux = hormiguero.createCorridor(Room.roomType.LIVEROOM);
-                if (aux != null)
-                {
-                    capacidadTotalDeHormigas += aux.capacidadTotalRoom;
-                    salasHormigas.Add(aux);
-                    HayQueCrearSalasHormigas = false;
-                    //Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
-                    Task.current.Succeed();
-                }
-                else
-                {
-                    espacioLlenoHormiguero = true;
-                    Task.current.Fail();
-                }
-
-                break;
-            case 1:
-
-                aux = hormiguero.createCorridor(Room.roomType.STORAGE);
-                if (aux != null)
-                {
-                    salasComida.Add(aux);
-                    capacidadTotalDeComida += aux.capacidadTotalRoom;
-                    HayQueCrearSalasComida = false;
-                    //Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
-                    Task.current.Succeed();
-                }
-                else
-                {
-                    espacioLlenoHormiguero = true;
-                    Task.current.Fail();
-                }
-                break;
-            case 2:
-
-                aux = hormiguero.createCorridor(Room.roomType.STORAGE);
-
-                if (aux != null)
-                {
-                    salasHuevos.Add(aux);
-                    capacidadTotalDeHuevos += aux.capacidadTotalRoom;
-                    HayQueCrearSalasHuevos = false;
-                    //Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
-                    Task.current.Succeed();
-                }
-                else
-                {
-                    espacioLlenoHormiguero = true;
-                    Task.current.Fail();
-                }
-
-
-                break;
-        }
-    }
-
 
 
     #endregion
@@ -905,7 +801,7 @@ public class Reina : HormigaGenerica
 
             if (salaDondePonerHuevo == null)
             {
-                Room Aux = getSalaLibreHuevos();
+                Room Aux = GetSalaLibreHuevos();
                 if (Aux != null)
                 {
                     salaDondePonerHuevo = Aux;
@@ -944,7 +840,7 @@ public class Reina : HormigaGenerica
                     GameObject huevoAux = Instantiate(PrefabHuevo, posicionParaColocarHuevo, Quaternion.identity);
                     Huevo huevoScript = huevoAux.GetComponent<Huevo>();
                     huevoScript.init(salaDondePonerHuevo, hormigaAponer,casillaDondePonerHuevo);
-                    meterHuevosEnSala(salaDondePonerHuevo);
+                    MeterHuevosEnSala(salaDondePonerHuevo);
                     huevosTotal.Add(huevoScript);
                     huevoScript.miType = hormigaAponer;
                     ponerHuevo = false;
@@ -1076,35 +972,20 @@ public class Reina : HormigaGenerica
         return finalNum;
     }
 
-    // Métodos para el tratamiento de huevos
-    public void huevoNecesitaCuidado(Huevo miHuevo)
-    {
-        if (!huevosQueTienenQueSerCuidados.Contains(miHuevo))
-        {
-            huevosQueTienenQueSerCuidados.Add(miHuevo);
-        }
-
-    }
-
-    public void huevoCuidado(Huevo miHuevo)
-    {
-        huevosQueTienenQueSerCuidados.Remove(miHuevo);
-    }
-
     // Métodos para el tratamiento de la comida
-    public void comidaGuardada(Comida comida, Room sala, TileScript tile)
+    public void ComidaGuardada(Comida comida, Room sala, TileScript tile)
     {
-        if (!ComidaTotal.Contains(comida))
+        if (!comidaTotal.Contains(comida))
         {
             //Debug.Log("Meter cosas de comida guardada");
-            ComidaTotal.Add(comida);
+            comidaTotal.Add(comida);
             comida.misala = sala;
             comida.miTile = tile;
             //sala.meterCosas();
         }
-        if (ComidaVista.Contains(comida))
+        if (comidaVista.Contains(comida))
         {
-            ComidaVista.Remove(comida);
+            comidaVista.Remove(comida);
         }
     }
 
@@ -1173,9 +1054,9 @@ public class Reina : HormigaGenerica
 
     // Devuelve la sala porque sera necesario asignarsela a las homirmigas comidas y huevos para manejarlas
     #region Meter Cosas en salas
-    public Room meterComidaEnSala()
+    public Room MeterComidaEnSala()
     {
-        Room sala = getSalaLibreComida();
+        Room sala = GetSalaLibreComida();
         if (sala != null)
         {
             Debug.Log(" Se mete comida desde  meter Comida en sala");
@@ -1184,9 +1065,9 @@ public class Reina : HormigaGenerica
         return sala;
     }
 
-    public Room meterHormigaEnSala()
+    public Room MeterHormigaEnSala()
     {
-        Room sala = getSalaLibreHormigas();
+        Room sala = GetSalaLibreHormigas();
         if (sala != null)
         {
             sala.meterCosas();
@@ -1194,12 +1075,12 @@ public class Reina : HormigaGenerica
         return sala;
     }
 
-    public Room meterHuevosEnSala(Room sala)
+    public Room MeterHuevosEnSala(Room sala)
     {
         if (sala != null)
         {
             sala.meterCosas();
-            totalHuevos++;
+            //totalHuevos++;
         }
         return sala;
     }
@@ -1209,7 +1090,7 @@ public class Reina : HormigaGenerica
     // Métodos para el tratamiento de muertos
     public void HormigaHaMuerto(HormigaGenerica hormiga)
     {
-        sacarHormigaSala(hormiga.miSala);
+        SacarHormigaSala(hormiga.miSala);
         Debug.Log("Hormiga A Muerto");
         // Actualizamos a todos los enemigos que tenga
         foreach (EnemigoGenerico enem in hormiga.enemigosCerca)
@@ -1308,18 +1189,18 @@ public class Reina : HormigaGenerica
             hormiga.comida.laEstanLLevando = false;
             hormiga.comida.hormigaQueLlevaLaComida = null;
             hormiga.comida.transform.SetParent(null);
-            sacarComidaSala(hormiga.salaDejarComida, hormiga.comida, hormiga.casillaDejarComida);
-            if (reina.ComidaVista.Contains(hormiga.comida))
+            SacarComidaSala(hormiga.salaDejarComida, hormiga.comida, hormiga.casillaDejarComida);
+            if (reina.comidaVista.Contains(hormiga.comida))
             {
-                reina.ComidaVista.Remove(hormiga.comida);
+                reina.comidaVista.Add(hormiga.comida);
             }
         }
         // Si la hormiga muere mientras va a comer
         if (hormiga.comidaAComer != null)
         {
-            if (!ComidaTotal.Contains(hormiga.comidaAComer))
+            if (!comidaTotal.Contains(hormiga.comidaAComer))
             {
-                ComidaTotal.Add(hormiga.comidaAComer);
+                comidaTotal.Add(hormiga.comidaAComer);
             }
         }
         // Si la hormiga está siendo curada por alguien
@@ -1334,13 +1215,17 @@ public class Reina : HormigaGenerica
         foreach (HormigaGenerica h in hormigasCerca)
         {
             h.enemigosCerca.Remove(enemigo);
+            if (h.enemigoAlQueAtacar == this)
+            {
+                h.enemigoAlQueAtacar = null;
+                h.hayOrdenDeAtacar = false;
+            }
         }
         // Eliminamos al enemigo de la lista de enemigosTotales de la reina
-        if (enemigosTotales.Contains(enemigo))
+        if (enemigosTotal.Contains(enemigo))
         {
-            enemigosTotales.Remove(enemigo);
+            enemigosTotal.Remove(enemigo);
         }
-
         enemigo = null;
     }
 
@@ -1349,7 +1234,7 @@ public class Reina : HormigaGenerica
         // Sacamos la comida de la sala si muere cuando está siendo llevada
         if (comidaMuerta.hormigaQueLlevaLaComida != null || comidaMuerta.haSidoCogida)
         {
-            sacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
+            SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
         }
 
         if (comidaMuerta.hormigaQueLlevaLaComida != null)
@@ -1369,7 +1254,7 @@ public class Reina : HormigaGenerica
         }
 
         // Si la reina tenia esa comida como vista en su lista, se elimina
-        ComidaVista.Remove(comidaMuerta);
+        comidaVista.Remove(comidaMuerta);
 
         comidaMuerta = null;
     }
@@ -1377,7 +1262,7 @@ public class Reina : HormigaGenerica
     public void HuevoHaMuerto(Huevo miHuevo)
     {
         // Sacamos el huevo de la sala
-        sacarHuevosSala(miHuevo.myRoom, miHuevo);
+        SacarHuevosSala(miHuevo.myRoom, miHuevo);
         // Si el huevo estaba siendo curado, avisamos a la hormiga que lo curaba
         if (miHuevo.siendoCuidadoPor != null)
         {
@@ -1398,7 +1283,7 @@ public class Reina : HormigaGenerica
     #region Metodos para sacar cosas de las salas
     // necesitamos la sala dode se guardan las cosas ???
 
-    public void sacarHormigaSala(Room sala)
+    public void SacarHormigaSala(Room sala)
     {
         if (sala != null)
         {
@@ -1407,27 +1292,26 @@ public class Reina : HormigaGenerica
         totalHormigas--;
     }
 
-    public void sacarComidaSala(Room sala, Comida comida, TileScript miTile)
+    public void SacarComidaSala(Room sala, Comida comida, TileScript miTile)
     {
-        if (ComidaTotal.Remove(comida))
+        if (comidaTotal.Remove(comida))
         {
             Debug.Log("Comida eliminada de comidaTotal");
         }
         sala.sacarCosas(miTile);
     }
 
-    public void sacarHuevosSala(Room sala, Huevo huevo)
+    public void SacarHuevosSala(Room sala, Huevo huevo)
     {
         huevosTotal.Remove(huevo);
         sala.sacarCosas(huevo.myTile);
-        totalHuevos--;
+        //totalHuevos--;
     }
 
     #endregion
 
-    // Devuelve una sala de cada tipo con espacio
     #region Gets de salas libres
-    public Room getSalaLibreHormigas()
+    public Room GetSalaLibreHormigas()
     {
         foreach (Room aux in salasHormigas)
         {
@@ -1439,7 +1323,7 @@ public class Reina : HormigaGenerica
         return null;
     }
 
-    public Room getSalaLibreComida()
+    public Room GetSalaLibreComida()
     {
         foreach (Room aux in salasComida)
         {
@@ -1453,7 +1337,7 @@ public class Reina : HormigaGenerica
         return null;
     }
 
-    public Room getSalaLibreHuevos()
+    public Room GetSalaLibreHuevos()
     {
         foreach (Room aux in salasHuevos)
         {

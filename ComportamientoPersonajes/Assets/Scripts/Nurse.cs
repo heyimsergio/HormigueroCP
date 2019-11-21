@@ -65,7 +65,7 @@ public class Nurse : HormigaGenerica
         reina.numeroDeNursesTotal++;
         reina.nursesDesocupadas.Add(this);
 
-        miSala = reina.meterHormigaEnSala();
+        miSala = reina.MeterHormigaEnSala();
 
         // Prioridades NavMesh
         if (reina.contPrioridadNavMesh > 99)
@@ -110,7 +110,7 @@ public class Nurse : HormigaGenerica
             // Actualizas a la hormiga y avisas a la reina de este enemigo
             if (!enemigosCerca.Contains(aux))
             {
-                reina.recibirAlertaEnemigo(aux);
+                reina.RecibirAlertaEnemigo(aux);
                 enemigosCerca.Add(aux);
             }
         }
@@ -124,7 +124,7 @@ public class Nurse : HormigaGenerica
             }
             if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
             {
-                reina.recibirAlertaComida(aux);
+                reina.RecibirAlertaComida(aux);
                 comidaQueHayCerca.Add(aux);
             }
         }
@@ -284,6 +284,10 @@ public class Nurse : HormigaGenerica
                     }
                 }
             }
+            else
+            {
+                agente.SetDestination(huevoACuidar.transform.position);
+            }
             Task.current.Succeed();
             return;
         }
@@ -362,7 +366,8 @@ public class Nurse : HormigaGenerica
             siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
             //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
             agente.SetDestination(siguientePosicionExplorar);
-        } else
+        }
+        else
         {
             if(siguientePosicionExplorar == Vector3.zero)
             {
@@ -377,10 +382,12 @@ public class Nurse : HormigaGenerica
                 siguientePosicionExplorar = new Vector3(aux.position.x,0,aux.position.z);
                 //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
                 agente.SetDestination(siguientePosicionExplorar);
-            } else if(Vector3.Distance(this.transform.position,siguientePosicionExplorar)< 0.5f)
+            }
+            else if(Vector3.Distance(this.transform.position,siguientePosicionExplorar)< 0.5f)
             {
                 siguientePosicionExplorar = Vector3.zero;
-            } else
+            }
+            else
             {
                 agente.SetDestination(siguientePosicionExplorar);
             }

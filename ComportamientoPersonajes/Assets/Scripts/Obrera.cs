@@ -68,7 +68,7 @@ public class Obrera : HormigaGenerica
         reina.numeroDeObrerasTotal++;
         reina.obrerasDesocupadas.Add(this);
 
-        miSala = reina.meterHormigaEnSala();
+        miSala = reina.MeterHormigaEnSala();
 
         // Prioridades NavMesh
         if (reina.contPrioridadNavMesh > 99)
@@ -96,12 +96,6 @@ public class Obrera : HormigaGenerica
         posCavar = Vector3.zero;
     }
 
-    // Update is called once per frame
-    /*void Update()
-    {
-        actualizarHambre();
-    }*/
-
     private void OnTriggerEnter(Collider other)
     {
         // Si encuentras un enemigo y no está en la lista de enemigos
@@ -116,7 +110,7 @@ public class Obrera : HormigaGenerica
             // Actualizas a la hormiga y avisas a la reina de este enemigo
             if (!enemigosCerca.Contains(aux))
             {
-                reina.recibirAlertaEnemigo(aux);
+                reina.RecibirAlertaEnemigo(aux);
                 enemigosCerca.Add(aux);
             }
         }
@@ -129,7 +123,7 @@ public class Obrera : HormigaGenerica
             }
             if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
             {
-                reina.recibirAlertaComida(aux);
+                reina.RecibirAlertaComida(aux);
                 comidaQueHayCerca.Add(aux);
             }
         }
@@ -187,11 +181,22 @@ public class Obrera : HormigaGenerica
     {
         if (hayOrdenDeCavar || hayOrdenCurarHormiga || hayOrdenBuscarComida || hayOrdenDeAtacar)
         {
-            if(comida != null)
+            // Si tengo una orden, dejo de curar si lo estaba haciendo por mi cuenta
+            if (hormigaACurar != null)
+            {
+                if (hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormigaACurar))
+                {
+                    reina.hormigasHeridas.Add(hormigaACurar);
+                }
+                hormigaACurar.siendoCuradaPor = null;
+                hormigaACurar = null;
+            }
+            // Si tengo una orden, suelto la comida si estaba por mi cuenta buscando
+            if (comida != null)
             {
                 comida.transform.SetParent(null);
                 comida.laEstanLLevando = false;
-                reina.sacarComidaSala(salaDejarComida, comida, casillaDejarComida);
+                reina.SacarComidaSala(salaDejarComida, comida, casillaDejarComida);
                 comida.hormigaQueLlevaLaComida = null;
                 comida = null;
                 salaDejarComida = null;
@@ -199,6 +204,10 @@ public class Obrera : HormigaGenerica
                 posComida = Vector3.zero;
                 posDejarComida = Vector3.zero;
 
+                if (reina.comidaVista.Contains(comida))
+                {
+                    reina.comidaVista.Add(comida);
+                }
             }
             Task.current.Succeed();
         }
@@ -265,35 +274,35 @@ public class Obrera : HormigaGenerica
 
 
                 int capacidadRestanteHormigas = reina.capacidadTotalDeHormigas - reina.totalHormigas;
-                int capacidadRestanteComida = reina.capacidadTotalDeComida - reina.ComidaTotal.Count;
-                int capacidadRestanteHuevos = reina.capacidadTotalDeHuevos - reina.totalHuevos;
+                int capacidadRestanteComida = reina.capacidadTotalDeComida - reina.comidaTotal.Count;
+                int capacidadRestanteHuevos = reina.capacidadTotalDeHuevos - reina.huevosTotal.Count;
 
 
-                if (reina.HayQueCrearSalasComida && reina.HayQueCrearSalasHuevos && reina.HayQueCrearSalasHormigas)
+                if (reina.hayQueCrearSalasComida && reina.hayQueCrearSalasHuevos && reina.hayQueCrearSalasHormigas)
                 {
                     min = Reina.CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, reina.importanciaHormigas, reina.importanciaComida, reina.importanciaHuevos);
                 }
-                else if (reina.HayQueCrearSalasHormigas && reina.HayQueCrearSalasHuevos)
+                else if (reina.hayQueCrearSalasHormigas && reina.hayQueCrearSalasHuevos)
                 {
                     min = Reina.CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, reina.importanciaHormigas, reina.importanciaComida, 0);
                 }
-                else if (reina.HayQueCrearSalasHormigas && reina.HayQueCrearSalasComida)
+                else if (reina.hayQueCrearSalasHormigas && reina.hayQueCrearSalasComida)
                 {
                     min = Reina.CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, reina.importanciaHormigas, 0, reina.importanciaHuevos);
                 }
-                else if (reina.HayQueCrearSalasComida && reina.HayQueCrearSalasHuevos)
+                else if (reina.hayQueCrearSalasComida && reina.hayQueCrearSalasHuevos)
                 {
                     min = Reina.CompareLess3(capacidadRestanteHormigas, capacidadRestanteComida, capacidadRestanteHuevos, 0, reina.importanciaComida, reina.importanciaHuevos);
                 }
-                else if (reina.HayQueCrearSalasHormigas)
+                else if (reina.hayQueCrearSalasHormigas)
                 {
                     min = 0;
                 }
-                else if (reina.HayQueCrearSalasComida)
+                else if (reina.hayQueCrearSalasComida)
                 {
                     min = 1;
                 }
-                else if (reina.HayQueCrearSalasHuevos)
+                else if (reina.hayQueCrearSalasHuevos)
                 {
                     min = 2;
                 }
@@ -311,7 +320,7 @@ public class Obrera : HormigaGenerica
                         {
                             reina.capacidadTotalDeHormigas += aux.capacidadTotalRoom;
                             reina.salasHormigas.Add(aux);
-                            reina.HayQueCrearSalasHormigas = false;
+                            reina.hayQueCrearSalasHormigas = false;
                             //Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
@@ -334,7 +343,7 @@ public class Obrera : HormigaGenerica
                         {
                             reina.salasComida.Add(aux);
                             reina.capacidadTotalDeComida += aux.capacidadTotalRoom;
-                            reina.HayQueCrearSalasComida = false;
+                            reina.hayQueCrearSalasComida = false;
                             //Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
@@ -358,7 +367,7 @@ public class Obrera : HormigaGenerica
                         {
                             reina.salasHuevos.Add(aux);
                             reina.capacidadTotalDeHuevos += aux.capacidadTotalRoom;
-                            reina.HayQueCrearSalasHuevos = false;
+                            reina.hayQueCrearSalasHuevos = false;
                             //Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
@@ -388,7 +397,12 @@ public class Obrera : HormigaGenerica
     [Task]
     public void HayHuecoParaDejarComida()
     {
-        if (reina.ComidaTotal.Count >= reina.capacidadTotalDeComida)
+        if (this.comida != null)
+        {
+            Task.current.Succeed();
+            return;
+        }
+        if (reina.comidaTotal.Count >= reina.capacidadTotalDeComida)
         {
             if (comida != null)
             {
@@ -411,7 +425,12 @@ public class Obrera : HormigaGenerica
     public void HaySuficienteComida()
     {
         //Debug.Log(reina.umbralComida * reina.totalHormigas);
-        if (reina.ComidaTotal.Count < reina.umbralComida * reina.totalHormigas)
+        if (this.comida != null)
+        {
+            Task.current.Fail();
+            return;
+        }
+        if (reina.comidaTotal.Count < reina.umbralComida * reina.totalHormigas)
         {
             Task.current.Fail();
         }
@@ -445,7 +464,7 @@ public class Obrera : HormigaGenerica
                     {
                         //Debug.Log("Elijo una comida que este cerca");
                         // Compruebo primeramente que tenga sala libre y la asigno
-                        salaDejarComida = reina.meterComidaEnSala();
+                        salaDejarComida = reina.MeterComidaEnSala();
                         if (salaDejarComida != null)
                         {
                             casillaDejarComida = salaDejarComida.getFreeTile();
@@ -455,7 +474,7 @@ public class Obrera : HormigaGenerica
                             posComida = Vector3.zero;
                             posDejarComida = Vector3.zero;
                             // Si la reina lo tiene en su lista de comida vista, lo borro
-                            reina.ComidaVista.Remove(comidaAux);
+                            reina.comidaVista.Remove(comidaAux);
                             Task.current.Succeed();
                             return;
                         }
@@ -484,7 +503,6 @@ public class Obrera : HormigaGenerica
         Task.current.Fail();
         return;
     }
-
 
     [Task]
     public void Explorar()
@@ -535,61 +553,6 @@ public class Obrera : HormigaGenerica
         Task.current.Succeed();
     }
 
-    /*
-    [Task]
-    public void Explorar()
-    {
-        if (this.zonaDondeEsta == 1)
-        {
-            //Debug.Log("Estoy fuera");
-            float distanceToTarget = Vector3.Distance(transform.position, siguientePosicionExplorar);
-            //Debug.Log(distanceToTarget);
-            if (distanceToTarget < 0.2f)
-            {
-                Vector3 randomDirection;
-                NavMeshHit aux;
-                do
-                {
-                    randomDirection = UnityEngine.Random.insideUnitSphere * 10 + this.transform.position;
-                } while (!NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas));
-                //saliendo = true;
-                agente.SetDestination(aux.position);
-                siguientePosicionExplorar = aux.position;
-            }
-            //
-        }
-        else
-        {
-            //Debug.Log("Estoy dentro");
-            if (this.zonaDondeEsta == 0)
-            {
-                //Debug.Log("No estoy saliendo");
-                Vector3 randomDirection;
-                NavMeshHit aux;
-                bool aux2;
-                do
-                {
-                    randomDirection = UnityEngine.Random.insideUnitSphere * 100 + this.transform.position;
-                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-                } while (aux.position.x > (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2)) || !aux2);
-                //Debug.Log("Salir hacia: " + aux.position);
-                //saliendo = true;
-                agente.SetDestination(aux.position);
-                siguientePosicionExplorar = aux.position;
-            }
-            else if (this.zonaDondeEsta == 3)
-            {
-                //Debug.Log("Estoy saliendo");
-                if ((transform.position.x - (hormigueroFuera.transform.position.x + hormigueroFuera.width / 2) < 2f))
-                {
-                    //saliendo = false;
-                    //estaDentro = false;
-                }
-            }
-        }
-        Task.current.Succeed();
-    }
-    */
-
+ 
     #endregion
 }

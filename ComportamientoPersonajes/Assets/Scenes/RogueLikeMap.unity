@@ -2009,7 +2009,7 @@ MonoBehaviour:
   reina: {fileID: 0}
   meHanMandadoOrden: 0
   hayOrdenDeCavar: 0
-  contPrioridadNavMesh: 0
+  contPrioridadNavMesh: 1
   tiempoQueTardaEnPonerHuevo: 3
   tiempoQueLlevaPoniendoHuevo: 0
   estaPoniendoHuevo: 0
