@@ -56,7 +56,7 @@ public class Huevo : MonoBehaviour
         // Huevo muerto
         if(tiempoQueAguantaSinCuidar < 0)
         {
-            Debug.Log("Huevo Muerto");
+            //Debug.Log("Huevo Muerto");
             miReina.HuevoHaMuerto(this);
             Destroy(this.gameObject);
         }

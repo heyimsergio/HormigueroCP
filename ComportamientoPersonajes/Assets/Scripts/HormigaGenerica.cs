@@ -96,6 +96,7 @@ public class HormigaGenerica : PersonajeGenerico
     int numRayosExtra = 3;
     int numRayosFijos = 4;
     int RayDistance = 10;
+
     // Cavar
     public bool hayOrdenDeCavar = false;
 
@@ -377,7 +378,6 @@ public class HormigaGenerica : PersonajeGenerico
 
 
 
-
     #region Tareas Globales Hormigas
 
     [Task]
@@ -599,14 +599,27 @@ public class HormigaGenerica : PersonajeGenerico
     {
         if (comidaAComer == null)
         {
-            comidaAComer = reina.pedirComida();
+            //Debug.Log("No tengo comida aun ");
+            //comidaAComer = reina.pedirComida();
+            if (reina.ComidaTotal.Count > 0)
+            {
+                //Debug.Log("Hay comida");
+                comidaAComer = reina.ComidaTotal[Random.Range(0,reina.ComidaTotal.Count)];
+                //reina.ComidaTotal.Remove(comidaAComer);
+            }
+            // Comprobamos si podemos o no acceder a comida
             if (comidaAComer != null)
             {
+                Debug.Log("VOY A LA PUTA COMIDA");
                 agente.SetDestination(comidaAComer.transform.position);
+                Task.current.Succeed();
+                return;
             }
             else
             {
+                Debug.Log("Axwelfeo");
                 Task.current.Fail();
+                return;
             }
         }
         else
@@ -615,8 +628,17 @@ public class HormigaGenerica : PersonajeGenerico
             {
                 Debug.Log("He llegado a la comida");
                 hambre += comidaAComer.comer();
+                comidaAComer = null;
                 Task.current.Succeed();
+                return;
+            } else
+            {
+                agente.SetDestination(comidaAComer.transform.position);
+                Debug.Log("Posicion comida a comer: " + comidaAComer.transform.position);
             }
+            Debug.Log("Intentando ira porla comida");
+            Task.current.Succeed();
+            return;
         }
 
     }
@@ -817,87 +839,57 @@ public class HormigaGenerica : PersonajeGenerico
         Task.current.Fail();
     }
 
-
     [Task]
     public void BuscarComida()
     {
-
         if (comida != null)
         {
-            if (posComida == Vector3.zero)
+            // Si no he cogido la comida aún, me dirijo a ella
+            if (!comida.laEstanLLevando)
             {
-                Debug.Log("No hay pos  donde esta la comida");
-                // si la comida no la ha cogido nadie voy, si no la tarea falla;
-                if (comida.hormigaQueLLevaLaComida == null && !comida.haSidoCogida)
+                if (posComida == Vector3.zero)
                 {
-                    Debug.Log("si la comida no la ha cogido nadie voy, si no la tarea falla");
                     posComida = comida.transform.position;
                     agente.SetDestination(comida.transform.position);
                     Task.current.Succeed();
                     return;
                 }
-                else
-                {
-                    Task.current.Fail();
-                    return;
-                }
-            }
-            // si la comida aun no la ha cogido nadie
-            if (comida.hormigaQueLLevaLaComida == null)
-            {
-                Debug.Log("Nadie lleva esa Comida");
+
+                // En este caso, voy hasta donde está la comida, cuando llego
                 if (Vector3.Distance(this.transform.position, posComida) < 0.2f)
                 {
-                    comida.hormigaQueLLevaLaComida = this;
+                    // Muevo la comida con la hormiga y le actualizo que están llevando esa comida
                     comida.transform.SetParent(this.transform);
-                    salaDejarComida = reina.getSalaLibreComida();
-                    if (salaDejarComida != null)
-                    {
-                        Debug.Log("Tengo Sala");
-                        casillaDejarComida = salaDejarComida.getFreeTile();
-                        Task.current.Succeed();
-                        return;
-                    }
-                    else
-                    { // no hemos conseguido sala para dejar comida
-                        comida.transform.SetParent(null);
-                        posDejarComida = Vector3.zero;
-                        salaDejarComida = null;
-                        casillaDejarComida = null;
-                        posComida = Vector3.zero;
-                        Debug.Log("No hay sala para dejar comida");
-                        comida = null;
-                        Task.current.Fail();
-                        return;
-                    }
-                } else
+                    comida.laEstanLLevando = true;
+                    Task.current.Succeed();
+                    return;
+                }
+                else
                 {
-                    Debug.Log("Acercandome");
-                    agente.SetDestination(posComida);
+                    // Te sigues acercando a la comida
                     Task.current.Succeed();
                     return;
                 }
             }
-            // si soy yo quien lleva la comida pongo el destino
-            if (comida.hormigaQueLLevaLaComida == this)
+            // Si ya he cogido la comida, me dirijo a la casilla libre que he tomado
+            else
             {
-                Debug.Log("Soy yo quien lleva la comida");
+                // Guardo la posición a donde me dirijo para dejar la comida
                 if (posDejarComida == Vector3.zero)
                 {
-                    Debug.Log("Posicion de dejar la comida es 0");
                     posDejarComida = casillaDejarComida.transform.position;
                     agente.SetDestination(posDejarComida);
                     Task.current.Succeed();
                     return;
                 }
-                else if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
+                // Cuando llego a la casilla, suelto la comida y actualizo el haSidoCogida
+                if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
                 {
-                    // comida guardada
-                    Debug.Log("Llego a la pos de dejar la comida");
                     reina.comidaGuardada(comida, salaDejarComida, casillaDejarComida);
                     comida.haSidoCogida = true;
                     comida.transform.SetParent(null);
-                    Debug.Log("Comida dejada");
+                    comida.hormigaQueLlevaLaComida = null;
+                    // Reseteamos los datos de la hormiga
                     comida = null;
                     salaDejarComida = null;
                     casillaDejarComida = null;
@@ -905,36 +897,25 @@ public class HormigaGenerica : PersonajeGenerico
                     posDejarComida = Vector3.zero;
                     Task.current.Succeed();
                     return;
-                } else
+                }
+                else
                 {
-                    Debug.Log("Yendo");
-                    //agente.SetDestination(posDejarComida);
+                    // Te sigues acercando a la comida
                     Task.current.Succeed();
                     return;
                 }
             }
-            else
-            {
-                // esa comida ya la lleva alguien, reseteo todo
-                Debug.Log("La comida la lleva alguien qu eno soy yo");
-                posDejarComida = Vector3.zero;
-                salaDejarComida = null;
-                casillaDejarComida = null;
-                posComida = Vector3.zero;
-                comida = null;
-                Task.current.Fail();
-                return;
-            }
         }
-        // no tengo comida
-        Debug.Log("Otra cosa");
-        posDejarComida = Vector3.zero;
-        salaDejarComida = null;
-        casillaDejarComida = null;
-        posComida = Vector3.zero;
-        comida = null;
-        Task.current.Fail();
-
+        else
+        {
+            // La comida ha muerto, reseteo datos
+            salaDejarComida = null;
+            casillaDejarComida = null;
+            posComida = Vector3.zero;
+            posDejarComida = Vector3.zero;
+            comida = null;
+            Task.current.Fail();
+        }
     }
 
     #endregion
