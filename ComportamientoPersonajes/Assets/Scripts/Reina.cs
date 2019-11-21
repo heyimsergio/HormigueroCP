@@ -290,46 +290,6 @@ public class Reina : HormigaGenerica
 
     #endregion
 
-
-    // devuelve una sala de cada tipo con espacio
-    #region geters de salas libres
-    public Room getSalaLibreHormigas()
-    {
-        foreach( Room aux in salasHormigas)
-        {
-            if (!aux.isFull)
-            {
-                return aux;
-            }
-        }
-        return null;
-    }
-
-    public Room getSalaLibreComida()
-    {
-        foreach (Room aux in salasComida)
-        {
-            if (!aux.isFull)
-            {
-                return aux;
-            }
-        }
-        return null;
-    }
-
-    public Room getSalaLibreHuevos()
-    {
-        foreach (Room aux in salasHuevos)
-        {
-            if (!aux.isFull)
-            {
-                return aux;
-            }
-        }
-        return null;
-    }
-    #endregion
-
     // Alertas que recibe la reina
     public void recibirAlertaComida(Comida comida)
     {
@@ -346,8 +306,6 @@ public class Reina : HormigaGenerica
             enemigosTotales.Add(enemigo);
         }
     }
-
-
 
     // Tareas de la reina
     [Task]
@@ -1061,8 +1019,6 @@ public class Reina : HormigaGenerica
 
     // Otros ???
 
-
-
     public static int CompareLess3(int num1, int num2, int num3, float importancia1, float importancia2 , float importancia3)
     {
         if(importancia1 <= 0)
@@ -1115,7 +1071,6 @@ public class Reina : HormigaGenerica
         return finalNum;
     }
 
-
     // Métodos para el tratamiento de huevos
     public void huevoNecesitaCuidado(Huevo miHuevo)
     {
@@ -1146,17 +1101,6 @@ public class Reina : HormigaGenerica
             ComidaVista.Remove(comida);
         }
     }
-
-    /*public Comida pedirComida()
-    {
-        if(ComidaTotal.Count > 0)
-        {
-            Comida c = ComidaTotal[0];
-            ComidaTotal.Remove(c);
-            return c;
-        }
-        return null;
-    }*/
 
     // Métodos para el tratamiento de los ataques
     public void HormigaAtacando()
@@ -1472,6 +1416,45 @@ public class Reina : HormigaGenerica
         totalHuevos--;
     }
 
+    #endregion
+
+    // Devuelve una sala de cada tipo con espacio
+    #region Gets de salas libres
+    public Room getSalaLibreHormigas()
+    {
+        foreach (Room aux in salasHormigas)
+        {
+            if (!aux.isFull)
+            {
+                return aux;
+            }
+        }
+        return null;
+    }
+
+    public Room getSalaLibreComida()
+    {
+        foreach (Room aux in salasComida)
+        {
+            if (!aux.isFull)
+            {
+                return aux;
+            }
+        }
+        return null;
+    }
+
+    public Room getSalaLibreHuevos()
+    {
+        foreach (Room aux in salasHuevos)
+        {
+            if (!aux.isFull)
+            {
+                return aux;
+            }
+        }
+        return null;
+    }
     #endregion
 
 }

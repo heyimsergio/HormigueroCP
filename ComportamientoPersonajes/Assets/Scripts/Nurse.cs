@@ -96,10 +96,6 @@ public class Nurse : HormigaGenerica
         siguientePosicionExplorar = Vector3.zero;
     }
 
-    /*private void Update()
-    {
-    }*/
-
     private void OnTriggerEnter(Collider other)
     {
         // Si encuentras un enemigo y no está en la lista de enemigos
