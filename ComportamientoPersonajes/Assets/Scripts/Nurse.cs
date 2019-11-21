@@ -260,7 +260,7 @@ public class Nurse : HormigaGenerica
             // Si es la primera vez, no tengo asignada la posicion del huevo
             if (posHuevo == Vector3.zero)
             {
-                Debug.Log("Se asigna la posicion del huevo a curar");
+                //Debug.Log("Se asigna la posicion del huevo a curar");
                 TiempoActual = tiempoCuidandoHuevos;
                 posHuevo = huevoACuidar.transform.position;
                 agente.SetDestination(huevoACuidar.transform.position);
@@ -275,7 +275,7 @@ public class Nurse : HormigaGenerica
                 if (TiempoActual <= 0)
                 {
                     huevoACuidar.Cuidar();
-                    Debug.Log("Huevo Cuidado");
+                    //Debug.Log("Huevo Cuidado");
                     // Reseteas todos los valores
                     TiempoActual = tiempoCuidandoHuevos;
                     posHuevo = Vector3.zero;
@@ -330,7 +330,7 @@ public class Nurse : HormigaGenerica
                         // Si la reina lo tiene en su lista de huevos que necesitan cuidados, lo borro
                         reina.huevosQueTienenQueSerCuidados.Remove(huevoACuidar);
                         Task.current.Succeed();
-                        Debug.Log("Hay Huevo Cerca que puede ser o necesita cuidados");
+                        //Debug.Log("Hay Huevo Cerca que puede ser o necesita cuidados");
                         return;
                     }
                 }

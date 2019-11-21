@@ -57,7 +57,7 @@ public class Reina : HormigaGenerica
     public int capacidadTotalDeComida;
     public int capacidadTotalDeHuevos;
     public int totalHormigas;                           // Esto para que ??
-    public int totalComida;                             // Esto para que ??
+    //public int totalComida;                             // Esto para que ??
     public int totalHuevos;                             // Esto para que ??
     public int numeroDeNursesTotal;
     public int numeroDeObrerasTotal;
@@ -94,7 +94,7 @@ public class Reina : HormigaGenerica
     float actualTime;
 
     // CosasVistas
-    public LinkedList<Comida> ComidaVista = new LinkedList<Comida>();
+    public List<Comida> ComidaVista = new List<Comida>();
 
     //IMPORTANCIA DE OBJETIVOS
     public float importanciaHormigas;
@@ -275,9 +275,9 @@ public class Reina : HormigaGenerica
 
     public void checkearNecesidadComida()
     {
-        if(totalHormigas * umbralComida  > totalComida)
+        if(totalHormigas * umbralComida  > ComidaTotal.Count)
         {
-            if(totalComida < capacidadTotalDeComida)
+            if(ComidaTotal.Count < capacidadTotalDeComida)
             {
                 HayQueBuscarComida = true;
             }
@@ -335,7 +335,7 @@ public class Reina : HormigaGenerica
     {
         if (!ComidaVista.Contains(comida) && !comida.laEstanLLevando && !comida.haSidoCogida)
         {
-            ComidaVista.AddLast(comida);
+            ComidaVista.Add(comida);
         }
     }
 
@@ -501,9 +501,9 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayComidaSuficiente()
     {
-        if (totalHormigas * umbralComida > totalComida)
+        if (totalHormigas * umbralComida > ComidaTotal.Count)
         {
-            if (totalComida < capacidadTotalDeComida)
+            if (ComidaTotal.Count < capacidadTotalDeComida)
             {
                 Task.current.Fail();
             }
@@ -601,7 +601,7 @@ public class Reina : HormigaGenerica
             Task.current.Succeed();
             return;
         }
-        if (totalComida * umbralCapacidadComida >= capacidadTotalDeComida - totalComida)
+        if (ComidaTotal.Count * umbralCapacidadComida >= capacidadTotalDeComida - ComidaTotal.Count)
         {
             HayQueCrearSalasComida = true;
             Task.current.Succeed();
@@ -633,7 +633,7 @@ public class Reina : HormigaGenerica
 
 
         int capacidadRestanteHormigas = capacidadTotalDeHormigas - totalHormigas;
-        int capacidadRestanteComida = capacidadTotalDeComida - totalComida;
+        int capacidadRestanteComida = capacidadTotalDeComida - ComidaTotal.Count;
         int capacidadRestanteHuevos = capacidadTotalDeHuevos - totalHuevos;
 
 
@@ -759,7 +759,7 @@ public class Reina : HormigaGenerica
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
-            Debug.Log("Tengo nurse que mandar a cuidar");
+            //Debug.Log("Tengo nurse que mandar a cuidar");
             // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
             aux.hayOrdenCuidarHuevos = true;
             nursesOcupadas.Add(aux);
@@ -1139,7 +1139,6 @@ public class Reina : HormigaGenerica
             ComidaTotal.Add(comida);
             comida.misala = sala;
             comida.miTile = tile;
-            totalComida++;
             sala.meterCosas();
         }
         if (ComidaVista.Contains(comida))
@@ -1148,16 +1147,16 @@ public class Reina : HormigaGenerica
         }
     }
 
-    public Comida pedirComida()
+    /*public Comida pedirComida()
     {
         if(ComidaTotal.Count > 0)
         {
             Comida c = ComidaTotal[0];
-            ComidaTotal.RemoveAt(0);
+            ComidaTotal.Remove(c);
             return c;
         }
         return null;
-    }
+    }*/
 
     // Métodos para el tratamiento de los ataques
     public void HormigaAtacando()
@@ -1175,7 +1174,6 @@ public class Reina : HormigaGenerica
     // Métodos para el tratamiento de creaciones
     public void NaceHormiga(Huevo huevo)
     {
-        //HuevoHaMuerto(huevo);
         switch (huevo.miType)
         {
             case TipoHormiga.NURSE:
@@ -1197,7 +1195,7 @@ public class Reina : HormigaGenerica
                 // se instanciaria
                 break;
             case TipoHormiga.SOLDADO:
-                Debug.Log("Soldado nace");
+                //Debug.Log("Soldado nace");
                 //numeroDeSoldadosTotal++;
                 //totalHormigas++;
                 break;
@@ -1231,7 +1229,6 @@ public class Reina : HormigaGenerica
         if (sala != null)
         {
             sala.meterCosas();
-            totalComida++;
         }
         return sala;
     }
@@ -1257,8 +1254,6 @@ public class Reina : HormigaGenerica
     }
     #endregion
 
-
-
     #region Manejar cosas Muertas
     // Métodos para el tratamiento de muertos
     public void HormigaHaMuerto(HormigaGenerica hormiga)
@@ -1274,6 +1269,11 @@ public class Reina : HormigaGenerica
         foreach (Huevo huevo in hormiga.huevosCerca)
         {
             huevo.hormigasCerca.Remove(this);
+        }
+        // Actualizamos a todos las comidas que tenga
+        foreach (Comida comida in hormiga.comidaQueHayCerca)
+        {
+            comida.hormigasCerca.Remove(this);
         }
 
         // Eliminar a la hormiga de todas las listas
@@ -1351,13 +1351,26 @@ public class Reina : HormigaGenerica
             hormiga.siendoCuradaPor.hormigaACurar = null;
             hormiga.siendoCuradaPor = null;
         }
-
-        // Actualizamos a todos las comidas que tenga
-        foreach (Comida comida in hormiga.comidaQueHayCerca)
+        // Si la hormiga muere mientras tiene una comida asignada
+        if (hormiga.comida != null)
         {
-            comida.hormigasCerca.Remove(this);
+            hormiga.comida.laEstanLLevando = false;
+            hormiga.comida.hormigaQueLlevaLaComida = null;
+            hormiga.comida.transform.SetParent(null);
+            sacarComidaSala(hormiga.salaDejarComida, hormiga.comida, hormiga.casillaDejarComida);
+            if (reina.ComidaVista.Contains(hormiga.comida))
+            {
+                reina.ComidaVista.Remove(hormiga.comida);
+            }
         }
-
+        // Si la hormiga muere mientras va a comer
+        if (hormiga.comidaAComer != null)
+        {
+            if (!ComidaTotal.Contains(hormiga.comidaAComer))
+            {
+                ComidaTotal.Add(hormiga.comidaAComer);
+            }
+        }
         // Si la hormiga está siendo curada por alguien
         hormiga.siendoCuradaPor = null;
     }
@@ -1376,28 +1389,38 @@ public class Reina : HormigaGenerica
         }
     }
 
-    public void ComidaHaMuerto(Comida comida)
+    public void ComidaHaMuerto(Comida comidaMuerta)
     {
-        // Sacamos la comida solo si haSidoCogida
-        if (comida.haSidoCogida)
+        // Sacamos la comida de la sala si muere cuando está siendo llevada
+        if (comidaMuerta.hormigaQueLlevaLaComida != null || comidaMuerta.haSidoCogida)
         {
-            sacarComidaSala(comida.misala, comida, comida.miTile);
+            sacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
+            /*comidaMuerta.hormigaQueLLevaLaComida.comida = null;
+            comidaMuerta.hormigaQueLLevaLaComida.salaDejarComida = null;
+            comidaMuerta.hormigaQueLLevaLaComida.casillaDejarComida = null;
+            comidaMuerta.hormigaQueLLevaLaComida.posComida = Vector3.zero;
+            comidaMuerta.hormigaQueLLevaLaComida.posDejarComida = Vector3.zero;*/
+            //comidaMuerta.hormigaQueLlevaLaComida = null;
         }
 
-        if(comida.hormigaQueLLevaLaComida != null)
+        if (comidaMuerta.hormigaQueLlevaLaComida != null)
         {
-
-            comida.hormigaQueLLevaLaComida.comida = null;
-            comida.hormigaQueLLevaLaComida = null;
+            comidaMuerta.hormigaQueLlevaLaComida.comida = null;
+            comidaMuerta.hormigaQueLlevaLaComida.salaDejarComida = null;
+            comidaMuerta.hormigaQueLlevaLaComida.casillaDejarComida = null;
+            comidaMuerta.hormigaQueLlevaLaComida.posComida = Vector3.zero;
+            comidaMuerta.hormigaQueLlevaLaComida.posDejarComida = Vector3.zero;
+            comidaMuerta.hormigaQueLlevaLaComida = null;
         }
 
-        // Avisamos a las hormigas de que la comida ha muerto
-        foreach (HormigaGenerica h in comida.hormigasCerca)
+        // Avisamos a las hormigas cercanas de que la comida ha muerto
+        foreach (HormigaGenerica h in comidaMuerta.hormigasCerca)
         {
             h.comidaQueHayCerca.Remove(comida);
         }
+
         // Si la reina tenia esa comida como vista en su lista, se elimina
-        ComidaVista.Remove(comida);
+        ComidaVista.Remove(comidaMuerta);
     }
 
     public void HuevoHaMuerto(Huevo miHuevo)
@@ -1435,9 +1458,11 @@ public class Reina : HormigaGenerica
 
     public void sacarComidaSala(Room sala, Comida comida, TileScript miTile)
     {
-        ComidaTotal.Remove(comida);
+        if (ComidaTotal.Remove(comida))
+        {
+            Debug.Log("Comida eliminada de comidaTotal");
+        }
         sala.sacarCosas(miTile);
-        totalComida--;
     }
 
     public void sacarHuevosSala(Room sala, Huevo huevo)

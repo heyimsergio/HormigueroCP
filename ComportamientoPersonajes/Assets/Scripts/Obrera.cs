@@ -118,13 +118,12 @@ public class Obrera : HormigaGenerica
         }
         else if (other.tag == "Trigo")
         {
-
             Comida aux = other.gameObject.GetComponent<Comida>();
             if (!aux.hormigasCerca.Contains(this))
             {
                 aux.hormigasCerca.Add(this);
             }
-            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
+            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && aux.hormigaQueLlevaLaComida == null)
             {
                 reina.recibirAlertaComida(aux);
                 comidaQueHayCerca.Add(aux);
@@ -155,11 +154,6 @@ public class Obrera : HormigaGenerica
     }
 
     #region Tareas Obrera
-
-
-
-
-
 
 
     // HayEnemigosCerca()
@@ -229,13 +223,16 @@ public class Obrera : HormigaGenerica
         {
             tiempoQueLlevaHaciendoElTunel += Time.deltaTime;
             agente.SetDestination(reina.hormiguero.gameObject.transform.position + new Vector3(Random.Range(0, reina.hormiguero.width), 0, Random.Range(0, reina.hormiguero.heigth)));
-        } else
+            Task.current.Succeed();
+            return;
+        }
+        else
         {
             int min = -1;
 
 
             int capacidadRestanteHormigas = reina.capacidadTotalDeHormigas - reina.totalHormigas;
-            int capacidadRestanteComida = reina.capacidadTotalDeComida - reina.totalComida;
+            int capacidadRestanteComida = reina.capacidadTotalDeComida - reina.ComidaTotal.Count;
             int capacidadRestanteHuevos = reina.capacidadTotalDeHuevos - reina.totalHuevos;
 
 
@@ -268,8 +265,6 @@ public class Obrera : HormigaGenerica
                 min = 2;
             }
 
-
-
             Room aux;
             switch (min)
             {
@@ -298,7 +293,6 @@ public class Obrera : HormigaGenerica
                         reina.numHormigasCavandoTuneles--;
                         Task.current.Fail();
                     }
-
                     break;
                 case 1:
 
@@ -346,8 +340,6 @@ public class Obrera : HormigaGenerica
                         reina.numHormigasCavandoTuneles--;
                         Task.current.Fail();
                     }
-
-
                     break;
             }
         }
@@ -357,12 +349,11 @@ public class Obrera : HormigaGenerica
     }
 
     // HayHormigaQueCurarCerca()
-
     
     [Task]
     public void HayHuecoParaDejarComida()
     {
-        if (reina.totalComida >= reina.capacidadTotalDeComida)
+        if (reina.ComidaTotal.Count >= reina.capacidadTotalDeComida)
         {
             if(comida != null)
             {
@@ -374,7 +365,8 @@ public class Obrera : HormigaGenerica
             posComida = Vector3.zero;
             comida = null;
             Task.current.Fail();
-        } else
+        }
+        else
         {
             Task.current.Succeed();
         }
@@ -384,7 +376,7 @@ public class Obrera : HormigaGenerica
     public void HaySuficienteComida()
     {
         //Debug.Log(reina.umbralComida * reina.totalHormigas);
-        if (reina.totalComida < reina.umbralComida * reina.totalHormigas)
+        if (reina.ComidaTotal.Count < reina.umbralComida * reina.totalHormigas)
         {
             Task.current.Fail();
         }
@@ -406,32 +398,50 @@ public class Obrera : HormigaGenerica
     [Task]
     public void HayComidaParaLlevar()
     {
-
         if (!hayOrdenBuscarComida)
         {
-            if(comida == null)
+            // Si no tengo ninguna comida asignada, miro las que hay alrededor
+            if (comida == null)
             {
+                // Recorremos la lista de comida cerca
                 foreach (Comida comidaAux in comidaQueHayCerca)
                 {
-                    if(comidaAux.hormigaQueLLevaLaComida == null && !comidaAux.haSidoCogida)
+                    if (comidaAux.hormigaQueLlevaLaComida == null && !comidaAux.haSidoCogida)
                     {
-                        //comida.hormigaQueLLevaLaComida = this;
-                        comida = comidaAux;
-                        reina.ComidaVista.Remove(comidaAux);
-                        Task.current.Succeed();
-                        return;
+                        // Compruebo primeramente que tenga sala libre y la asigno
+                        salaDejarComida = reina.meterComidaEnSala();
+                        if (salaDejarComida != null)
+                        {
+                            casillaDejarComida = salaDejarComida.getFreeTile();
+                            comidaAux.cogerComida(salaDejarComida, casillaDejarComida);
+                            comida = comidaAux;
+                            comida.hormigaQueLlevaLaComida = this;
+                            posComida = Vector3.zero;
+                            posDejarComida = Vector3.zero;
+                            // Si la reina lo tiene en su lista de comida vista, lo borro
+                            reina.ComidaVista.Remove(comidaAux);
+                            Task.current.Succeed();
+                            return;
+                        }
+                        else
+                        {
+                            // No hay sala para dejar comida, por lo que no la cojo
+                            Task.current.Fail();
+                            return;
+                        }
                     }
                 }
-            } else
+            }
+            else
             {
+                // Si ya tiene una comida asignada
                 Task.current.Succeed();
                 return;
             }
-        } 
-
+        }
+        // Si no encuentra comida, o tiene orden
         Task.current.Fail();
         return;
-        
     }
 
     [Task]

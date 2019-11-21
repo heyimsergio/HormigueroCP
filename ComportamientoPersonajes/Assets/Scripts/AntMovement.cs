@@ -1,4 +1,5 @@
 ﻿using Panda;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,13 +37,24 @@ public class AntMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
 
         if (agent.isOnOffMeshLink)
         {
             if (!haEntradoAlCamino)
             {
                 PersonajeGenerico a = agent.gameObject.GetComponent<PersonajeGenerico>();
+                HormigaGenerica h = this.gameObject.GetComponent<HormigaGenerica>();
+                foreach (EnemigoGenerico enem in h.enemigosCerca)
+                {
+                    enem.hormigasCerca.Remove(h);
+                }
+                h.enemigosCerca = new List<EnemigoGenerico>();
+                foreach (Comida c in h.comidaQueHayCerca)
+                {
+                    c.hormigasCerca.Remove(h);
+                }
+                h.comidaQueHayCerca = new List<Comida>();
+
                 haEntradoAlCamino = true;
                 if (a.zonaDondeEsta == 0)
                 {
@@ -69,7 +81,8 @@ public class AntMovement : MonoBehaviour
             }
 
             agent.speed = speed * linkMultiplayer;
-        } else
+        }
+        else
         {
             if (haEntradoAlCamino)
             {

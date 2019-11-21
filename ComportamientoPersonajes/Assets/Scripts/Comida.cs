@@ -16,7 +16,7 @@ public class Comida : MonoBehaviour
     public bool haSidoCogida = false;
     public bool laEstanLLevando = false;
 
-    public HormigaGenerica hormigaQueLLevaLaComida = null;
+    public HormigaGenerica hormigaQueLlevaLaComida = null;
     public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
 
     //Variables de ubicacion de la comida;
@@ -78,16 +78,12 @@ public class Comida : MonoBehaviour
     /// </summary>
     /// <param name="misala"> Sala donde se ubica la comida</param>
     /// <param name="miTile"> Tile donde se ubica la comida</param>
-    /*
+
     public void cogerComida(Room misala, TileScript miTile)
     {
         this.misala = misala;
         this.miTile = miTile;
-        haSidoCogida = true;
-        this.transform.position = misala.centroDeLaSala;
     }
-
-    */
 
 
 }
