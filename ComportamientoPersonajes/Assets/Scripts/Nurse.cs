@@ -364,7 +364,7 @@ public class Nurse : HormigaGenerica
                 aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
             } while (!aux2);
             siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
-            Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+            //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
             agente.SetDestination(siguientePosicionExplorar);
         } else
         {
@@ -379,7 +379,7 @@ public class Nurse : HormigaGenerica
                     aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
                 } while (!aux2);
                 siguientePosicionExplorar = new Vector3(aux.position.x,0,aux.position.z);
-                Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+                //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
                 agente.SetDestination(siguientePosicionExplorar);
             } else if(Vector3.Distance(this.transform.position,siguientePosicionExplorar)< 0.5f)
             {
