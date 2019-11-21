@@ -612,14 +612,14 @@ public class HormigaGenerica : PersonajeGenerico
             // Comprobamos si podemos o no acceder a comida
             if (comidaAComer != null)
             {
-                Debug.Log("VOY A LA PUTA COMIDA");
+                //Debug.Log("VOY A LA PUTA COMIDA");
                 agente.SetDestination(comidaAComer.transform.position);
                 Task.current.Succeed();
                 return;
             }
             else
             {
-                Debug.Log("Axwelfeo");
+                //Debug.Log("Axwelfeo");
                 Task.current.Fail();
                 return;
             }
@@ -628,7 +628,7 @@ public class HormigaGenerica : PersonajeGenerico
         {
             if (Vector3.Distance(this.transform.position, comidaAComer.transform.position) < 0.2f)
             {
-                Debug.Log("He llegado a la comida");
+                //Debug.Log("He llegado a la comida");
                 hambre += comidaAComer.comer();
                 comidaAComer = null;
                 Task.current.Succeed();
@@ -636,9 +636,9 @@ public class HormigaGenerica : PersonajeGenerico
             } else
             {
                 agente.SetDestination(comidaAComer.transform.position);
-                Debug.Log("Posicion comida a comer: " + comidaAComer.transform.position);
+                //Debug.Log("Posicion comida a comer: " + comidaAComer.transform.position);
             }
-            Debug.Log("Intentando ira porla comida");
+            //Debug.Log("Intentando ira porla comida");
             Task.current.Succeed();
             return;
         }

@@ -87,7 +87,7 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
@@ -156,29 +156,37 @@ MonoBehaviour:
   hayOrdenDeAtacar: 0
   enemigoAlQueAtacar: {fileID: 0}
   reinaCerca: 0
+  obrerasCerca: 0
+  soldadosCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
   casillaDejarComida: {fileID: 0}
+  posComida: {x: 0, y: 0, z: 0}
+  posDejarComida: {x: 0, y: 0, z: 0}
+  comidaQueHayCerca: []
   hayOrdenBuscarComida: 0
-  hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
-  siendoCuradaPor: {fileID: 0}
   posHerida: {x: 0, y: 0, z: 0}
   hormigasCerca: []
+  hormigaACurar: {fileID: 0}
+  siendoCuradaPor: {fileID: 0}
   cantidadDeCura: 3
   puedeSerCurada: 0
   necesitaSerCurada: 0
+  umbralPuedeCurarse: 9
+  umbralNecesitaCurarse: 3
   hayOrdenCurarHormiga: 0
   tiempoCuidandoHuevos: 10
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
+  huevosCerca: []
+  hayOrdenCuidarHuevos: 0
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
-  numeroDeSoldadosCerca: 0
-  reinaEstaCerca: 0
   hayOrdenDeCavar: 0
-  tiempoParaHacerTunel: 0
+  tiempoParaHacerTunel: 5
   tiempoQueLlevaHaciendoElTunel: 0
   posicionInicialTunel: {x: 0, y: 0, z: 0}
   posicionFinalTunel: {x: 0, y: 0, z: 0}

@@ -207,11 +207,7 @@ public class Reina : HormigaGenerica
 
         // Actualización del hormiguero y creación de salas
         actualTime = Time.time - initTime;
-        if (crearSala)
-        {
-            ConstruirSala();
-            crearSala = false;
-        }
+
         SimulateWorld();
         ActualizarPercepcionesHormiguero();
         ActualizarVariablesReina();
@@ -1100,10 +1096,11 @@ public class Reina : HormigaGenerica
     {
         if (!ComidaTotal.Contains(comida))
         {
+            //Debug.Log("Meter cosas de comida guardada");
             ComidaTotal.Add(comida);
             comida.misala = sala;
             comida.miTile = tile;
-            sala.meterCosas();
+            //sala.meterCosas();
         }
         if (ComidaVista.Contains(comida))
         {
@@ -1181,6 +1178,7 @@ public class Reina : HormigaGenerica
         Room sala = getSalaLibreComida();
         if (sala != null)
         {
+            Debug.Log(" Se mete comida desde  meter Comida en sala");
             sala.meterCosas();
         }
         return sala;
@@ -1445,6 +1443,8 @@ public class Reina : HormigaGenerica
     {
         foreach (Room aux in salasComida)
         {
+            Debug.Log("Numero de comida: " + aux.llenadoActual);
+            Debug.Log("Capacidad de Comida: " + aux.capacidadTotalRoom);
             if (!aux.isFull)
             {
                 return aux;

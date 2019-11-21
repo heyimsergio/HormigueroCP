@@ -2002,6 +2002,7 @@ MonoBehaviour:
   posHuevo: {x: 0, y: 0, z: 0}
   huevosCerca: []
   hayOrdenCuidarHuevos: 0
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
@@ -2075,7 +2076,7 @@ MonoBehaviour:
   umbralCapacidadComida: 0.3
   "tama\xF1oMaxColaConstruccionSalas": 0
   salasEnConstruccion: 0
-  umbralComida: 1.4
+  umbralComida: 2.3
   comidaPrefab: {fileID: 2867959774170439277, guid: 09ba6be01b00b9b46a847381e95dd101,
     type: 3}
   PrefabHuevo: {fileID: 1489546582499747470, guid: 36cebf16d8691e24c8c986527498073c,
