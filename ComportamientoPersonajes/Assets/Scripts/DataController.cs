@@ -9,17 +9,22 @@ public class DataController : MonoBehaviour
 
     public static DataController dataContoller;
 
-    private bool facil = false;
-    private bool medio = true;
-    private bool dificil = false;
+    public bool facil = false;
+    public bool medio = true;
+    public bool dificil = false;
 
     public InputField nurses;
     public InputField soldados;
     public InputField obreras;
 
-    private int numNurse = 0;
-    private int numObreras = 0;
-    private int numSoldados = 0;
+    public int numNurse = 0;
+    public int numObreras = 0;
+    public int numSoldados = 0;
+
+    public Nurse nursePrefab;
+    public Obrera obreraPrefab;
+    //public Soldado soldadoPrefab;
+    
 
 
     private void Awake()

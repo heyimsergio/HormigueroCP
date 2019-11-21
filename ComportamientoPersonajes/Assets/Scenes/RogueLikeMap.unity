@@ -130,6 +130,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nurse
       objectReference: {fileID: 0}
+    - target: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -361,7 +366,7 @@ PrefabInstance:
     - target: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -514,7 +519,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -1865,6 +1870,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nurse (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1933,6 +1943,7 @@ GameObject:
   - component: {fileID: 1646566902}
   - component: {fileID: 1646566901}
   - component: {fileID: 1646566903}
+  - component: {fileID: 1646566905}
   - component: {fileID: 1646566904}
   m_Layer: 0
   m_Name: Reina
@@ -2135,6 +2146,18 @@ MonoBehaviour:
     breakPointStatuses: 
     collapsedLines: 
     btScript: 
+--- !u!114 &1646566905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646566900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c5d1f83dd341bc49a3e7f91fb93b7f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1694178321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2583,7 +2606,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}

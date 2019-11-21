@@ -1183,6 +1183,10 @@ MonoBehaviour:
   nurses: {fileID: 393133631}
   soldados: {fileID: 2055301317}
   obreras: {fileID: 241224701}
+  nursePrefab: {fileID: 4413783055448590807, guid: c969fd524db04ce40857f5df2d0b2470,
+    type: 3}
+  obreraPrefab: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+    type: 3}
 --- !u!4 &422559527
 Transform:
   m_ObjectHideFlags: 0
