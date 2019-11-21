@@ -2167,7 +2167,7 @@ MonoBehaviour:
   - {fileID: 2486056645466122379, guid: 752f379f92c8a854dab57f1b28ca932d, type: 3}
   - {fileID: 2486056645466122379, guid: a5a77f94b67311244964f2d55c5368db, type: 3}
   - {fileID: 2486056645466122379, guid: 2e5257b308a59d143ab6a4e0e77ee336, type: 3}
-  prefabCorridor: {fileID: 8144170520043494077, guid: 8a4a8d3681924454f834cdfb545f0ee7,
+  prefabCorridor: {fileID: 2467580837031594972, guid: 361b8e1d806b80c49bd06b8f68afd47a,
     type: 3}
   prefabTile: {fileID: 1584391899563105300, guid: b17832778413d9c40be6c5416fdd6b13,
     type: 3}
