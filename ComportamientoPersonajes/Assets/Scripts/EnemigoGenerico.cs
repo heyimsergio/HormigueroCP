@@ -20,6 +20,7 @@ public class EnemigoGenerico : PersonajeGenerico
     public float tiempoEntreAtaquesMax = 0.5f;
 
     Floor hormigueroDentro;
+    Vector3 siguientePosicion;
 
     // Start is called before the first frame update
     void Start()

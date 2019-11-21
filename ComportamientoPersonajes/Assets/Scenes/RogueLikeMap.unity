@@ -112,6 +112,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &56768167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+    type: 3}
+  m_PrefabInstance: {fileID: 4576295137146405432}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &268939970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -351,6 +357,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Nurse (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413783055448590793, guid: c969fd524db04ce40857f5df2d0b2470,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -2174,6 +2185,7 @@ MonoBehaviour:
   prefabAgujero: {fileID: 2079550690895735533, guid: f53720b0b42815148a38a78db4a375aa,
     type: 3}
   createRoomBool: 0
+  centro: {x: 0, y: 0, z: 0}
 --- !u!4 &1894152932
 Transform:
   m_ObjectHideFlags: 0
@@ -2486,7 +2498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f00ddca15fb28f46a833c660884bf05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 56768167}
 --- !u!1001 &4576295137146405432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2572,7 +2584,7 @@ PrefabInstance:
     - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: tiempoParaHacerTunel
-      value: 20
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
