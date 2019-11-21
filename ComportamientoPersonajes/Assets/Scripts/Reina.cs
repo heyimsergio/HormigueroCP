@@ -1047,10 +1047,19 @@ public class Reina : HormigaGenerica
                 siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
                 //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
                 agente.SetDestination(siguientePosicionExplorar);
+                Task.current.Succeed();
+                return;
             }
             else if (Vector3.Distance(this.transform.position, siguientePosicionExplorar) < 0.5f)
             {
                 siguientePosicionExplorar = Vector3.zero;
+                Task.current.Succeed();
+                return;
+            } else
+            {
+                agente.SetDestination(siguientePosicionExplorar);
+                Task.current.Succeed();
+                return;
             }
         }
         Task.current.Succeed();

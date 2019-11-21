@@ -78,7 +78,8 @@ public class HormigaGenerica : PersonajeGenerico
     public bool hayOrdenCuidarHuevos = false;
 
     //Explorar
-    protected Vector3 siguientePosicionExplorar;
+    [Header("Explorar")]
+    public Vector3 siguientePosicionExplorar;
 
     // Comer
     [Header("Comida a Comer")]
