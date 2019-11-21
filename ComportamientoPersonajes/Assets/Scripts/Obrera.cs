@@ -155,7 +155,6 @@ public class Obrera : HormigaGenerica
 
     #region Tareas Obrera
 
-
     // HayEnemigosCerca()
 
     [Task]

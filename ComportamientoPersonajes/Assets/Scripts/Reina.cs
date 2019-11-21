@@ -1317,6 +1317,8 @@ public class Reina : HormigaGenerica
         }
         // Si la hormiga está siendo curada por alguien
         hormiga.siendoCuradaPor = null;
+
+        hormiga = null;
     }
 
     public void EnemigoHaMuerto(EnemigoGenerico enemigo)
@@ -1331,6 +1333,8 @@ public class Reina : HormigaGenerica
         {
             enemigosTotales.Remove(enemigo);
         }
+
+        enemigo = null;
     }
 
     public void ComidaHaMuerto(Comida comidaMuerta)
@@ -1339,12 +1343,6 @@ public class Reina : HormigaGenerica
         if (comidaMuerta.hormigaQueLlevaLaComida != null || comidaMuerta.haSidoCogida)
         {
             sacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
-            /*comidaMuerta.hormigaQueLLevaLaComida.comida = null;
-            comidaMuerta.hormigaQueLLevaLaComida.salaDejarComida = null;
-            comidaMuerta.hormigaQueLLevaLaComida.casillaDejarComida = null;
-            comidaMuerta.hormigaQueLLevaLaComida.posComida = Vector3.zero;
-            comidaMuerta.hormigaQueLLevaLaComida.posDejarComida = Vector3.zero;*/
-            //comidaMuerta.hormigaQueLlevaLaComida = null;
         }
 
         if (comidaMuerta.hormigaQueLlevaLaComida != null)
@@ -1365,6 +1363,8 @@ public class Reina : HormigaGenerica
 
         // Si la reina tenia esa comida como vista en su lista, se elimina
         ComidaVista.Remove(comidaMuerta);
+
+        comidaMuerta = null;
     }
 
     public void HuevoHaMuerto(Huevo miHuevo)
