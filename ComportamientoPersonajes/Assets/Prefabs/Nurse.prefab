@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4413783055448590806}
   - component: {fileID: 4413783055448590800}
   m_Layer: 0
-  m_Name: Nurse (1)
+  m_Name: Nurse
   m_TagString: Nurse
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,34 +195,46 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hambre: 200
+  umbralHambre: 200
+  tengoHambre: 0
+  umbralHambreMaximo: 100
+  tengoMuchaHambre: 0
   pesoQuePuedenTransportar: 0
   estaLuchando: 0
   enemigosCerca: []
   hayOrdenDeAtacar: 0
   enemigoAlQueAtacar: {fileID: 0}
+  reinaCerca: 0
+  obrerasCerca: 0
+  soldadosCerca: 0
   siguientePosicionBuscandoComida: {x: 0, y: 0, z: 0}
   comida: {fileID: 0}
+  casillaDejarComida: {fileID: 0}
+  posComida: {x: 0, y: 0, z: 0}
+  posDejarComida: {x: 0, y: 0, z: 0}
+  comidaQueHayCerca: []
   hayOrdenBuscarComida: 0
-  hormigaACurar: {fileID: 0}
   tiempoParaCurar: 0
-  siendoCuradaPor: {fileID: 0}
   posHerida: {x: 0, y: 0, z: 0}
   hormigasCerca: []
+  hormigaACurar: {fileID: 0}
+  siendoCuradaPor: {fileID: 0}
   cantidadDeCura: 3
   puedeSerCurada: 0
   necesitaSerCurada: 0
+  umbralPuedeCurarse: 9
+  umbralNecesitaCurarse: 3
   hayOrdenCurarHormiga: 0
   tiempoCuidandoHuevos: 0
   huevoACuidar: {fileID: 0}
   posHuevo: {x: 0, y: 0, z: 0}
+  huevosCerca: []
+  hayOrdenCuidarHuevos: 0
+  siguientePosicionExplorar: {x: 0, y: 0, z: 0}
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
-  huevosCerca: []
-  numeroDeObrerasCerca: 0
-  numeroDeSoldadosCerca: 0
-  reinaCerca: 0
-  hayOrdenCuidarHuevos: 0
+  hayOrdenDeCavar: 0
 --- !u!54 &4413783055448590806
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -246,7 +258,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4413783055448590793}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
   m_Name: 

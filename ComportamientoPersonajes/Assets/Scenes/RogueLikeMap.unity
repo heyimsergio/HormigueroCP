@@ -526,6 +526,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Obrera
       objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: tiempoParaHacerTunel
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -586,11 +591,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 2144260384}
-    - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
-        type: 3}
-      propertyPath: tiempoParaHacerTunel
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_Enabled
@@ -1945,6 +1945,8 @@ GameObject:
   - component: {fileID: 1646566903}
   - component: {fileID: 1646566905}
   - component: {fileID: 1646566904}
+  - component: {fileID: 1646566906}
+  - component: {fileID: 1646566907}
   m_Layer: 0
   m_Name: Reina
   m_TagString: Reina
@@ -2159,6 +2161,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c5d1f83dd341bc49a3e7f91fb93b7f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1646566906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646566900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40354646c3f4e4ab21d53dc076f2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  link: {fileID: 0}
+--- !u!54 &1646566907
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646566900}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1694178321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2581,7 +2613,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144260382}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 11.190001, y: 40, z: 12.49}
+  m_LocalPosition: {x: 85, y: 40, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2600,6 +2632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 56768167}
+  free: 0
 --- !u!1001 &4576295137146405432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2621,6 +2654,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Obrera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
+        type: 3}
+      propertyPath: tiempoParaHacerTunel
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872402, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
@@ -2682,11 +2720,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 2144260384}
-    - target: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
-        type: 3}
-      propertyPath: tiempoParaHacerTunel
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4576295136347872412, guid: 1ca0848ee4d2c5842b758f9e71d03198,
         type: 3}
       propertyPath: m_Enabled
