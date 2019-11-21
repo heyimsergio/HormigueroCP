@@ -380,6 +380,9 @@ public class Nurse : HormigaGenerica
             } else if(Vector3.Distance(this.transform.position,siguientePosicionExplorar)< 0.5f)
             {
                 siguientePosicionExplorar = Vector3.zero;
+            } else
+            {
+                agente.SetDestination(siguientePosicionExplorar);
             }
         }
         Task.current.Succeed();

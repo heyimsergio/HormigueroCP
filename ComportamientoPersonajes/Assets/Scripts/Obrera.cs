@@ -34,7 +34,7 @@ public class Obrera : HormigaGenerica
     // posDejarComida = Vector3.zero;
 
     // Cavar
-    [Header ("CAVAR")]
+    [Header("CAVAR")]
     public int tiempoParaHacerTunel;
     public float tiempoQueLlevaHaciendoElTunel;
     public Vector3 posicionInicialTunel;
@@ -89,7 +89,7 @@ public class Obrera : HormigaGenerica
         umbralHambreMaximo = 80;
 
         // Explorar
-        siguientePosicionExplorar = this.transform.position;
+        siguientePosicionExplorar = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -218,7 +218,7 @@ public class Obrera : HormigaGenerica
     [Task]
     public void Cavar()
     {
-        if(tiempoQueLlevaHaciendoElTunel < tiempoParaHacerTunel)
+        if (tiempoQueLlevaHaciendoElTunel < tiempoParaHacerTunel)
         {
             tiempoQueLlevaHaciendoElTunel += Time.deltaTime;
             agente.SetDestination(reina.hormiguero.gameObject.transform.position + new Vector3(Random.Range(0, reina.hormiguero.width), 0, Random.Range(0, reina.hormiguero.heigth)));
@@ -343,18 +343,18 @@ public class Obrera : HormigaGenerica
             }
         }
 
-        
+
 
     }
 
     // HayHormigaQueCurarCerca()
-    
+
     [Task]
     public void HayHuecoParaDejarComida()
     {
         if (reina.ComidaTotal.Count >= reina.capacidadTotalDeComida)
         {
-            if(comida != null)
+            if (comida != null)
             {
                 comida.transform.SetParent(null);
             }
@@ -370,7 +370,7 @@ public class Obrera : HormigaGenerica
             Task.current.Succeed();
         }
     }
-    
+
     [Task]
     public void HaySuficienteComida()
     {
@@ -443,6 +443,57 @@ public class Obrera : HormigaGenerica
         return;
     }
 
+
+    [Task]
+    public void Explorar()
+    {
+        // si esta dentro
+        if (zonaDondeEsta == 0)
+        {
+            // sale
+            siguientePosicionExplorar = Vector3.zero;
+            Vector3 randomDirection;
+            NavMeshHit aux;
+            bool aux2;
+            do
+            {
+                randomDirection = UnityEngine.Random.insideUnitSphere * 10 + reina.afueras.centro;
+                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+            } while (!aux2);
+            siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+            //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+            agente.SetDestination(siguientePosicionExplorar);
+
+        }
+        else
+        {
+            if (siguientePosicionExplorar == Vector3.zero)
+            {
+                Vector3 randomDirection;
+                NavMeshHit aux;
+                bool aux2;
+                do
+                {
+                    randomDirection = UnityEngine.Random.insideUnitSphere * (10) + this.transform.position;
+                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
+                } while (!aux2);
+                siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+                //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+                agente.SetDestination(siguientePosicionExplorar);
+            }
+            else if (Vector3.Distance(this.transform.position, siguientePosicionExplorar) < 0.5f)
+            {
+                siguientePosicionExplorar = Vector3.zero;
+            } else
+            {
+                agente.SetDestination(siguientePosicionExplorar);
+            }
+
+        }
+        Task.current.Succeed();
+    }
+
+    /*
     [Task]
     public void Explorar()
     {
@@ -496,6 +547,7 @@ public class Obrera : HormigaGenerica
         }
         Task.current.Succeed();
     }
+    */
 
     #endregion
 }
