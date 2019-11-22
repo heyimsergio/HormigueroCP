@@ -1282,7 +1282,6 @@ public class Reina : HormigaGenerica
 
     // Tarea Poner Huevo de Reina
 
-
     #region Meter Cosas en salas
     public Room MeterComidaEnSala()
     {

@@ -375,7 +375,6 @@ public class HormigaGenerica : PersonajeGenerico
 
     }
 
-
     #region Tareas Globales Hormigas
 
     [Task]
@@ -426,16 +425,16 @@ public class HormigaGenerica : PersonajeGenerico
         }
         else
         {
-            // Suelto la comida si tengo
+            // Suelto la comida si tengo, pero no me la desasigno
             if (comida != null)
             {
                 comida.transform.SetParent(null);
                 comida.laEstanLLevando = false;
-                reina.SacarComidaSala(salaDejarComida, comida, casillaDejarComida);
-                comida.hormigaQueLlevaLaComida = null;
-                comida = null;
-                salaDejarComida = null;
-                casillaDejarComida = null;
+                //reina.SacarComidaSala(salaDejarComida, comida, casillaDejarComida);
+                //comida.hormigaQueLlevaLaComida = null;
+                //comida = null;
+                //salaDejarComida = null;
+                //casillaDejarComida = null;
                 posComida = Vector3.zero;
                 posDejarComida = Vector3.zero;
                 if (reina.comidaVista.Contains(comida))

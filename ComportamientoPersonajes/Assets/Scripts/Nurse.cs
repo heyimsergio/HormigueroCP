@@ -341,7 +341,6 @@ public class Nurse : HormigaGenerica
     [Task]
     public void Explorar()
     {
-
         if(zonaDondeEsta == 1)
         {
             siguientePosicionExplorar = Vector3.zero;
