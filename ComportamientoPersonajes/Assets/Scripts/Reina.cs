@@ -210,7 +210,74 @@ public class Reina : HormigaGenerica
         TIEMPO3 = 180;
         TIEMPO4 = 230;
 
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Si encuentras un enemigo y no está en la lista de enemigos
+        if (other.tag == "Enemigo")
+        {
+            EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            // Actualizas al enemigo de que hay hormiga cerca
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
+            // Actualizas a la hormiga y avisas a la reina de este enemigo
+            if (!enemigosCerca.Contains(aux))
+            {
+                reina.RecibirAlertaEnemigo(aux);
+                enemigosCerca.Add(aux);
+            }
+        }
+        else if (other.tag == "Trigo")
+        {
+            Comida aux = other.gameObject.GetComponent<Comida>();
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
+            if (!aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
+            {
+                reina.RecibirAlertaComida(aux);
+            }
+        }
+        else if (other.tag == "Huevo")
+        {
+            Huevo aux = other.GetComponent<Huevo>();
+            // Actualizas al huevo de las hormigas que tiene cerca
+            if (!aux.hormigasCerca.Contains(this))
+            {
+                aux.hormigasCerca.Add(this);
+            }
+            // Actualizas la lista de huevos cerca
+            if (!huevosCerca.Contains(aux))
+            {
+                huevosCerca.Add(aux);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Si un enemigo sale de nuestro collider, y estabamos luchando con el actualizar la lista
+        if (other.tag == "Enemigo")
+        {
+            EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+            aux.hormigasCerca.Remove(this);
+            enemigosCerca.Remove(aux);
+        }
+        else if (other.tag == "Trigo")
+        {
+            Comida aux = other.gameObject.GetComponent<Comida>();
+            aux.hormigasCerca.Remove(this);
+        }
+        else if (other.tag == "Huevo")
+        {
+            Huevo aux = other.GetComponent<Huevo>();
+            huevosCerca.Remove(aux);
+            aux.hormigasCerca.Remove(this);
+        }
     }
 
     // Update is called once per frame
@@ -329,7 +396,8 @@ public class Reina : HormigaGenerica
         /*if(soldadosDesocupadas.Count > 0)
         {
             Task.current.Succeed();
-        } else
+        } 
+        else
         {
             Task.current.Fail();
         }*/
@@ -544,8 +612,8 @@ public class Reina : HormigaGenerica
                 // Actualizamos a la obrera
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
                 aux.comida = comidaVista[0];
-                aux.comida.CogerComida(salaDejarComida, casillaDejarComida);
-                aux.comida.hormigaQueLlevaLaComida = this;
+                aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
+                aux.comida.hormigaQueLlevaLaComida = aux;
                 aux.posComida = Vector3.zero;
                 aux.posDejarComida = Vector3.zero;
                 // Si la reina lo tiene en su lista de comida vista, lo borro
@@ -583,7 +651,7 @@ public class Reina : HormigaGenerica
                 // Actualizamos a la soldado
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
                 aux.comida = comidaVista[0];
-                aux.comida.CogerComida(salaDejarComida, casillaDejarComida);
+                aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
                 aux.comida.hormigaQueLlevaLaComida = this;
                 aux.posComida = Vector3.zero;
                 aux.posDejarComida = Vector3.zero;
@@ -613,15 +681,15 @@ public class Reina : HormigaGenerica
             aux.salaDejarComida = reina.MeterComidaEnSala();
             if (aux.salaDejarComida != null)
             {
-                // Asignamos el huevo a curar a la hormiga
+                // Asignamos la comida a coger por la nurse
                 aux.hayOrdenBuscarComida = true;
                 nursesOcupadas.Add(aux);
                 nursesDesocupadas.Remove(aux);
                 // Actualizamos a la nurse
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
                 aux.comida = comidaVista[0];
-                aux.comida.CogerComida(salaDejarComida, casillaDejarComida);
-                aux.comida.hormigaQueLlevaLaComida = this;
+                aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
+                aux.comida.hormigaQueLlevaLaComida = aux;
                 aux.posComida = Vector3.zero;
                 aux.posDejarComida = Vector3.zero;
                 // Si la reina lo tiene en su lista de comida vista, lo borro
@@ -827,7 +895,7 @@ public class Reina : HormigaGenerica
             obrerasOcupadas.Add(aux);
             obrerasDesocupadas.Remove(aux);
             aux.hormigaACurar = aux2;
-            aux2.siendoCuradaPor = this;
+            aux2.siendoCuradaPor = aux;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
             return;
@@ -860,6 +928,7 @@ public class Reina : HormigaGenerica
 
         if (aux != null && aux != aux2)
         {
+            Debug.Log("Tengo nurse que mandar a curar");
             // Si la hormiga ya estaba cuidando un huevo
             DesasignarHuevoACurar(aux);
             // Si la hormiga ya tiene una hormiga curando
@@ -871,7 +940,7 @@ public class Reina : HormigaGenerica
             nursesOcupadas.Add(aux);
             nursesDesocupadas.Remove(aux);
             aux.hormigaACurar = aux2;
-            aux2.siendoCuradaPor = this;
+            aux2.siendoCuradaPor = aux;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
             return;
@@ -914,14 +983,83 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayHuevosCercaQueNecesitanCuidados()
     {
+        // Si no tengo ningun huevo asignado, miro los que hay alrededor
+        if (huevoACuidar == null)
+        {
+            // Recorremos la lista de huevos cercanos
+            foreach (Huevo h in huevosCerca)
+            {
+                // Si algun huevo PUEDE ser cuidado y no tiene a nadie asignado, se lo asigno e indico al huevo quien lo cuida
+                if (h.siendoCuidadoPor == null && h.necesitaCuidados)
+                {
+                    huevoACuidar = h;
+                    h.siendoCuidadoPor = this;
+                    // Si la reina lo tiene en su lista de huevos que necesitan cuidados, lo borro
+                    reina.huevosQueTienenQueSerCuidados.Remove(huevoACuidar);
+                    Task.current.Succeed();
+                    //Debug.Log("Hay Huevo Cerca que puede ser o necesita cuidados");
+                    return;
+                }
+            }
+        }
+        else
+        {
+            Task.current.Succeed();
+            return;
+        }
+        // Si no encuentra ningun huevo
         Task.current.Fail();
+        return;
     }
 
     // CuidarHuevos() --> está en la nurse actualmente solo
     [Task]
     public void CuidarHuevos()
     {
-        Task.current.Fail();
+        if (huevoACuidar != null)
+        {
+            // Si es la primera vez, no tengo asignada la posicion del huevo
+            if (posHuevo == Vector3.zero)
+            {
+                //Debug.Log("Se asigna la posicion del huevo a curar");
+                TiempoActual = tiempoCuidandoHuevos;
+                posHuevo = huevoACuidar.transform.position;
+                agente.SetDestination(huevoACuidar.transform.position);
+                Task.current.Succeed();
+                return;
+            }
+            // Cuando la distancia al huevo sea pequeña
+            if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
+            {
+                TiempoActual -= Time.deltaTime;
+                // Si ha pasado el tiempo de cuidar
+                if (TiempoActual <= 0)
+                {
+                    huevoACuidar.Cuidar();
+                    // Debug.Log("Huevo Cuidado");
+                    // Reseteas todos los valores
+                    TiempoActual = tiempoCuidandoHuevos;
+                    posHuevo = Vector3.zero;
+                    huevoACuidar.siendoCuidadoPor = null;
+                    huevoACuidar = null;
+                }
+            }
+            else
+            {
+                agente.SetDestination(huevoACuidar.transform.position);
+            }
+            Task.current.Succeed();
+            return;
+        }
+        // Si el huevo ha muerto o nacido, se devuelve Fail para que siga haciendo cosas del BT
+        else
+        {
+            TiempoActual = tiempoCuidandoHuevos;
+            huevoACuidar = null;
+            posHuevo = Vector3.zero;
+            Task.current.Fail();
+            return;
+        }
     }
 
     [Task]
@@ -941,7 +1079,7 @@ public class Reina : HormigaGenerica
         }
         else
         {
-            if(huevosQueLlevaPuestosEnEstaTanda == huevosAPonerEnEstaTanda)
+            if (huevosQueLlevaPuestosEnEstaTanda == huevosAPonerEnEstaTanda)
             {
                 ponerHuevo = false;
                 huevosAPonerEnEstaTanda = Random.Range(numeroMinimoHuevosPorTanda, numeroMaximoHuevosPorTanda);
@@ -1028,7 +1166,8 @@ public class Reina : HormigaGenerica
                 Task.current.Succeed();
                 return;
 
-            } else
+            }
+            else
             {
                 agente.SetDestination(posicionParaColocarHuevo);
                 Task.current.Succeed();
@@ -1184,7 +1323,7 @@ public class Reina : HormigaGenerica
     }
 
     // Métodos para des-asignar cuando se manda una orden
-    public void DesasignarHuevoACurar (HormigaGenerica hormiga)
+    public void DesasignarHuevoACurar(HormigaGenerica hormiga)
     {
         if (hormiga.huevoACuidar != null)
         {
@@ -1324,17 +1463,17 @@ public class Reina : HormigaGenerica
         // Actualizamos a todos los enemigos que tenga
         foreach (EnemigoGenerico enem in hormiga.enemigosCerca)
         {
-            enem.hormigasCerca.Remove(this);
+            enem.hormigasCerca.Remove(hormiga);
         }
         // Actualizamos a todos los huevos que tenga
         foreach (Huevo huevo in hormiga.huevosCerca)
         {
-            huevo.hormigasCerca.Remove(this);
+            huevo.hormigasCerca.Remove(hormiga);
         }
         // Actualizamos a todos las comidas que tenga
         foreach (Comida comida in hormiga.comidaQueHayCerca)
         {
-            comida.hormigasCerca.Remove(this);
+            comida.hormigasCerca.Remove(hormiga);
         }
 
         // Eliminar a la hormiga de todas las listas
@@ -1474,10 +1613,14 @@ public class Reina : HormigaGenerica
     public void ComidaHaMuerto(Comida comidaMuerta)
     {
         // Sacamos la comida de la sala si muere cuando está siendo llevada
-        if (comidaMuerta.hormigaQueLlevaLaComida != null || comidaMuerta.haSidoCogida)
+        if ((comidaMuerta.hormigaQueLlevaLaComida != null && comidaMuerta.laEstanLLevando) || comidaMuerta.haSidoCogida)
         {
-            SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
             Debug.Log("COMIDA QUE ESTABA LLEVANDO HA MUERTO");
+            SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
+        }
+        else
+        {
+            Debug.Log("LA COMIDA SE HA MUERTO SOLA");
         }
 
         // Actualizamos si la comida está siendo llevada por una hormiga (no necesario)

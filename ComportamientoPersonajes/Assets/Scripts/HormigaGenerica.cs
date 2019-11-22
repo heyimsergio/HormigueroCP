@@ -155,16 +155,19 @@ public class HormigaGenerica : PersonajeGenerico
                 {
                     if (objetoColision.transform.parent.gameObject != this.gameObject)
                     {
+                        //Soldado hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                        Obrera hormigaObrera = objetoColision.transform.parent.gameObject.GetComponent<Obrera>();
+                        Reina hormigaReina = objetoColision.transform.parent.gameObject.GetComponent<Reina>();
                         //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
-                        if (objetoColision.transform.parent.gameObject.GetType().Equals("Obrera"))
+                        if (hormigaObrera != null)
                         {
                             obrerasCerca = true;
                         }
-                        if (objetoColision.transform.parent.gameObject.GetType().Equals("Soldado"))
+                        /*if (hormigaSoldado != null)
                         {
                             soldadosCerca = true;
-                        }
-                        if (objetoColision.transform.parent.gameObject.GetType().Equals("Reina"))
+                        }*/
+                        if (hormigaReina != null)
                         {
                             reinaCerca = true;
                         }
@@ -198,6 +201,22 @@ public class HormigaGenerica : PersonajeGenerico
                 {
                     if (objetoColision.transform.parent.gameObject != this.gameObject)
                     {
+                        //Soldado hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                        Obrera hormigaObrera = objetoColision.transform.parent.gameObject.GetComponent<Obrera>();
+                        Reina hormigaReina = objetoColision.transform.parent.gameObject.GetComponent<Reina>();
+                        //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
+                        if (hormigaObrera != null)
+                        {
+                            obrerasCerca = true;
+                        }
+                        /*if (hormigaSoldado != null)
+                        {
+                            soldadosCerca = true;
+                        }*/
+                        if (hormigaReina != null)
+                        {
+                            reinaCerca = true;
+                        }
                         if (!hormigasCerca.Contains(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>()))
                         {
                             hormigasCerca.Add(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>());

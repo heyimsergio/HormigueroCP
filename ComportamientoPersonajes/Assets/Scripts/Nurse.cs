@@ -116,16 +116,14 @@ public class Nurse : HormigaGenerica
         }
         else if (other.tag == "Trigo")
         {
-           
             Comida aux = other.gameObject.GetComponent<Comida>();
             if (!aux.hormigasCerca.Contains(this))
             {
                 aux.hormigasCerca.Add(this);
             }
-            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
+            if (!aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
             {
                 reina.RecibirAlertaComida(aux);
-                comidaQueHayCerca.Add(aux);
             }
         }
         else if (other.tag == "Huevo")
@@ -156,7 +154,6 @@ public class Nurse : HormigaGenerica
         else if (other.tag == "Trigo")
         {
             Comida aux = other.gameObject.GetComponent<Comida>();
-            comidaQueHayCerca.Remove(aux);
             aux.hormigasCerca.Remove(this);
         }
         else if (other.tag == "Huevo")

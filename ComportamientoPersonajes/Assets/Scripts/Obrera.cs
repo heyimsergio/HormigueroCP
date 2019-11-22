@@ -121,7 +121,7 @@ public class Obrera : HormigaGenerica
             {
                 aux.hormigasCerca.Add(this);
             }
-            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando)
+            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
             {
                 reina.RecibirAlertaComida(aux);
                 comidaQueHayCerca.Add(aux);

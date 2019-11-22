@@ -18,8 +18,8 @@ public class GeneradorEnemigos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tiempoMaximo = 20f;
-        tiempoMinimo = 10f;
+        tiempoMaximo = 50f;
+        tiempoMinimo = 25f;
         tiempoParaSpawnear = tiempoMinimo;
         pos1 = new Vector3(0.5f, 0, 0.5f);
         pos2 = new Vector3(1f, 0, 49f);
