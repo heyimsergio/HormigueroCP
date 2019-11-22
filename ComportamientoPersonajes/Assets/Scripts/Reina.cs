@@ -966,15 +966,15 @@ public class Reina : HormigaGenerica
                 switch (min)
                 {
                     case 0:
-                        Debug.Log("Hormiga Nurse");
+                        //Debug.Log("Hormiga Nurse");
                         hormigaAponer = TipoHormiga.NURSE;
                         break;
                     case 1:
-                        Debug.Log("Hormiga Obrera");
+                        //Debug.Log("Hormiga Obrera");
                         hormigaAponer = TipoHormiga.OBRERA;
                         break;
                     case 2:
-                        Debug.Log("Hormiga Soldado");
+                        //Debug.Log("Hormiga Soldado");
                         hormigaAponer = TipoHormiga.SOLDADO;
                         break;
                 }
@@ -1344,9 +1344,14 @@ public class Reina : HormigaGenerica
         }
 
         // Depende de la hormiga que sea, se saca de una lista u otra
-        if (hormiga.GetType().Equals("Nurse"))
+        Nurse hormigaNurse = hormiga.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
+        //Nurse hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+        Obrera hormigaObrera = hormiga.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+
+        if (hormigaNurse != null)
         {
-            Nurse hormigaNurse = (Nurse)hormiga;
+            Debug.Log("NURSE HA MUERTO");
+            //Nurse hormigaNurse = (Nurse)hormiga;
             if (nursesDesocupadas.Contains(hormigaNurse))
             {
                 nursesDesocupadas.Remove(hormigaNurse);
@@ -1355,10 +1360,12 @@ public class Reina : HormigaGenerica
             {
                 nursesOcupadas.Remove(hormigaNurse);
             }
+            numeroDeNursesTotal--;
         }
-        else if (hormiga.GetType().Equals("Obrera"))
+        else if (hormigaObrera != null)
         {
-            Obrera hormigaObrera = (Obrera)hormiga;
+            Debug.Log("OBRERA HA MUERTO");
+            //Obrera hormigaObrera = (Obrera)hormiga;
             if (obrerasDesocupadas.Contains(hormigaObrera))
             {
                 obrerasDesocupadas.Remove(hormigaObrera);
@@ -1367,6 +1374,7 @@ public class Reina : HormigaGenerica
             {
                 obrerasOcupadas.Remove(hormigaObrera);
             }
+            numeroDeObrerasTotal--;
         }
         else if (hormiga.GetType().Equals("Soldado"))
         {
@@ -1446,7 +1454,7 @@ public class Reina : HormigaGenerica
     public void EnemigoHaMuerto(EnemigoGenerico enemigo)
     {
         // Avisamos a la hormiga de que el enemigo ha muerto
-        foreach (HormigaGenerica h in hormigasCerca)
+        foreach (HormigaGenerica h in enemigo.hormigasCerca)
         {
             h.enemigosCerca.Remove(enemigo);
             if (h.enemigoAlQueAtacar == this)
@@ -1567,8 +1575,6 @@ public class Reina : HormigaGenerica
     {
         foreach (Room aux in salasComida)
         {
-            Debug.Log("Numero de comida: " + aux.llenadoActual);
-            Debug.Log("Capacidad de Comida: " + aux.capacidadTotalRoom);
             if (!aux.isFull)
             {
                 return aux;

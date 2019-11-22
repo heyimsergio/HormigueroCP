@@ -119,19 +119,33 @@ public class EnemigoGenerico : PersonajeGenerico
                         agente.SetDestination(randomDirection);
                         tiempoEntreAtaques -= Time.deltaTime;
                     }
-
+                    Task.current.Succeed();
+                    return;
+                }
+                else
+                {
+                    agente.SetDestination(hormigaCerca.transform.position);
+                    Task.current.Succeed();
+                    return;
                 }
             }
             else
             {
-                hormigasCerca.RemoveAt(0);
+                //hormigasCerca.RemoveAt(0);
+                Task.current.Fail();
+                return;
             }
 
-            if (hormigasCerca.Count == 0)
+            /*if (hormigasCerca.Count == 0)
             {
                 siguientePosicion = this.transform.position;
                 Task.current.Succeed();
-            }
+            }*/
+        }
+        else
+        {
+            Task.current.Fail();
+            return;
         }
     }
 

@@ -790,7 +790,7 @@ public class HormigaGenerica : PersonajeGenerico
                 return;
             }
 
-            if (Vector3.Distance(this.transform.position, posHerida) < 1.5f)
+            if (Vector3.Distance(this.transform.position, posHerida) < 3f)
             {
                 TiempoActual -= Time.deltaTime;
                 // Si ha pasado el tiempo de cura

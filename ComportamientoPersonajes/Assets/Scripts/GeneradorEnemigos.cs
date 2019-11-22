@@ -18,8 +18,8 @@ public class GeneradorEnemigos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tiempoMaximo = 10f;
-        tiempoMinimo = 5f;
+        tiempoMaximo = 20f;
+        tiempoMinimo = 10f;
         tiempoParaSpawnear = tiempoMinimo;
         pos1 = new Vector3(0.5f, 0, 0.5f);
         pos2 = new Vector3(1f, 0, 49f);
@@ -44,19 +44,19 @@ public class GeneradorEnemigos : MonoBehaviour
         switch (pos)
         {
             case 1:
-                Debug.Log("spawn en 1");
+                //Debug.Log("spawn en 1");
                 Instantiate(enemigo, pos1, Quaternion.identity);
                 break;
             case 2:
-                Debug.Log("spawn en 2");
+                //Debug.Log("spawn en 2");
                 Instantiate(enemigo, pos2, Quaternion.identity);
                 break;
             case 3:
-                Debug.Log("spawn en 3");
+                //Debug.Log("spawn en 3");
                 Instantiate(enemigo, pos3, Quaternion.identity);
                 break;
             case 4:
-                Debug.Log("spawn en 4");
+                //Debug.Log("spawn en 4");
                 Instantiate(enemigo, pos4, Quaternion.identity);
                 break;
             default:
