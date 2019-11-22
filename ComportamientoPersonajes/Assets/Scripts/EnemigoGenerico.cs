@@ -28,8 +28,10 @@ public class EnemigoGenerico : PersonajeGenerico
         this.zonaDondeEsta = 1;
         this.vida = 10;
         this.daño = 2;
+        this.velocidad = 2.0f;
         pb = this.gameObject.GetComponent<PandaBehaviour>();
         agente = this.gameObject.GetComponent<NavMeshAgent>();
+        agente.speed = this.velocidad;
         this.siguientePosicion = this.transform.position;
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
         tiempoEntreAtaques = tiempoEntreAtaquesMax;
