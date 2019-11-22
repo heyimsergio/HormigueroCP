@@ -1216,6 +1216,7 @@ public class Reina : HormigaGenerica
         {
             hormiga.comida.transform.SetParent(null);
             hormiga.comida.laEstanLLevando = false;
+            hormiga.comida.haSidoCogida = false;
             reina.SacarComidaSala(hormiga.salaDejarComida, hormiga.comida, hormiga.casillaDejarComida);
             hormiga.comida.hormigaQueLlevaLaComida = null;
             hormiga.comida = null;
