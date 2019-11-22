@@ -468,7 +468,7 @@ public class Obrera : HormigaGenerica
                         if (salaDejarComida != null)
                         {
                             casillaDejarComida = salaDejarComida.getFreeTile();
-                            comidaAux.cogerComida(salaDejarComida, casillaDejarComida);
+                            comidaAux.CogerComida(salaDejarComida, casillaDejarComida);
                             comida = comidaAux;
                             comida.hormigaQueLlevaLaComida = this;
                             posComida = Vector3.zero;

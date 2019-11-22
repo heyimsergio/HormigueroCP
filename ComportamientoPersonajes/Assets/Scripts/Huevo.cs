@@ -28,7 +28,7 @@ public class Huevo : MonoBehaviour
         huevoCollider.isTrigger = true;
     }
 
-    public void init(Room aux, Reina.TipoHormiga tipo, TileScript tile)
+    public void Init(Room aux, Reina.TipoHormiga tipo, TileScript tile)
     {
         myRoom = aux;
         miType = tipo;

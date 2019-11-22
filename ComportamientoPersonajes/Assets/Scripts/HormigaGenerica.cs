@@ -110,9 +110,9 @@ public class HormigaGenerica : PersonajeGenerico
     // Update is called once per frame
     void Update()
     {
-        actualizarHambre();
+        ActualizarHambre();
 
-        actualizarSiPuedeSerCurada();
+        ActualizarSiPuedeSerCurada();
 
         SistemaDeVision();
     }
@@ -215,7 +215,7 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    public void actualizarHambre()
+    public void ActualizarHambre()
     {
         hambre -= Time.deltaTime;
         if (hambre >= umbralHambre)
@@ -240,9 +240,9 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    public void actualizarSiPuedeSerCurada()
+    public void ActualizarSiPuedeSerCurada()
     {
-        if (puedeCurarse())
+        if (PuedeCurarse())
         {
             puedeSerCurada = true;
         }
@@ -251,7 +251,7 @@ public class HormigaGenerica : PersonajeGenerico
             puedeSerCurada = false;
         }
 
-        if (necesitaCurarse())
+        if (NecesitaCurarse())
         {
             necesitaSerCurada = true;
             if (!reina.hormigasHeridas.Contains(this))
@@ -302,17 +302,17 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    private bool puedeCurarse()
+    private bool PuedeCurarse()
     {
         return (this.vida < umbralPuedeCurarse);
     }
 
-    private bool necesitaCurarse()
+    private bool NecesitaCurarse()
     {
         return (this.vida < umbralNecesitaCurarse);
     }
 
-    public void quitarVida(int damage)
+    public void QuitarVida(int damage)
     {
         Debug.Log("Hormiga perdiendo vida");
         this.vida -= damage;
@@ -323,7 +323,7 @@ public class HormigaGenerica : PersonajeGenerico
         }
     }
 
-    public void sumarVida()
+    public void SumarVida()
     {
         Debug.Log("Hormiga ganando vida");
         this.vida += cantidadDeCura;
@@ -711,7 +711,7 @@ public class HormigaGenerica : PersonajeGenerico
             if (Vector3.Distance(this.transform.position, comidaAComer.transform.position) < 0.2f)
             {
                 //Debug.Log("He llegado a la comida");
-                hambre += comidaAComer.comer();
+                hambre += comidaAComer.Comer();
                 comidaAComer = null;
                 Task.current.Succeed();
                 return;
@@ -799,7 +799,7 @@ public class HormigaGenerica : PersonajeGenerico
                 // Si ha pasado el tiempo de cura
                 if (TiempoActual <= 0)
                 {
-                    hormigaACurar.sumarVida();
+                    hormigaACurar.SumarVida();
                     Debug.Log("Hormiga Curada");
                     // Reseteas todos los valores
                     TiempoActual = tiempoParaCurar;

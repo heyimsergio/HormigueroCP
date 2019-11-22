@@ -206,10 +206,10 @@ public class Reina : HormigaGenerica
     void Update()
     {
         // Actualizar hambre
-        actualizarHambre();
+        ActualizarHambre();
 
         // Actualizar si tiene vida suficiente o no
-        actualizarSiPuedeSerCurada();
+        ActualizarSiPuedeSerCurada();
 
         // Actualización del hormiguero y creación de salas
         actualTime = Time.time - initTime;
@@ -226,7 +226,7 @@ public class Reina : HormigaGenerica
 
     private void ActualizarPercepcionesHormiguero()
     {
-        actualizarPrioridades();
+        ActualizarPrioridades();
         //checkearNecesidadComida();
     }
 
@@ -244,7 +244,7 @@ public class Reina : HormigaGenerica
     /// </summary>
     #region Funciones actualizar prioridades Reina
 
-    public void actualizarPrioridades()
+    public void ActualizarPrioridades()
     {  
 
         //Prioridades tipo de hormiga a crear
@@ -839,7 +839,7 @@ public class Reina : HormigaGenerica
                 {
                     GameObject huevoAux = Instantiate(PrefabHuevo, posicionParaColocarHuevo, Quaternion.identity);
                     Huevo huevoScript = huevoAux.GetComponent<Huevo>();
-                    huevoScript.init(salaDondePonerHuevo, hormigaAponer,casillaDondePonerHuevo);
+                    huevoScript.Init(salaDondePonerHuevo, hormigaAponer,casillaDondePonerHuevo);
                     MeterHuevosEnSala(salaDondePonerHuevo);
                     huevosTotal.Add(huevoScript);
                     huevoScript.miType = hormigaAponer;
@@ -1046,7 +1046,7 @@ public class Reina : HormigaGenerica
             centro.z += posZ;
 
             GameObject aux = Instantiate(comidaPrefab, centro, Quaternion.identity);
-            aux.GetComponent<Comida>().initComida(Comida.comidaType.Trigo);
+            aux.GetComponent<Comida>().InitComida(Comida.comidaType.Trigo);
         }
     }
 

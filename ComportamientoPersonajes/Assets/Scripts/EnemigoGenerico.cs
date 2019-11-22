@@ -105,7 +105,7 @@ public class EnemigoGenerico : PersonajeGenerico
                         float random = Random.Range(0, 10);
                         if (random < 9f)
                         {
-                            hormigaCerca.quitarVida(this.daño);
+                            hormigaCerca.QuitarVida(this.daño);
                         }
                         else
                         {

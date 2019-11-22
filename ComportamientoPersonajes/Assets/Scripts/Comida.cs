@@ -6,7 +6,6 @@ public class Comida : MonoBehaviour
 {
 
     public enum comidaType { Trigo}
-
     comidaType myType;
 
     public int peso;
@@ -33,7 +32,7 @@ public class Comida : MonoBehaviour
         miTile = null;
     }
 
-    public void initComida(comidaType tipo)
+    public void InitComida(comidaType tipo)
     {
         switch (tipo)
         {
@@ -67,7 +66,7 @@ public class Comida : MonoBehaviour
         }
     }
 
-    public int comer()
+    public int Comer()
     {
         usosDeLaComida--;
         return hambreQueRestaura;
@@ -79,7 +78,7 @@ public class Comida : MonoBehaviour
     /// <param name="misala"> Sala donde se ubica la comida</param>
     /// <param name="miTile"> Tile donde se ubica la comida</param>
 
-    public void cogerComida(Room misala, TileScript miTile)
+    public void CogerComida(Room misala, TileScript miTile)
     {
         this.misala = misala;
         this.miTile = miTile;
