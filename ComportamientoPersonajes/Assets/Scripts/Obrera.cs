@@ -121,7 +121,7 @@ public class Obrera : HormigaGenerica
             {
                 aux.hormigasCerca.Add(this);
             }
-            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida)
+            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando)
             {
                 reina.RecibirAlertaComida(aux);
                 comidaQueHayCerca.Add(aux);
@@ -439,14 +439,14 @@ public class Obrera : HormigaGenerica
                         salaDejarComida = reina.MeterComidaEnSala();
                         if (salaDejarComida != null)
                         {
+                            // Si la reina lo tiene en su lista de comida vista, lo borro
+                            reina.comidaVista.Remove(comidaAux);
                             casillaDejarComida = salaDejarComida.getFreeTile();
                             comidaAux.CogerComida(salaDejarComida, casillaDejarComida);
                             comida = comidaAux;
                             comida.hormigaQueLlevaLaComida = this;
                             posComida = Vector3.zero;
                             posDejarComida = Vector3.zero;
-                            // Si la reina lo tiene en su lista de comida vista, lo borro
-                            reina.comidaVista.Remove(comidaAux);
                             Task.current.Succeed();
                             return;
                         }

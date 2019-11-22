@@ -1477,6 +1477,7 @@ public class Reina : HormigaGenerica
         if (comidaMuerta.hormigaQueLlevaLaComida != null || comidaMuerta.haSidoCogida)
         {
             SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
+            Debug.Log("COMIDA QUE ESTABA LLEVANDO HA MUERTO");
         }
 
         // Actualizamos si la comida está siendo llevada por una hormiga (no necesario)

@@ -61,7 +61,6 @@ public class CameraController : MonoBehaviour
         {
             if (Input.GetKey("w"))
             {
-                Debug.Log("W");
                 this.transform.Translate(0, vel * Time.deltaTime, 0);
                 if (this.transform.position.z > 50)
                 {
