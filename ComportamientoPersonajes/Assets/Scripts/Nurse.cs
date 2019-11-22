@@ -210,17 +210,8 @@ public class Nurse : HormigaGenerica
     {
         if (hayOrdenCuidarHuevos || hayOrdenCurarHormiga || hayOrdenBuscarComida)
         {
-            if (hormigaACurar != null)
-            {
-                hormigaACurar.siendoCuradaPor = null;
-                if (hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormigaACurar))
-                {
-                    reina.hormigasHeridas.Add(hormigaACurar);
-                }
-            }
-            hormigaACurar = null;
-            posHerida = Vector3.zero;
             Task.current.Succeed();
+            return;
         }
         else
         {
@@ -230,6 +221,7 @@ public class Nurse : HormigaGenerica
                 reina.nursesDesocupadas.Add(this);
             }
             Task.current.Fail();
+            return;
         }
     }
 
@@ -238,8 +230,6 @@ public class Nurse : HormigaGenerica
     {
         if (hayOrdenCuidarHuevos)
         {
-            // Todo lo que esté haciendo si tengo una orden más prioritaria, lo corto
-            // Si estabas curando a una hormiga
             Task.current.Succeed();
         }
         else

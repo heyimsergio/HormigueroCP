@@ -32,10 +32,12 @@ tree("Reina")
 						OrdenDestaparObreras()
 			mute
 				sequence
+					HayEspacioParaDejarComida()
 					not
 						HayComidaSuficiente()
 					not
 						HayHormigasBuscandoComida()
+					HayComidaVistaDisponible()
 					fallback
 						sequence
 							HayObrerasLibres()

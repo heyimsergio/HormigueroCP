@@ -459,48 +459,167 @@ public class Reina : HormigaGenerica
     #region Ordenes Buscar Comida
 
     [Task]
+    public void HayEspacioParaDejarComida()
+    {
+        if (comidaTotal.Count < capacidadTotalDeComida)
+        {
+            Task.current.Succeed();
+            return;
+        }
+        else
+        {
+            Task.current.Fail();
+            return;
+        }
+    }
+
+    [Task]
     public void HayComidaSuficiente()
     {
-        if (totalHormigas * umbralComida > comidaTotal.Count)
+        if (totalHormigas * umbralComida < comidaTotal.Count)
         {
-            if (comidaTotal.Count < capacidadTotalDeComida)
-            {
-                Task.current.Fail();
-            }
-            else
-            {
-                Task.current.Succeed();
-            }
+            Task.current.Succeed();
+            return;
         }
-        Task.current.Succeed();
+        Task.current.Fail();
+        return;
     }
 
     [Task]
     public void HayHormigasBuscandoComida()
     {
-        if (numHormigasBuscandoComida == 0)
+        if (numHormigasBuscandoComida > 2)
         {
             Task.current.Succeed();
+            return;
         }
         Task.current.Fail();
+        return;
+    }
+
+    [Task]
+    public void HayComidaVistaDisponible()
+    {
+        if (comidaVista.Count > 0)
+        {
+            Task.current.Succeed();
+            return;
+        }
+        Task.current.Fail();
+        return;
     }
 
     [Task]
     public void OrdenBuscarComidaObreras()
     {
+        Obrera aux = obrerasDesocupadas[0];
+        if (aux != null)
+        {
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
+            aux.salaDejarComida = reina.MeterComidaEnSala();
+            if (aux.salaDejarComida != null)
+            {
+                // Asignamos el huevo a curar a la hormiga
+                aux.hayOrdenBuscarComida = true;
+                obrerasOcupadas.Add(aux);
+                obrerasDesocupadas.Remove(aux);
+                // Actualizamos a la obrera
+                aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
+                aux.comida = comidaVista[0];
+                aux.comida.CogerComida(salaDejarComida, casillaDejarComida);
+                aux.comida.hormigaQueLlevaLaComida = this;
+                aux.posComida = Vector3.zero;
+                aux.posDejarComida = Vector3.zero;
+                // Si la reina lo tiene en su lista de comida vista, lo borro
+                reina.comidaVista.Remove(aux.comida);
+                // Actualizo la cantidad de hormigas buscando comida que hay
+                numHormigasBuscandoComida++;
+                Debug.Log("REINA: Mando obrera a por comida");
+                Task.current.Succeed();
+                return;
+            }
+        }
         Task.current.Fail();
+        return;
     }
 
     [Task]
     public void OrdenBuscarComidaSoldados()
     {
+        /*Soldado aux = soldadosDesocupadas[0];
+        if (aux != null)
+        {
+            // Si la hormiga ya estaba cuidando un huevo
+            DesasignarHuevoACurar(aux);
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
+            aux.salaDejarComida = reina.MeterComidaEnSala();
+            if (aux.salaDejarComida != null)
+            {
+                // Asignamos el huevo a curar a la hormiga
+                aux.hayOrdenBuscarComida = true;
+                soldadosOcupadas.Add(aux);
+                soldadosDesocupadas.Remove(aux);
+                // Actualizamos a la soldado
+                aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
+                aux.comida = comidaVista[0];
+                aux.comida.CogerComida(salaDejarComida, casillaDejarComida);
+                aux.comida.hormigaQueLlevaLaComida = this;
+                aux.posComida = Vector3.zero;
+                aux.posDejarComida = Vector3.zero;
+                // Si la reina lo tiene en su lista de comida vista, lo borro
+                reina.comidaVista.Remove(aux.comida);
+                Task.current.Succeed();
+                return;
+            }
+        }*/
         Task.current.Fail();
+        return;
     }
 
     [Task]
     public void OrdenBuscarComidaNurses()
     {
+        Nurse aux = nursesDesocupadas[0];
+        if (aux != null)
+        {
+            // Si la hormiga ya estaba cuidando un huevo
+            DesasignarHuevoACurar(aux);
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
+
+            aux.salaDejarComida = reina.MeterComidaEnSala();
+            if (aux.salaDejarComida != null)
+            {
+                // Asignamos el huevo a curar a la hormiga
+                aux.hayOrdenBuscarComida = true;
+                nursesOcupadas.Add(aux);
+                nursesDesocupadas.Remove(aux);
+                // Actualizamos a la nurse
+                aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
+                aux.comida = comidaVista[0];
+                aux.comida.CogerComida(salaDejarComida, casillaDejarComida);
+                aux.comida.hormigaQueLlevaLaComida = this;
+                aux.posComida = Vector3.zero;
+                aux.posDejarComida = Vector3.zero;
+                // Si la reina lo tiene en su lista de comida vista, lo borro
+                reina.comidaVista.Remove(aux.comida);
+                // Actualizo el numero de hormigas buscando comida
+                numHormigasBuscandoComida++;
+                Debug.Log("REINA: Mando nurse a por comida");
+                Task.current.Succeed();
+                return;
+            }
+        }
         Task.current.Fail();
+        return;
     }
 
     #endregion
@@ -609,8 +728,13 @@ public class Reina : HormigaGenerica
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
-            //Debug.Log("Tengo nurse que mandar a cuidar");
-            // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
+            // Si la hormiga ya estaba cuidando un huevo
+            DesasignarHuevoACurar(aux);
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
+            // Asignamos el huevo a curar a la hormiga
             aux.hayOrdenCuidarHuevos = true;
             nursesOcupadas.Add(aux);
             nursesDesocupadas.Remove(aux);
@@ -618,7 +742,10 @@ public class Reina : HormigaGenerica
             aux.huevoACuidar.siendoCuidadoPor = aux;
             huevosQueTienenQueSerCuidados.RemoveAt(0);
             Task.current.Succeed();
+            return;
         }
+        Task.current.Fail();
+        return;
     }
 
     #endregion
@@ -697,6 +824,7 @@ public class Reina : HormigaGenerica
     {
         Nurse aux = nursesDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
+        // Comprobación para que no se cure a si misma
         if (aux == aux2)
         {
             if (nursesDesocupadas.Count > 1)
@@ -714,9 +842,16 @@ public class Reina : HormigaGenerica
                 return;
             }
         }
+
         if (aux != null && aux != aux2)
         {
-            Debug.Log("Tengo obrera que mandar a curar");
+            // Si la hormiga ya estaba cuidando un huevo
+            DesasignarHuevoACurar(aux);
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
+            // Asignamos la hormiga a cuidar
             aux.hayOrdenCurarHormiga = true;
             nursesOcupadas.Add(aux);
             nursesDesocupadas.Remove(aux);
@@ -726,6 +861,9 @@ public class Reina : HormigaGenerica
             Task.current.Succeed();
             return;
         }
+
+        Task.current.Fail();
+        return;
     }
 
     #endregion
@@ -1001,6 +1139,53 @@ public class Reina : HormigaGenerica
         numHormigasAtacando--;
     }
 
+    // Métodos para des-asignar cuando se manda una orden
+    public void DesasignarHuevoACurar (HormigaGenerica hormiga)
+    {
+        if (hormiga.huevoACuidar != null)
+        {
+            if (hormiga.huevoACuidar.necesitaCuidados == true && !reina.huevosQueTienenQueSerCuidados.Contains(hormiga.huevoACuidar))
+            {
+                reina.huevosQueTienenQueSerCuidados.Add(hormiga.huevoACuidar);
+            }
+            hormiga.huevoACuidar.siendoCuidadoPor = null;
+            hormiga.huevoACuidar = null;
+        }
+    }
+
+    public void DesasignarHormigaACurar(HormigaGenerica hormiga)
+    {
+        if (hormiga.hormigaACurar != null)
+        {
+            if (hormiga.hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormiga.hormigaACurar))
+            {
+                reina.hormigasHeridas.Add(hormiga.hormigaACurar);
+            }
+            hormiga.hormigaACurar.siendoCuradaPor = null;
+            hormiga.hormigaACurar = null;
+        }
+    }
+
+    public void DesasignarComidaACoger(HormigaGenerica hormiga)
+    {
+        if (hormiga.comida != null)
+        {
+            hormiga.comida.transform.SetParent(null);
+            hormiga.comida.laEstanLLevando = false;
+            reina.SacarComidaSala(hormiga.salaDejarComida, hormiga.comida, hormiga.casillaDejarComida);
+            hormiga.comida.hormigaQueLlevaLaComida = null;
+            hormiga.comida = null;
+            hormiga.salaDejarComida = null;
+            hormiga.casillaDejarComida = null;
+            hormiga.posComida = Vector3.zero;
+            hormiga.posDejarComida = Vector3.zero;
+
+            if (reina.comidaVista.Contains(hormiga.comida))
+            {
+                reina.comidaVista.Add(hormiga.comida);
+            }
+        }
+    }
 
     // Métodos para el tratamiento de creaciones
     public void NaceHormiga(Huevo huevo)
@@ -1052,7 +1237,7 @@ public class Reina : HormigaGenerica
 
         // Tarea Poner Huevo de Reina
 
-    // Devuelve la sala porque sera necesario asignarsela a las homirmigas comidas y huevos para manejarlas
+
     #region Meter Cosas en salas
     public Room MeterComidaEnSala()
     {
@@ -1186,6 +1371,11 @@ public class Reina : HormigaGenerica
         // Si la hormiga muere mientras tiene una comida asignada
         if (hormiga.comida != null)
         {
+            if (hormiga.hayOrdenBuscarComida)
+            {
+                hormiga.hayOrdenBuscarComida = false;
+                reina.numHormigasBuscandoComida--;
+            }
             hormiga.comida.laEstanLLevando = false;
             hormiga.comida.hormigaQueLlevaLaComida = null;
             hormiga.comida.transform.SetParent(null);
@@ -1237,8 +1427,14 @@ public class Reina : HormigaGenerica
             SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
         }
 
+        // Actualizamos si la comida está siendo llevada por una hormiga (no necesario)
         if (comidaMuerta.hormigaQueLlevaLaComida != null)
         {
+            if (comidaMuerta.hormigaQueLlevaLaComida.hayOrdenBuscarComida)
+            {
+                comidaMuerta.hormigaQueLlevaLaComida.hayOrdenBuscarComida = false;
+                numHormigasBuscandoComida--;
+            }
             comidaMuerta.hormigaQueLlevaLaComida.comida = null;
             comidaMuerta.hormigaQueLlevaLaComida.salaDejarComida = null;
             comidaMuerta.hormigaQueLlevaLaComida.casillaDejarComida = null;
