@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Reina : HormigaGenerica
 {
 
-    public enum TipoHormiga {NURSE,OBRERA,SOLDADO,NULL};
+    public enum TipoHormiga { NURSE, OBRERA, SOLDADO, NULL };
 
     #region atributos propios de la reina
 
@@ -16,17 +16,21 @@ public class Reina : HormigaGenerica
 
     //Poner huevos
     [Header("Variables Poner Huevos Reina")]
-    public int tiempoQueTardaEnPonerHuevo;
-    public float tiempoQueLlevaPoniendoHuevo;
+    public int tiempoQueTardaEnPonerHuevos;
     public bool estaPoniendoHuevo = false;
     private bool tienePosicionPonerHuevo = false;
     private TipoHormiga hormigaAponer = TipoHormiga.NULL;
     private Room salaDondePonerHuevo = null;
     private TileScript casillaDondePonerHuevo = null;
     public Vector3 posicionParaColocarHuevo;
+    // Controlan las tandas de huevos;
     public bool puedePonerHuevo;
-    public int tiempoMaximoParaPonerHuevo;
-    public float tiempoRestanteHuevo;
+    public float tiempoRestanteHuevos;
+    public int huevosAPonerEnEstaTanda;
+    public int huevosQueLlevaPuestosEnEstaTanda;
+    public int numeroMinimoHuevosPorTanda;
+    public int numeroMaximoHuevosPorTanda;
+
 
     //Cuidar huevos
     [Header("Variables Cuidar Huevos Reina")]
@@ -131,10 +135,10 @@ public class Reina : HormigaGenerica
     public float umbralHormigasAtacando;
 
     // tiempos de cambio de prioridades
-    public int TIEMPO1 = 2*60+30; // 2 mins y 30 segs 
-    public int TIEMPO2 = 5*60;// 5 mins
-    public int TIEMPO3 = 7*60 +30; // 7 mins y 30 segs
-    public int TIEMPO4 = 10*60;
+    public int TIEMPO1 = 2 * 60 + 30; // 2 mins y 30 segs 
+    public int TIEMPO2 = 5 * 60;// 5 mins
+    public int TIEMPO3 = 7 * 60 + 30; // 7 mins y 30 segs
+    public int TIEMPO4 = 10 * 60;
 
     // planificador de necesidad  de crear salas
     public float umbralCapacidadHormigas = 0.2f;
@@ -175,8 +179,9 @@ public class Reina : HormigaGenerica
         reina = this;
 
         // Atributos poner huevos
-        tiempoQueLlevaPoniendoHuevo = 0;
-        tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
+        huevosAPonerEnEstaTanda = 0;
+        huevosQueLlevaPuestosEnEstaTanda = 0;
+        huevosAPonerEnEstaTanda = Random.Range(numeroMinimoHuevosPorTanda, numeroMaximoHuevosPorTanda);
 
         // Prioridades NavMesh
         agente.avoidancePriority = 0;
@@ -199,6 +204,12 @@ public class Reina : HormigaGenerica
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
 
+        //TiemposEvolucionJuego
+        TIEMPO1 = 80;
+        TIEMPO2 = 130;
+        TIEMPO3 = 180;
+        TIEMPO4 = 230;
+
 
     }
 
@@ -216,7 +227,6 @@ public class Reina : HormigaGenerica
 
         SimulateWorld();
         ActualizarPercepcionesHormiguero();
-        ActualizarVariablesReina();
     }
 
     private void SimulateWorld()
@@ -232,8 +242,8 @@ public class Reina : HormigaGenerica
 
     private void ActualizarVariablesReina()
     {
-        tiempoRestanteHuevo -= Time.deltaTime;
-        if (tiempoRestanteHuevo < 0 && !ponerHuevo)
+        tiempoRestanteHuevos -= Time.deltaTime;
+        if (tiempoRestanteHuevos < 0 && !ponerHuevo)
         {
             ponerHuevo = true;
         }
@@ -245,7 +255,7 @@ public class Reina : HormigaGenerica
     #region Funciones actualizar prioridades Reina
 
     public void ActualizarPrioridades()
-    {  
+    {
 
         //Prioridades tipo de hormiga a crear
         if (actualTime < TIEMPO1) // prioriza nurse
@@ -254,19 +264,22 @@ public class Reina : HormigaGenerica
             importanciaObreras = 2;
             importanciaSoldados = 0.1f;
 
-        } else if(actualTime >= TIEMPO1 && actualTime < TIEMPO2) // prioriza obreras
+        }
+        else if (actualTime >= TIEMPO1 && actualTime < TIEMPO2) // prioriza obreras
         {
             importanciaNurses = 3;
             importanciaObreras = 1;
             importanciaSoldados = 1f;
 
-        } else if(actualTime >= TIEMPO2 && actualTime < TIEMPO3) // prioriza soldado
+        }
+        else if (actualTime >= TIEMPO2 && actualTime < TIEMPO3) // prioriza soldado
         {
             importanciaNurses = 1;
             importanciaObreras = 1.5f;
             importanciaSoldados = 2f;
 
-        } else // todo por igual
+        }
+        else // todo por igual
         {
             importanciaNurses = 1;
             importanciaObreras = 1.2f;
@@ -326,11 +339,12 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayObrerasLibres()
     {
-       if(obrerasDesocupadas.Count > 0)
+        if (obrerasDesocupadas.Count > 0)
         {
             Task.current.Succeed();
             return;
-        } else
+        }
+        else
         {
             Task.current.Fail();
             return;
@@ -340,10 +354,11 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayNursesLibres()
     {
-        if(nursesDesocupadas.Count > 0)
+        if (nursesDesocupadas.Count > 0)
         {
             Task.current.Succeed();
-        } else
+        }
+        else
         {
             Task.current.Fail();
         }
@@ -520,7 +535,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayObrerasCavando()
     {
-        if(numHormigasCavandoTuneles > 0)
+        if (numHormigasCavandoTuneles > 0)
         {
             Task.current.Succeed();
             return;
@@ -532,7 +547,7 @@ public class Reina : HormigaGenerica
     public void OrdenCavarObreras()
     {
         Obrera aux = obrerasDesocupadas[0];
-        if(aux != null)
+        if (aux != null)
         {
             aux.hayOrdenDeCavar = true;
             obrerasOcupadas.Add(aux);
@@ -774,12 +789,37 @@ public class Reina : HormigaGenerica
     [Task]
     public void PuedoPonerHuevos()
     {
-        Task.current.Succeed();
+        if (!ponerHuevo)
+        {
+            tiempoRestanteHuevos -= Time.deltaTime;
+            if (tiempoRestanteHuevos < 0)
+            {
+                ponerHuevo = true;
+                Task.current.Succeed();
+                return;
+            }
+            Task.current.Fail();
+            return;
+        }
+        else
+        {
+            if(huevosQueLlevaPuestosEnEstaTanda == huevosAPonerEnEstaTanda)
+            {
+                ponerHuevo = false;
+                huevosAPonerEnEstaTanda = Random.Range(numeroMinimoHuevosPorTanda, numeroMaximoHuevosPorTanda);
+                tiempoRestanteHuevos = tiempoQueTardaEnPonerHuevos;
+                huevosQueLlevaPuestosEnEstaTanda = 0;
+                Task.current.Fail();
+                return;
+            }
+            Task.current.Succeed();
+            return;
+        }
     }
 
     [Task]
     public void PonerHuevos()
-    {        
+    {
         if (ponerHuevo)
         {
             if (hormigaAponer == TipoHormiga.NULL)
@@ -788,12 +828,15 @@ public class Reina : HormigaGenerica
                 switch (min)
                 {
                     case 0:
+                        Debug.Log("Hormiga Nurse");
                         hormigaAponer = TipoHormiga.NURSE;
                         break;
                     case 1:
+                        Debug.Log("Hormiga Obrera");
                         hormigaAponer = TipoHormiga.OBRERA;
                         break;
                     case 2:
+                        Debug.Log("Hormiga Soldado");
                         hormigaAponer = TipoHormiga.SOLDADO;
                         break;
                 }
@@ -831,34 +874,33 @@ public class Reina : HormigaGenerica
             if (auxDistance < 0.1 && tienePosicionPonerHuevo)
             {
                 estaPoniendoHuevo = true;
-                if (tiempoQueLlevaPoniendoHuevo < tiempoQueTardaEnPonerHuevo)
-                {
-                    tiempoQueLlevaPoniendoHuevo += Time.deltaTime;
-                }
-                else
-                {
-                    GameObject huevoAux = Instantiate(PrefabHuevo, posicionParaColocarHuevo, Quaternion.identity);
-                    Huevo huevoScript = huevoAux.GetComponent<Huevo>();
-                    huevoScript.Init(salaDondePonerHuevo, hormigaAponer,casillaDondePonerHuevo);
-                    MeterHuevosEnSala(salaDondePonerHuevo);
-                    huevosTotal.Add(huevoScript);
-                    huevoScript.miType = hormigaAponer;
-                    ponerHuevo = false;
-                    tienePosicionPonerHuevo = false;
-                    hormigaAponer = TipoHormiga.NULL;
-                    salaDondePonerHuevo = null;
-                    casillaDondePonerHuevo = null;
-                    ponerHuevo = false;
-                    tiempoRestanteHuevo = tiempoMaximoParaPonerHuevo;
-                    estaPoniendoHuevo = false;
-                    tiempoQueLlevaPoniendoHuevo = 0;
-                    Task.current.Succeed();
-                }
+                GameObject huevoAux = Instantiate(PrefabHuevo, posicionParaColocarHuevo, Quaternion.identity);
+                Huevo huevoScript = huevoAux.GetComponent<Huevo>();
+                huevoScript.Init(salaDondePonerHuevo, hormigaAponer, casillaDondePonerHuevo);
+                MeterHuevosEnSala(salaDondePonerHuevo);
+                huevosTotal.Add(huevoScript);
+                huevoScript.miType = hormigaAponer;
+                ponerHuevo = false;
+                tienePosicionPonerHuevo = false;
+                hormigaAponer = TipoHormiga.NULL;
+                salaDondePonerHuevo = null;
+                casillaDondePonerHuevo = null;
+                estaPoniendoHuevo = false;
+                huevosQueLlevaPuestosEnEstaTanda++;
+                Task.current.Succeed();
+                return;
+
+            } else
+            {
+                agente.SetDestination(posicionParaColocarHuevo);
+                Task.current.Succeed();
+                return;
             }
         }
         else
         {
             Task.current.Fail();
+            return;
         }
 
     }
@@ -869,6 +911,7 @@ public class Reina : HormigaGenerica
 
         if (zonaDondeEsta == 1)
         {
+            //Debug.Log("Esta fuera");
             siguientePosicionExplorar = Vector3.zero;
             Vector3 randomDirection;
             NavMeshHit aux;
@@ -905,7 +948,8 @@ public class Reina : HormigaGenerica
                 siguientePosicionExplorar = Vector3.zero;
                 Task.current.Succeed();
                 return;
-            } else
+            }
+            else
             {
                 agente.SetDestination(siguientePosicionExplorar);
                 Task.current.Succeed();
@@ -920,9 +964,9 @@ public class Reina : HormigaGenerica
 
     // Otros ???
 
-    public static int CompareLess3(int num1, int num2, int num3, float importancia1, float importancia2 , float importancia3)
+    public static int CompareLess3(int num1, int num2, int num3, float importancia1, float importancia2, float importancia3)
     {
-        if(importancia1 <= 0)
+        if (importancia1 <= 0)
         {
             num1 = 100000000;
         }
@@ -937,17 +981,17 @@ public class Reina : HormigaGenerica
             num3 = 100000000;
         }
 
-        if(importancia1 != 0)
+        if (importancia1 != 0)
         {
             num1 = (int)(num1 / importancia1);
         }
 
-        if(importancia2 != 0)
+        if (importancia2 != 0)
         {
             num2 = (int)(num2 / importancia2);
         }
 
-        if(importancia3 != 0)
+        if (importancia3 != 0)
         {
             num3 = (int)(num3 / importancia3);
         }
@@ -956,13 +1000,13 @@ public class Reina : HormigaGenerica
         int min = num1;
         int finalNum = 0;
 
-        if(min> num2)
+        if (min > num2)
         {
             min = num2;
             finalNum = 1;
         }
 
-        if(min > num3)
+        if (min > num3)
         {
             min = num3;
             finalNum = 2;
@@ -1050,7 +1094,7 @@ public class Reina : HormigaGenerica
         }
     }
 
-        // Tarea Poner Huevo de Reina
+    // Tarea Poner Huevo de Reina
 
     // Devuelve la sala porque sera necesario asignarsela a las homirmigas comidas y huevos para manejarlas
     #region Meter Cosas en salas

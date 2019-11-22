@@ -2010,19 +2010,16 @@ MonoBehaviour:
   meHanMandadoOrden: 0
   hayOrdenDeCavar: 0
   contPrioridadNavMesh: 1
-  tiempoQueTardaEnPonerHuevo: 3
-  tiempoQueLlevaPoniendoHuevo: 0
+  tiempoQueTardaEnPonerHuevos: 50
   estaPoniendoHuevo: 0
   posicionParaColocarHuevo: {x: 0, y: 0, z: 0}
   puedePonerHuevo: 0
-  tiempoMaximoParaPonerHuevo: 3
-  tiempoRestanteHuevo: 0
-  numeroDeNurses: 0
+  tiempoRestanteHuevos: 0
+  huevosAPonerEnEstaTanda: 0
+  huevosQueLlevaPuestosEnEstaTanda: 0
+  numeroMinimoHuevosPorTanda: 4
+  numeroMaximoHuevosPorTanda: 8
   huevosQueTienenQueSerCuidados: []
-  enemigosCercanos: []
-  numEnemigosCerca: 0
-  hormigasACurar: {fileID: 0}
-  hormigasDesocupadas: {fileID: 0}
   nursesOcupadas: []
   obrerasOcupadas: []
   nursesDesocupadas: []
@@ -2031,7 +2028,6 @@ MonoBehaviour:
   capacidadTotalDeComida: 0
   capacidadTotalDeHuevos: 0
   totalHormigas: 0
-  totalHuevos: 0
   numeroDeNursesTotal: 0
   numeroDeObrerasTotal: 0
   numeroDeSoldadosTotal: 0
@@ -2043,8 +2039,9 @@ MonoBehaviour:
   numHormigasCurando: 0
   numHormigasAbriendoHormiguero: 0
   numHormigasAbriendoCerrandoHormiguero: 0
-  enemigosTotales: []
-  ComidaTotal: []
+  enemigosTotal: []
+  comidaTotal: []
+  comidaVista: []
   huevosTotal: []
   hormigasHeridas: []
   tiempoQueQuedaParaQueLlueva: 0
@@ -2055,24 +2052,22 @@ MonoBehaviour:
   afueras: {fileID: 0}
   probComida: 50
   MaxProbComida: 5000
-  ComidaVista: []
   importanciaHormigas: 3
   importanciaHuevos: 1
   importanciaComida: 2
   importanciaNurses: 0
   importanciaObreras: 0
   importanciaSoldados: 0
-  HayQueCrearSalasHormigas: 0
-  HayQueCrearSalasComida: 0
-  HayQueCrearSalasHuevos: 0
-  HayQueCrearSalas: 0
-  HayQueBuscarComida: 0
+  hayQueCrearSalasHormigas: 0
+  hayQueCrearSalasComida: 0
+  hayQueCrearSalasHuevos: 0
+  hayQueCrearSalas: 0
   hormigaMuerta: 0
   umbralHormigasAtacando: 0
-  TIEMPO1: 0
-  TIEMPO2: 0
-  TIEMPO3: 0
-  TIEMPO4: 0
+  TIEMPO1: 80
+  TIEMPO2: 130
+  TIEMPO3: 180
+  TIEMPO4: 230
   umbralCapacidadHormigas: 0.2
   umbralCapacidadHuevos: 0.1
   umbralCapacidadComida: 0.3
