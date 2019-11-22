@@ -744,7 +744,6 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void HayHormigaQueCurarCerca()
     {
-
         if (hayOrdenCurarHormiga == false)
         {
             // Si no tengo ninguna hormiga asignada para curar, miro las que hay alrededor
@@ -760,7 +759,6 @@ public class HormigaGenerica : PersonajeGenerico
                         h.siendoCuradaPor = this;
                         // Si la reina lo tiene en su lista de hormigas heridas, lo borro
                         reina.hormigasHeridas.Remove(hormigaACurar);
-                        Debug.Log("Hay Hormiga Cerca que puede ser o necesita curarse");
                         Task.current.Succeed();
                         return;
                     }
@@ -916,6 +914,11 @@ public class HormigaGenerica : PersonajeGenerico
                     comida.transform.SetParent(null);
                     comida.hormigaQueLlevaLaComida = null;
                     // Reseteamos los datos de la hormiga
+                    if (hayOrdenBuscarComida)
+                    {
+                        hayOrdenBuscarComida = false;
+                        reina.numHormigasBuscandoComida--;
+                    }
                     comida = null;
                     salaDejarComida = null;
                     casillaDejarComida = null;
@@ -935,12 +938,17 @@ public class HormigaGenerica : PersonajeGenerico
         }
         else
         {
-            // La comida ha muerto, reseteo datos
+            // La comida ha muerto o tengo que dejar al comida, reseteo datos
             salaDejarComida = null;
             casillaDejarComida = null;
             posComida = Vector3.zero;
             posDejarComida = Vector3.zero;
             comida = null;
+            if (hayOrdenBuscarComida)
+            {
+                hayOrdenBuscarComida = false;
+                reina.numHormigasBuscandoComida--;
+            }
             Task.current.Fail();
         }
     }

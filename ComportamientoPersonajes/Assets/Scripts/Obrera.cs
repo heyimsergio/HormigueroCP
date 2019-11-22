@@ -181,34 +181,6 @@ public class Obrera : HormigaGenerica
     {
         if (hayOrdenDeCavar || hayOrdenCurarHormiga || hayOrdenBuscarComida || hayOrdenDeAtacar)
         {
-            // Si tengo una orden, dejo de curar si lo estaba haciendo por mi cuenta
-            if (hormigaACurar != null)
-            {
-                if (hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormigaACurar))
-                {
-                    reina.hormigasHeridas.Add(hormigaACurar);
-                }
-                hormigaACurar.siendoCuradaPor = null;
-                hormigaACurar = null;
-            }
-            // Si tengo una orden, suelto la comida si estaba por mi cuenta buscando
-            if (comida != null)
-            {
-                comida.transform.SetParent(null);
-                comida.laEstanLLevando = false;
-                reina.SacarComidaSala(salaDejarComida, comida, casillaDejarComida);
-                comida.hormigaQueLlevaLaComida = null;
-                comida = null;
-                salaDejarComida = null;
-                casillaDejarComida = null;
-                posComida = Vector3.zero;
-                posDejarComida = Vector3.zero;
-
-                if (reina.comidaVista.Contains(comida))
-                {
-                    reina.comidaVista.Add(comida);
-                }
-            }
             Task.current.Succeed();
         }
         else

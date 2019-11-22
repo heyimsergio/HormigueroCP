@@ -22,7 +22,7 @@ public class ReadData : MonoBehaviour
         time += Time.deltaTime;
         if ( time > 0.1f && !creado)
         {
-            Debug.Log("instanciar");
+            //Debug.Log("instanciar");
             for (int i = 0; i < data.numNurse; i++)
             {
                 Instantiate(data.nursePrefab, posInicial, Quaternion.identity);

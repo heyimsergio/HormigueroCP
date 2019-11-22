@@ -32,11 +32,11 @@ public class CameraController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log("raycast");
+                //Debug.Log("raycast");
                 HormigaGenerica h = hit.transform.gameObject.GetComponent(typeof(HormigaGenerica)) as HormigaGenerica;
                 if (h != null || hit.transform.gameObject.tag == "Reina")
                 {
-                    Debug.Log("Es hormiga");
+                    //Debug.Log("Es hormiga");
                     free = false;
                     target = h.gameObject;
                 } else
