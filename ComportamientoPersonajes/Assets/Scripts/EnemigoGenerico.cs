@@ -181,43 +181,6 @@ public class EnemigoGenerico : PersonajeGenerico
         //Debug.Log("Explorar");
         hormigaAAtacar = null;
 
-        /*
-        float distanceToTarget = Vector3.Distance(transform.position, this.siguientePosicion);
-        //Debug.Log(distanceToTarget);
-        if (distanceToTarget < 0.2f)
-        {
-            Vector3 randomDirection;
-            NavMeshHit aux;
-            bool aux2;
-            do
-            {
-                randomDirection = UnityEngine.Random.insideUnitSphere * 50 + this.transform.position;
-                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-            } while (aux.position.x > (hormigueroDentro.transform.position.x - (hormigueroDentro.width / 2)-1) || !aux2);
-
-            //Debug.Log("Salir hacia: " + aux.position);
-            //saliendo = true;
-            agente.SetDestination(aux.position);
-            siguientePosicion = aux.position;
-            /*
-            Vector3 randomDirection;
-            NavMeshHit aux;
-            do
-            {
-                randomDirection = UnityEngine.Random.insideUnitSphere * 50 + this.transform.position;
-            } while (!NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas));
-
-
-            agente.SetDestination(aux.position);
-            this.siguientePosicion = aux.position;
-        } else
-        {
-            agente.SetDestination(siguientePosicion);
-        }
-        Task.current.Succeed();
-        //
-        */
-
         // si esta dentro
         if (zonaDondeEsta == 0)
         {
@@ -234,7 +197,6 @@ public class EnemigoGenerico : PersonajeGenerico
             siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
             //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
             agente.SetDestination(siguientePosicionExplorar);
-
         }
         else
         {

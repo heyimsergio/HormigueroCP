@@ -11,12 +11,11 @@ public class HormigaGenerica : PersonajeGenerico
     public bool bocadillosFound = false;
 
     //Agente Navmesh
-    protected NavMeshAgent agente;
+    public NavMeshAgent agente;
+    public int priority;
     protected PandaBehaviour pb;
     protected Floor hormigueroDentro; //Saber donde empieza el suelo para no meterte dentro del hormiguero cuando exploras
     protected Outside hormigueroFuera;
-    //bool estaDentro = true; //True: está dentro, false: esta fuera
-    //bool saliendo = false;
 
     // ATRIBUTOS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -104,7 +103,7 @@ public class HormigaGenerica : PersonajeGenerico
     // Cavar
     public bool hayOrdenDeCavar = false;
 
-    
+
 
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -116,7 +115,16 @@ public class HormigaGenerica : PersonajeGenerico
     // Update is called once per frame
     void Update()
     {
-        
+        if (!bocadillosFound)
+        {
+            bocadillos = FindObjectOfType<BocadillosControlador>();
+            if (bocadillos != null)
+            {
+                Debug.Log("Encontrado");
+                bocadillosFound = true;
+            }
+        }
+
         ActualizarHambre();
 
         ActualizarSiPuedeSerCurada();
@@ -408,37 +416,31 @@ public class HormigaGenerica : PersonajeGenerico
         }
         else
         {
-            // Suelto la comida si tengo, pero no me la desasigno
-            /*if (comida != null)
+            // Elimino todo lo que esté haciendo, pero no le quito la orden
+
+            // reina.DesasignarComidaACoger(this);
+            // Suelto la comida, pero no la desasigno
+            if (comida != null && comida.laEstanLLevando)
             {
                 comida.transform.SetParent(null);
                 comida.laEstanLLevando = false;
-                //reina.SacarComidaSala(salaDejarComida, comida, casillaDejarComida);
-                //comida.hormigaQueLlevaLaComida = null;
-                //comida = null;
-                //salaDejarComida = null;
-                //casillaDejarComida = null;
                 posComida = Vector3.zero;
                 posDejarComida = Vector3.zero;
-                /*if (reina.comidaVista.Contains(comida))
-                {
-                    reina.comidaVista.Add(comida);
-                }
             }
-            // Dejo de curar a una hormiga si tengo
+
+            // reina.DesasignarHormigaACurar(this);
+            // Dejo de curar a la hormgia pero no la desasigno
             if (hormigaACurar != null)
             {
-                if (hormigaACurar.necesitaSerCurada && !reina.hormigasHeridas.Contains(hormigaACurar))
-                {
-                    reina.hormigasHeridas.Add(hormigaACurar);
-                }
-                hormigaACurar.siendoCuradaPor = null;
-                hormigaACurar = null;
-            }*/
+                // No hace falta hacer nada
+            }
 
-            reina.DesasignarComidaACoger(this);
-            reina.DesasignarHormigaACurar(this);
-            reina.DesasignarHuevoACurar(this);
+            // reina.DesasignarHuevoACurar(this);
+            // Dejo de cuidar un huevo pero no lo desasigno
+            if (huevoACuidar != null)
+            {
+                // No hace falta hacer nada
+            }
 
             // Asigno la posición a la que hay que ir
             agente.SetDestination(enemigoAlQueAtacar.transform.position);
@@ -478,69 +480,6 @@ public class HormigaGenerica : PersonajeGenerico
                 return;
             }
         }
-
-
-        /*
-        if (enemigosCerca.Count > 0)
-        {
-            if (enemigoAlQueAtacar == null)
-            {
-                enemigoAlQueAtacar = enemigosCerca[0];
-            }
-
-            if (enemigoAlQueAtacar != null)
-            {
-                agente.SetDestination(enemigoAlQueAtacar.transform.position);
-                float distanceToTarget = Vector3.Distance(transform.position, enemigoAlQueAtacar.transform.position);
-                if (comida != null)
-                {
-                    comida.transform.SetParent(null);
-                    comida = null;
-                    posDejarComida = Vector3.zero;
-                    salaDejarComida = null;
-                    casillaDejarComida = null;
-                    posComida = Vector3.zero;
-                }
-                if (distanceToTarget < 1.2f)
-                {
-                    if (tiempoEntreAtaques <= 0)
-                    {
-                        float random = Random.Range(0, 10);
-                        if (random < 9f)
-                        {
-                            enemigoAlQueAtacar.quitarVida(this.daño);
-                        }
-                        else
-                        {
-                            //Debug.Log("Ataque fallido");
-                        }
-                        tiempoEntreAtaques = tiempoEntreAtaquesMax;
-                    }
-                    else
-                    {
-                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + enemigoAlQueAtacar.transform.position;
-                        agente.SetDestination(randomDirection);
-                        tiempoEntreAtaques -= Time.deltaTime;
-                    }
-
-                }
-            }
-            else
-            {
-                enemigosCerca.RemoveAt(0);
-            }
-            // Aún pueden quedarte enemigos a los que atacar
-            if (enemigosCerca.Count == 0)
-            {
-                //siguientePosicionExplorar = this.transform.position;
-                Task.current.Succeed();
-            }
-        }
-        else
-        {
-            Task.current.Fail();
-        }
-        */
     }
 
     [Task]
@@ -551,6 +490,32 @@ public class HormigaGenerica : PersonajeGenerico
             EnemigoGenerico enemigoCerca = enemigosCerca[0];
             if (enemigoCerca != null)
             {
+                // Elimino todo lo que esté haciendo, pero no le quito la orden
+
+                // reina.DesasignarComidaACoger(this);
+                // Suelto la comida, pero no la desasigno
+                if (comida != null && comida.laEstanLLevando)
+                {
+                    comida.transform.SetParent(null);
+                    comida.laEstanLLevando = false;
+                    posComida = Vector3.zero;
+                    posDejarComida = Vector3.zero;
+                }
+
+                // reina.DesasignarHormigaACurar(this);
+                // Dejo de curar a la hormgia pero no la desasigno
+                if (hormigaACurar != null)
+                {
+                    // No hace falta hacer nada
+                }
+
+                // reina.DesasignarHuevoACurar(this);
+                // Dejo de cuidar un huevo pero no lo desasigno
+                if (huevoACuidar != null)
+                {
+                    // No hace falta hacer nada
+                }
+
                 Vector3 direccionEnemigo = enemigoCerca.transform.position - this.transform.position;
                 Vector3 direccionContraria = direccionEnemigo * -1;
                 agente.SetDestination(this.transform.position + direccionContraria);
@@ -709,7 +674,6 @@ public class HormigaGenerica : PersonajeGenerico
             }
             else
             {
-                //Debug.Log("Axwelfeo");
                 Task.current.Fail();
                 return;
             }
@@ -805,15 +769,19 @@ public class HormigaGenerica : PersonajeGenerico
                 Debug.Log("Se asigna la posicion de la hormiga a curar");
                 TiempoActual = tiempoParaCurar;
                 posHerida = hormigaACurar.transform.position;
-                agente.SetDestination(hormigaACurar.transform.position + new Vector3 (1,0,1));
+                agente.SetDestination(hormigaACurar.transform.position);
                 Task.current.Succeed();
                 return;
             }
 
-            if (Vector3.Distance(this.transform.position, posHerida) < 3f)
+            if (Vector3.Distance(this.transform.position, hormigaACurar.transform.position) < 3.8f && this.zonaDondeEsta == hormigaACurar.zonaDondeEsta)
             {
+                if (Vector3.Distance(this.transform.position, hormigaACurar.transform.position) < 2.5f)
+                {
+                    agente.SetDestination(this.transform.position);
+                }
                 TiempoActual -= Time.deltaTime;
-                Debug.Log("Curando a Hormiga");
+                Debug.Log("Curando a Hormiga en : " + TiempoActual);
                 // Si ha pasado el tiempo de cura
                 if (TiempoActual <= 0)
                 {
@@ -838,7 +806,7 @@ public class HormigaGenerica : PersonajeGenerico
             }
             else
             {
-                agente.SetDestination(hormigaACurar.transform.position + new Vector3(1, 0, 1));
+                agente.SetDestination(hormigaACurar.transform.position);
             }
             Task.current.Succeed();
             return;
@@ -941,9 +909,10 @@ public class HormigaGenerica : PersonajeGenerico
                     return;
                 }
                 // Cuando llego a la casilla, suelto la comida y actualizo el haSidoCogida
-                if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f)
+                if (Vector3.Distance(this.transform.position, posDejarComida) < 0.2f && zonaDondeEsta == 0)
                 {
                     reina.ComidaGuardada(comida, salaDejarComida, casillaDejarComida);
+                    comida.CogerComida(salaDejarComida, casillaDejarComida);
                     comida.haSidoCogida = true;
                     comida.transform.SetParent(null);
                     comida.hormigaQueLlevaLaComida = null;
@@ -992,7 +961,7 @@ public class HormigaGenerica : PersonajeGenerico
     #endregion
 
     // Al quitar una orden
-    public void SacarDeDesocupadas ()
+    public void SacarDeDesocupadas()
     {
         Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
         Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;

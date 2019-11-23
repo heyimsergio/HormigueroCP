@@ -199,6 +199,8 @@ public class Reina : HormigaGenerica
 
         // Prioridades NavMesh
         agente.avoidancePriority = 0;
+        priority = 0;
+        contPrioridadNavMesh = 1;
 
         // Ataques y Vida
         this.vida = 10;
@@ -229,7 +231,6 @@ public class Reina : HormigaGenerica
             bocadillos = FindObjectOfType<BocadillosControlador>();
             if (bocadillos != null)
             {
-                Debug.Log("Encontrado");
                 bocadillosFound = true;
             }
         }
@@ -674,11 +675,14 @@ public class Reina : HormigaGenerica
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
                 aux.comida = comidaVista[0];
                 aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
-                aux.comida.hormigaQueLlevaLaComida = this;
+                aux.comida.hormigaQueLlevaLaComida = aux;
                 aux.posComida = Vector3.zero;
                 aux.posDejarComida = Vector3.zero;
                 // Si la reina lo tiene en su lista de comida vista, lo borro
                 reina.comidaVista.Remove(aux.comida);
+                // Actualizo la cantidad de hormigas buscando comida que hay
+                numHormigasBuscandoComida++;
+                Debug.Log("REINA: Mando soldado a por comida");
                 Task.current.Succeed();
                 return;
             }
@@ -1370,10 +1374,8 @@ public class Reina : HormigaGenerica
             comida.miTile = tile;
             //sala.meterCosas();
         }
-        if (comidaVista.Contains(comida))
-        {
-            comidaVista.Remove(comida);
-        }
+        comidaVista.Remove(comida);
+
     }
 
     // Métodos para el tratamiento de los ataques
@@ -1503,7 +1505,7 @@ public class Reina : HormigaGenerica
         Room sala = GetSalaLibreComida();
         if (sala != null)
         {
-            Debug.Log("----------------- LLENADO ACTUAL: " + sala.llenadoActual);
+            Debug.Log("----------------- METO COMIDA EN SALA: " + sala.llenadoActual);
             sala.meterCosas();
         }
         return sala;
@@ -1603,6 +1605,7 @@ public class Reina : HormigaGenerica
             {
                 soldadosOcupadas.Remove(hormigaSoldado);
             }
+            numeroDeSoldadosTotal--;
         }
         else
         {
@@ -1647,6 +1650,8 @@ public class Reina : HormigaGenerica
             hormiga.comida.laEstanLLevando = false;
             hormiga.comida.hormigaQueLlevaLaComida = null;
             hormiga.comida.transform.SetParent(null);
+            /*hormiga.comida.misala = null;
+            hormiga.comida.miTile = null;*/
             SacarComidaSala(hormiga.salaDejarComida, hormiga.comida, hormiga.casillaDejarComida);
             if (reina.comidaVista.Contains(hormiga.comida))
             {
@@ -1663,7 +1668,12 @@ public class Reina : HormigaGenerica
         }
         // Si la hormiga está siendo curada por alguien
         hormiga.siendoCuradaPor = null;
-
+        // Si la hormiga muere en el link
+        if (hormiga.agente.isOnOffMeshLink)
+        {
+            NavMeshLink link = (NavMeshLink) hormiga.agente.navMeshOwner;
+            link.costModifier = -1;
+        }
         hormiga = null;
     }
 
@@ -1692,14 +1702,19 @@ public class Reina : HormigaGenerica
     public void ComidaHaMuerto(Comida comidaMuerta)
     {
         // Sacamos la comida de la sala si muere cuando está siendo llevada
-        if ((comidaMuerta.hormigaQueLlevaLaComida != null && comidaMuerta.laEstanLLevando) || comidaMuerta.haSidoCogida)
+        if (comidaMuerta.hormigaQueLlevaLaComida != null)
         {
             Debug.Log("COMIDA QUE ESTABA LLEVANDO HA MUERTO");
             SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
         }
+        else if (comidaMuerta.haSidoCogida)
+        {
+            Debug.Log("HAN COMIDO COMIDA, POR LO QUE SE SACA DE SALA");
+            SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
+        }
         else
         {
-            Debug.Log("LA COMIDA SE HA MUERTO SOLA");
+            //Debug.Log("LA COMIDA SE HA MUERTO SOLA, NO SE SACA DE SALA");
         }
 
         // Actualizamos si la comida está siendo llevada por una hormiga (no necesario)
@@ -1765,10 +1780,8 @@ public class Reina : HormigaGenerica
 
     public void SacarComidaSala(Room sala, Comida comida, TileScript miTile)
     {
-        if (comidaTotal.Remove(comida))
-        {
-            Debug.Log("Comida eliminada de comidaTotal");
-        }
+        comidaTotal.Remove(comida);
+        Debug.Log("----------------- SACO COMIDA DE SALA: " + sala.llenadoActual);
         sala.sacarCosas(miTile);
     }
 

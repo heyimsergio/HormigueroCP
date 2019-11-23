@@ -68,6 +68,7 @@ public class Soldado : HormigaGenerica
             reina.contPrioridadNavMesh = 1;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
+        priority = reina.contPrioridadNavMesh;
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
@@ -88,7 +89,6 @@ public class Soldado : HormigaGenerica
             bocadillos = FindObjectOfType<BocadillosControlador>();
             if (bocadillos != null)
             {
-                Debug.Log("Encontrado");
                 bocadillosFound = true;
             }
         }
