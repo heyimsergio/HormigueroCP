@@ -155,18 +155,17 @@ public class HormigaGenerica : PersonajeGenerico
                 {
                     if (objetoColision.transform.parent.gameObject != this.gameObject)
                     {
-                        //Soldado hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
                         Obrera hormigaObrera = objetoColision.transform.parent.gameObject.GetComponent<Obrera>();
+                        Soldado hormigaSoldado = objetoColision.transform.parent.gameObject.GetComponent<Soldado>();
                         Reina hormigaReina = objetoColision.transform.parent.gameObject.GetComponent<Reina>();
-                        //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
                         if (hormigaObrera != null)
                         {
                             obrerasCerca = true;
                         }
-                        /*if (hormigaSoldado != null)
+                        if (hormigaSoldado != null)
                         {
                             soldadosCerca = true;
-                        }*/
+                        }
                         if (hormigaReina != null)
                         {
                             reinaCerca = true;
@@ -175,15 +174,12 @@ public class HormigaGenerica : PersonajeGenerico
                         {
                             hormigasCerca.Add(objetoColision.transform.parent.gameObject.GetComponent<HormigaGenerica>());
                         }
-
-                        //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
                     }
                     else
                     {
                         //Debug.Log("Chocandote contigo mismo");
                     }
                 }
-                //Debug.DrawRay(transform.position, dir* RayDistance, Color.magenta);
             }
 
         }
@@ -201,18 +197,17 @@ public class HormigaGenerica : PersonajeGenerico
                 {
                     if (objetoColision.transform.parent.gameObject != this.gameObject)
                     {
-                        //Soldado hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
                         Obrera hormigaObrera = objetoColision.transform.parent.gameObject.GetComponent<Obrera>();
+                        Soldado hormigaSoldado = objetoColision.transform.parent.gameObject.GetComponent<Soldado>();
                         Reina hormigaReina = objetoColision.transform.parent.gameObject.GetComponent<Reina>();
-                        //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.tag);
                         if (hormigaObrera != null)
                         {
                             obrerasCerca = true;
                         }
-                        /*if (hormigaSoldado != null)
+                        if (hormigaSoldado != null)
                         {
                             soldadosCerca = true;
-                        }*/
+                        }
                         if (hormigaReina != null)
                         {
                             reinaCerca = true;
@@ -403,7 +398,7 @@ public class HormigaGenerica : PersonajeGenerico
         else
         {
             // Suelto la comida si tengo, pero no me la desasigno
-            if (comida != null)
+            /*if (comida != null)
             {
                 comida.transform.SetParent(null);
                 comida.laEstanLLevando = false;
@@ -414,7 +409,7 @@ public class HormigaGenerica : PersonajeGenerico
                 //casillaDejarComida = null;
                 posComida = Vector3.zero;
                 posDejarComida = Vector3.zero;
-                if (reina.comidaVista.Contains(comida))
+                /*if (reina.comidaVista.Contains(comida))
                 {
                     reina.comidaVista.Add(comida);
                 }
@@ -428,7 +423,11 @@ public class HormigaGenerica : PersonajeGenerico
                 }
                 hormigaACurar.siendoCuradaPor = null;
                 hormigaACurar = null;
-            }
+            }*/
+
+            reina.DesasignarComidaACoger(this);
+            reina.DesasignarHormigaACurar(this);
+            reina.DesasignarHuevoACurar(this);
 
             // Asigno la posición a la que hay que ir
             agente.SetDestination(enemigoAlQueAtacar.transform.position);
@@ -762,7 +761,7 @@ public class HormigaGenerica : PersonajeGenerico
                 Debug.Log("Se asigna la posicion de la hormiga a curar");
                 TiempoActual = tiempoParaCurar;
                 posHerida = hormigaACurar.transform.position;
-                agente.SetDestination(hormigaACurar.transform.position);
+                agente.SetDestination(hormigaACurar.transform.position + new Vector3 (1,0,1));
                 Task.current.Succeed();
                 return;
             }
@@ -770,6 +769,7 @@ public class HormigaGenerica : PersonajeGenerico
             if (Vector3.Distance(this.transform.position, posHerida) < 3f)
             {
                 TiempoActual -= Time.deltaTime;
+                Debug.Log("Curando a Hormiga");
                 // Si ha pasado el tiempo de cura
                 if (TiempoActual <= 0)
                 {
@@ -789,11 +789,12 @@ public class HormigaGenerica : PersonajeGenerico
                     Task.current.Succeed();
                     return;
                 }
-
+                Task.current.Succeed();
+                return;
             }
             else
             {
-                agente.SetDestination(hormigaACurar.transform.position);
+                agente.SetDestination(hormigaACurar.transform.position + new Vector3(1, 0, 1));
             }
             Task.current.Succeed();
             return;
@@ -939,8 +940,8 @@ public class HormigaGenerica : PersonajeGenerico
     public void SacarDeDesocupadas ()
     {
         Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
-        //Nurse hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
         Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+        Soldado hormigaSoldado = this.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
         if (hormigaNurse != null)
         {
             if (reina.nursesDesocupadas.Remove(hormigaNurse))
@@ -955,20 +956,20 @@ public class HormigaGenerica : PersonajeGenerico
                 reina.obrerasOcupadas.Add(hormigaObrera);
             }
         }
-        /*else if (hormigaSoldado != null)
+        else if (hormigaSoldado != null)
         {
             if (reina.soldadosDesocupadas.Remove(hormigaSoldado))
             {
                 reina.soldadosOcupadas.Add(hormigaSoldado);
             }
-        }*/
+        }
     }
 
     public void SacarDeOcupadas()
     {
         Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
-        //Nurse hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
         Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+        Soldado hormigaSoldado = this.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
         if (hormigaNurse != null)
         {
             if (reina.nursesOcupadas.Remove(hormigaNurse))
@@ -983,12 +984,12 @@ public class HormigaGenerica : PersonajeGenerico
                 reina.obrerasDesocupadas.Add(hormigaObrera);
             }
         }
-        /*else if (hormigaSoldado != null)
+        else if (hormigaSoldado != null)
         {
             if (reina.soldadosOcupadas.Remove(hormigaSoldado))
             {
                 reina.soldadosDesocupadas.Add(hormigaSoldado);
             }
-        }*/
+        }
     }
 }

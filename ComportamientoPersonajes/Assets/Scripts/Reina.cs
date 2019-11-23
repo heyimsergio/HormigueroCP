@@ -53,10 +53,10 @@ public class Reina : HormigaGenerica
     [Header("Variables Lógica Global Hormiguero")]
     public List<Nurse> nursesOcupadas = new List<Nurse>();
     public List<Obrera> obrerasOcupadas = new List<Obrera>();
-    //public List<Soldado> soldadosOcupadas = new List<Soldado>();
+    public List<Soldado> soldadosOcupadas = new List<Soldado>();
     public List<Nurse> nursesDesocupadas = new List<Nurse>();
     public List<Obrera> obrerasDesocupadas = new List<Obrera>();
-    //public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
+    public List<Soldado> soldadosDesocupadas  = new List<Soldado>();
     public int capacidadTotalDeHormigas;
     public int capacidadTotalDeComida;
     public int capacidadTotalDeHuevos;
@@ -156,6 +156,7 @@ public class Reina : HormigaGenerica
     public GameObject PrefabHuevo;
     public GameObject prefabNurse;
     public GameObject prefabObrera;
+    public GameObject prefabSoldado;
     #endregion
 
     #region Variables Auxiliares Durante el desarrollo
@@ -330,7 +331,6 @@ public class Reina : HormigaGenerica
             importanciaNurses = 3;
             importanciaObreras = 2;
             importanciaSoldados = 0.1f;
-
         }
         else if (actualTime >= TIEMPO1 && actualTime < TIEMPO2) // prioriza obreras
         {
@@ -393,15 +393,14 @@ public class Reina : HormigaGenerica
     [Task]
     public void HaySoldadosLibres()
     {
-        /*if(soldadosDesocupadas.Count > 0)
+        if(soldadosDesocupadas.Count > 0)
         {
             Task.current.Succeed();
         } 
         else
         {
             Task.current.Fail();
-        }*/
-        Task.current.Fail();
+        }
     }
 
     [Task]
@@ -632,7 +631,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaSoldados()
     {
-        /*Soldado aux = soldadosDesocupadas[0];
+        Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
             // Si la hormiga ya estaba cuidando un huevo
@@ -660,7 +659,7 @@ public class Reina : HormigaGenerica
                 Task.current.Succeed();
                 return;
             }
-        }*/
+        }
         Task.current.Fail();
         return;
     }
@@ -851,19 +850,36 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarSoldado()
     {
-        /*Soldado aux = soldadosDesocupadas[0];
-        if (aux != null)
+        Soldado aux = soldadosDesocupadas[0];
+        HormigaGenerica aux2 = hormigasHeridas[0];
+        if (aux == aux2)
         {
-            Debug.Log("Tengo nurse que mandar a cuidar");
-            // hay que asignar el huevo a cuidar, creo que debe ser distinto al huevo que se detcta solo porque si no podria sobreescribirlo, y cambiar la funcion cuidar huevo si me mandan usando ese huevo
-            aux.hayOrdenCuidarHuevos = true;
-            nursesOcupadas.Add(aux);
-            nursesDesocupadas.Remove(aux);
-            aux.huevoACuidar = huevosQueTienenQueSerCuidados[0];
-            aux.huevoACuidar.siendoCuidadoPor = aux;
-            huevosQueTienenQueSerCuidados.RemoveAt(0);
+            if (soldadosDesocupadas.Count > 1)
+            {
+                aux = soldadosDesocupadas[1];
+            }
+            else if (hormigasHeridas.Count > 1)
+            {
+                aux2 = hormigasHeridas[1];
+            }
+            else
+            {
+                // La hormiga herida y la obrera son la misma y no hay más
+                Task.current.Fail();
+                return;
+            }
+        }
+        if (aux != null && aux != aux2)
+        {
+            aux.hayOrdenCurarHormiga = true;
+            soldadosOcupadas.Add(aux);
+            soldadosDesocupadas.Remove(aux);
+            aux.hormigaACurar = aux2;
+            aux2.siendoCuradaPor = aux;
+            hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
-        }*/
+            return;
+        }
     }
 
     [Task]
@@ -1379,7 +1395,6 @@ public class Reina : HormigaGenerica
             case TipoHormiga.NURSE:
                 //numeroDeNursesTotal++;
                 //totalHormigas++;
-                Debug.Log("Nurse nace");
                 Vector3 posNurse = huevo.transform.position;
                 GameObject aux = Instantiate(prefabNurse, posNurse, Quaternion.identity);
                 //aux.transform.position = huevo.transform.position;
@@ -1389,15 +1404,15 @@ public class Reina : HormigaGenerica
             case TipoHormiga.OBRERA:
                 //numeroDeObrerasTotal++;
                 //totalHormigas++;
-                Debug.Log("Obrera nace");
                 Vector3 posObrera = huevo.transform.position;
                 GameObject aux2 = Instantiate(prefabObrera, posObrera, Quaternion.identity);
                 // se instanciaria
                 break;
             case TipoHormiga.SOLDADO:
-                //Debug.Log("Soldado nace");
                 //numeroDeSoldadosTotal++;
                 //totalHormigas++;
+                Vector3 posSoldado = huevo.transform.position;
+                GameObject aux3 = Instantiate(prefabSoldado, posSoldado, Quaternion.identity);
                 break;
         }
     }
@@ -1427,7 +1442,7 @@ public class Reina : HormigaGenerica
         Room sala = GetSalaLibreComida();
         if (sala != null)
         {
-            Debug.Log(" Se mete comida desde  meter Comida en sala");
+            Debug.Log("----------------- LLENADO ACTUAL: " + sala.llenadoActual);
             sala.meterCosas();
         }
         return sala;
@@ -1488,7 +1503,7 @@ public class Reina : HormigaGenerica
 
         // Depende de la hormiga que sea, se saca de una lista u otra
         Nurse hormigaNurse = hormiga.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
-        //Nurse hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+        Soldado hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
         Obrera hormigaObrera = hormiga.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
 
         if (hormigaNurse != null)
@@ -1507,8 +1522,6 @@ public class Reina : HormigaGenerica
         }
         else if (hormigaObrera != null)
         {
-            Debug.Log("OBRERA HA MUERTO");
-            //Obrera hormigaObrera = (Obrera)hormiga;
             if (obrerasDesocupadas.Contains(hormigaObrera))
             {
                 obrerasDesocupadas.Remove(hormigaObrera);
@@ -1519,9 +1532,8 @@ public class Reina : HormigaGenerica
             }
             numeroDeObrerasTotal--;
         }
-        else if (hormiga.GetType().Equals("Soldado"))
+        else if (hormigaSoldado != null)
         {
-            /*Soldado hormigaSoldado = (Soldado)hormiga;
             if (soldadosDesocupadas.Contains(hormigaSoldado))
             {
                 soldadosDesocupadas.Remove(hormigaSoldado);
@@ -1529,7 +1541,7 @@ public class Reina : HormigaGenerica
             else if (soldadosOcupadas.Contains(hormigaSoldado))
             {
                 soldadosOcupadas.Remove(hormigaSoldado);
-            }*/
+            }
         }
         else
         {

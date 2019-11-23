@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Nurse : HormigaGenerica
 {
     #region Variables Nurse
-    //Atacar
+    // Atacar
     // List<EnemigoGenerico> enemigosCerca
     // List<Huevo> huevosCerca = new List<Huevo>();
     // int numeroDeObrerasCerca = 0;
@@ -24,13 +24,13 @@ public class Nurse : HormigaGenerica
     // bool hayOrdenCurarHormiga
     // bool hayOrdenBuscarComida
 
-    //Cuidar de huevos
+    // Cuidar de huevos
     // float tiempoCuidandoHuevos = 20.0f;
     // Huevo huevoACuidar = null;
     // Vector3 posHuevo = Vector3.zero;
     // float TiempoActual;
 
-    //Curar A Una Hormiga
+    // Curar A Una Hormiga
     // HormigaGenerica hormigaACurar
     // int tiempoParaCurar
     // List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();

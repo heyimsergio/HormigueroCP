@@ -31,6 +31,10 @@ public class ReadData : MonoBehaviour
             {
                 Instantiate(data.obreraPrefab, posInicial, Quaternion.identity);
             }
+            for (int i = 0; i < data.numSoldados; i++)
+            {
+                Instantiate(data.soldadoPrefab, posInicial, Quaternion.identity);
+            }
             creado = true;
         }
     }

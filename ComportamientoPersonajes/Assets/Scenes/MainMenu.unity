@@ -1193,6 +1193,8 @@ MonoBehaviour:
     type: 3}
   obreraPrefab: {fileID: 4576295136347872413, guid: 1ca0848ee4d2c5842b758f9e71d03198,
     type: 3}
+  soldadoPrefab: {fileID: 6688741432257483192, guid: 19f58f7a509bd9844bd82d1171ca2ef7,
+    type: 3}
 --- !u!4 &422559527
 Transform:
   m_ObjectHideFlags: 0

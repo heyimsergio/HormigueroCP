@@ -23,7 +23,7 @@ public class DataController : MonoBehaviour
 
     public Nurse nursePrefab;
     public Obrera obreraPrefab;
-    //public Soldado soldadoPrefab;
+    public Soldado soldadoPrefab;
     
 
 
@@ -88,7 +88,7 @@ public class DataController : MonoBehaviour
             numSoldados = int.Parse(soldados.text);
         }
 
-        //Debug.Log(numNurse + " " + numObreras + " " + numSoldados + " " + facil + " " + medio + " " + dificil);
+        Debug.Log(numNurse + " " + numObreras + " " + numSoldados + " " + facil + " " + medio + " " + dificil);
         SceneManager.LoadScene(1);
     }
 }
