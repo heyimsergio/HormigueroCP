@@ -94,6 +94,16 @@ public class Obrera : HormigaGenerica
 
         // cavar
         posCavar = Vector3.zero;
+
+        if (!bocadillosFound)
+        {
+            bocadillos = FindObjectOfType<BocadillosControlador>();
+            if (bocadillos != null)
+            {
+                Debug.Log("Encontrado");
+                bocadillosFound = true;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -216,8 +226,12 @@ public class Obrera : HormigaGenerica
     [Task]
     public void Cavar()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Cavar();
+        }
         //esta fuera
-        if(zonaDondeEsta != 0)
+        if (zonaDondeEsta != 0)
         {
             Vector3 randomDirection;
             NavMeshHit aux;
@@ -481,6 +495,10 @@ public class Obrera : HormigaGenerica
     [Task]
     public void Explorar()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Explorar();
+        }
         // si esta dentro
         if (zonaDondeEsta == 0)
         {

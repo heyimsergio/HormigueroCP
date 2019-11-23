@@ -94,6 +94,16 @@ public class Nurse : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
+
+        if (!bocadillosFound)
+        {
+            bocadillos = FindObjectOfType<BocadillosControlador>();
+            if (bocadillos != null)
+            {
+                Debug.Log("Encontrado");
+                bocadillosFound = true;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -340,7 +350,11 @@ public class Nurse : HormigaGenerica
     [Task]
     public void Explorar()
     {
-        if(zonaDondeEsta == 1)
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Explorar();
+        }
+        if (zonaDondeEsta == 1)
         {
             siguientePosicionExplorar = Vector3.zero;
             Vector3 randomDirection;

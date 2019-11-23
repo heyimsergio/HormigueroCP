@@ -83,6 +83,15 @@ public class Soldado : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
+        if (!bocadillosFound)
+        {
+            bocadillos = FindObjectOfType<BocadillosControlador>();
+            if (bocadillos != null)
+            {
+                Debug.Log("Encontrado");
+                bocadillosFound = true;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -191,6 +200,10 @@ public class Soldado : HormigaGenerica
     [Task]
     public void Explorar()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Explorar();
+        }
         // si esta dentro
         if (zonaDondeEsta == 0)
         {

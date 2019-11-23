@@ -24,7 +24,7 @@ public class BocadillosControlador : MonoBehaviour
     bool cuidarHuevos = false;
     bool atacar = false;
 
-    Vector3 offset = new Vector3(5f, 0, 5f);
+    Vector3 offset = new Vector3(1.5f, 0, 1.5f);
 
 
     // Start is called before the first frame update
@@ -166,7 +166,7 @@ public class BocadillosControlador : MonoBehaviour
         }
     }
 
-    void Explorar()
+    public void Explorar()
     {
         explorar = true;
         buscarComida = false;
@@ -177,7 +177,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = false;
         atacar = false;
     }
-    void BuscarComida()
+    public void BuscarComida()
     {
         explorar = false;
         buscarComida = true;
@@ -188,7 +188,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = false;
         atacar = false;
     }
-    void Curar()
+    public void Curar()
     {
         explorar = false;
         buscarComida = false;
@@ -199,7 +199,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = false;
         atacar = false;
     }
-    void Patrullar()
+    public void Patrullar()
     {
         explorar = false;
         buscarComida = false;
@@ -210,7 +210,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = false;
         atacar = false;
     }
-    void Cavar()
+    public void Cavar()
     {
         explorar = false;
         buscarComida = false;
@@ -221,7 +221,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = false;
         atacar = false;
     }
-    void Comer()
+    public void Comer()
     {
         explorar = false;
         buscarComida = false;
@@ -232,7 +232,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = false;
         atacar = false;
     }
-    void CuidarHuevos()
+    public void CuidarHuevos()
     {
         explorar = false;
         buscarComida = false;
@@ -243,7 +243,7 @@ public class BocadillosControlador : MonoBehaviour
         cuidarHuevos = true;
         atacar = false;
     }
-    void Atacar()
+    public void Atacar()
     {
         explorar = false;
         buscarComida = false;
@@ -253,5 +253,17 @@ public class BocadillosControlador : MonoBehaviour
         comer = false;
         cuidarHuevos = false;
         atacar = true;
+    }
+
+    public void Nada()
+    {
+        explorar = false;
+        buscarComida = false;
+        curar = false;
+        patrullar = false;
+        cavar = false;
+        comer = false;
+        cuidarHuevos = false;
+        atacar = false;
     }
 }

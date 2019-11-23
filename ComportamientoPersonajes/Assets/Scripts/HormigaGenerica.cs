@@ -6,6 +6,10 @@ using UnityEngine.AI;
 
 public class HormigaGenerica : PersonajeGenerico
 {
+    //Bocadillos
+    public BocadillosControlador bocadillos;
+    public bool bocadillosFound = false;
+
     //Agente Navmesh
     protected NavMeshAgent agente;
     protected PandaBehaviour pb;
@@ -100,6 +104,8 @@ public class HormigaGenerica : PersonajeGenerico
     // Cavar
     public bool hayOrdenDeCavar = false;
 
+    
+
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
 
     // Start is called before the first frame update
@@ -110,6 +116,15 @@ public class HormigaGenerica : PersonajeGenerico
     // Update is called once per frame
     void Update()
     {
+        if (!bocadillosFound)
+        {
+            bocadillos = FindObjectOfType<BocadillosControlador>();
+            if (bocadillos != null)
+            {
+                Debug.Log("Encontrado");
+                bocadillosFound = true;
+            }
+        }
         ActualizarHambre();
 
         ActualizarSiPuedeSerCurada();
@@ -380,6 +395,10 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void Atacar()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Atacar();
+        }
         if (enemigoAlQueAtacar == null)
         {
             if (enemigosCerca.Count > 0)
@@ -844,6 +863,10 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void BuscarComida()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.BuscarComida();
+        }
         if (comida != null)
         {
             // Si no he cogido la comida aún, me dirijo a ella

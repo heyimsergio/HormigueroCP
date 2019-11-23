@@ -211,6 +211,16 @@ public class Reina : HormigaGenerica
         TIEMPO3 = 180;
         TIEMPO4 = 230;
 
+        if (!bocadillosFound)
+        {
+            bocadillos = FindObjectOfType<BocadillosControlador>();
+            if (bocadillos != null)
+            {
+                Debug.Log("Encontrado");
+                bocadillosFound = true;
+            }
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)

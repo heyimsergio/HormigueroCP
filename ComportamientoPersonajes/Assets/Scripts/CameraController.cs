@@ -20,6 +20,7 @@ public class CameraController : MonoBehaviour
         cam = this.GetComponent<Camera>();
         dentroPos = new Vector3(85, 40, 25);
         fueraPos = new Vector3(25, 40, 25);
+        bc = FindObjectOfType<BocadillosControlador>();
     }
 
     // Update is called once per frame
@@ -41,11 +42,13 @@ public class CameraController : MonoBehaviour
                     free = false;
                     target = h.gameObject;
                     bc.hormigaSeleccionada = h;
+                    
                 } else
                 {
                     free = true;
                     target = null;
                     bc.hormigaSeleccionada = null;
+                    bc.Nada();
                 }
             }
         }
@@ -54,12 +57,14 @@ public class CameraController : MonoBehaviour
             free = true;
             target = null;
             bc.hormigaSeleccionada = null;
+            bc.Nada();
             this.transform.position = dentroPos;
         } else if (Input.GetKeyDown("1"))
         {
             free = true;
             target = null;
             bc.hormigaSeleccionada = null;
+            bc.Nada();
             this.transform.position = fueraPos;
         }
         if (free)
