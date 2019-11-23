@@ -407,7 +407,7 @@ public class Obrera : HormigaGenerica
                         break;
                     case 2:
 
-                        aux = reina.hormiguero.createCorridor(Room.roomType.STORAGE);
+                        aux = reina.hormiguero.createCorridor(Room.roomType.EGGROOM);
 
                         if (aux != null)
                         {

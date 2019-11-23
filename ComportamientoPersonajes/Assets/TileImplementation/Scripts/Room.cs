@@ -94,6 +94,10 @@ public class Room
     public void meterCosas()
     {
         llenadoActual++;
+        if(myType == roomType.STORAGE)
+        {
+            Debug.Log("*****************Metiendo cosas en sala Comida: " + llenadoActual);
+        }
         if (llenadoActual >= capacidadTotalRoom)
         {
             isFull = true;
@@ -104,11 +108,17 @@ public class Room
     public void sacarCosas(TileScript tile)
     {
 
-        if(tile != null)
+
+        if (tile != null)
         {
             casillasVacias.Add(tile);
         }
         llenadoActual--;
+
+        if (myType == roomType.STORAGE)
+        {
+            Debug.Log("******************Sacando cosas en sala Comida: " + llenadoActual);
+        }
         if (isFull)
         {
             isFull = false;

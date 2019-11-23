@@ -793,7 +793,7 @@ public class HormigaGenerica : PersonajeGenerico
                 if (TiempoActual <= 0)
                 {
                     hormigaACurar.SumarVida();
-                    Debug.Log("Hormiga Curada");
+                    //Debug.Log("Hormiga Curada");
                     // Reseteas todos los valores
                     TiempoActual = tiempoParaCurar;
                     posHerida = Vector3.zero;
