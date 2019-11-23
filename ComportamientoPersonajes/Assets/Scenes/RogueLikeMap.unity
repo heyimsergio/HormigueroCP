@@ -141,7 +141,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7462029
 MonoBehaviour:
@@ -163,12 +163,6 @@ MonoBehaviour:
   pos2: {x: 0, y: 0, z: 0}
   pos3: {x: 0, y: 0, z: 0}
   pos4: {x: 0, y: 0, z: 0}
---- !u!1 &56768167 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4576295136347872411, guid: 1ca0848ee4d2c5842b758f9e71d03198,
-    type: 3}
-  m_PrefabInstance: {fileID: 4576295137146405432}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &268939970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,7 +218,7 @@ PrefabInstance:
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -429,7 +423,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &434455673
 GameObject:
@@ -615,7 +609,7 @@ PrefabInstance:
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -1172,7 +1166,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &920897474
 GameObject:
@@ -2104,7 +2098,7 @@ RectTransform:
   - {fileID: 2002717652}
   - {fileID: 1395838318}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2698,6 +2692,7 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigasCerca: []
+  hormigaAAtacar: {fileID: 0}
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 0.5
 --- !u!65 &1459648001
@@ -2793,7 +2788,7 @@ Transform:
   m_Children:
   - {fileID: 1020015103}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1459648006
 Rigidbody:
@@ -2861,7 +2856,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!191 &1482372615
 OffMeshLink:
@@ -3098,6 +3093,7 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigasCerca: []
+  hormigaAAtacar: {fileID: 0}
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 0.5
 --- !u!65 &1546281724
@@ -3193,7 +3189,7 @@ Transform:
   m_Children:
   - {fileID: 1158231360}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1546281729
 Rigidbody:
@@ -3266,7 +3262,7 @@ PrefabInstance:
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 4413783055448590803, guid: c969fd524db04ce40857f5df2d0b2470,
         type: 3}
@@ -3455,7 +3451,7 @@ Transform:
   - {fileID: 711407350}
   - {fileID: 1150814149}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &1646566903
 NavMeshAgent:
@@ -3601,7 +3597,7 @@ Transform:
   - {fileID: 1529361267}
   - {fileID: 683737011}
   m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1694178321
 PrefabInstance:
@@ -3879,6 +3875,7 @@ MonoBehaviour:
   vida: 0
   zonaDondeEsta: 0
   hormigasCerca: []
+  hormigaAAtacar: {fileID: 0}
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 0.5
 --- !u!65 &1922200435
@@ -3974,7 +3971,7 @@ Transform:
   m_Children:
   - {fileID: 828022726}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1922200440
 Rigidbody:
@@ -4094,7 +4091,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2128211569
 GameObject:
