@@ -17,6 +17,8 @@ tree("Soldado")
 		sequence
 			TengoMuchaHambre()
 			HayComida()
+			not
+				ReinaTieneMuchaHambre()
 			Comer()
 		sequence
 			TengoOrdenDeLaReina()

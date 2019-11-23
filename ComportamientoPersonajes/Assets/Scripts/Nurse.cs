@@ -212,11 +212,11 @@ public class Nurse : HormigaGenerica
         }
         else
         {
-            if (reina.nursesOcupadas.Contains(this))
+            /*if (reina.nursesOcupadas.Contains(this))
             {
                 reina.nursesOcupadas.Remove(this);
                 reina.nursesDesocupadas.Add(this);
-            }
+            }*/
             Task.current.Fail();
             return;
         }
@@ -268,6 +268,7 @@ public class Nurse : HormigaGenerica
                     if (hayOrdenCuidarHuevos == true)
                     {
                         hayOrdenCuidarHuevos = false;
+                        SacarDeOcupadas();
                     }
                 }
             }
@@ -287,6 +288,7 @@ public class Nurse : HormigaGenerica
             if (hayOrdenCuidarHuevos == true)
             {
                 hayOrdenCuidarHuevos = false;
+                SacarDeOcupadas();
             }
             Task.current.Fail();
             return;

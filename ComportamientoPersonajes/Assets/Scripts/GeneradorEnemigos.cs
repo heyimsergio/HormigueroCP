@@ -40,7 +40,7 @@ public class GeneradorEnemigos : MonoBehaviour
 
     public void SpawnEnemigo()
     {
-        int pos = Mathf.RoundToInt(Random.Range(1, 4));
+        int pos = Mathf.RoundToInt(Random.Range(1, 5));
         switch (pos)
         {
             case 1:

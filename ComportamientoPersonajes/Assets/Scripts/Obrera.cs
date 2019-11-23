@@ -185,11 +185,11 @@ public class Obrera : HormigaGenerica
         }
         else
         {
-            if (reina.obrerasOcupadas.Contains(this))
+            /*if (reina.obrerasOcupadas.Contains(this))
             {
                 reina.obrerasOcupadas.Remove(this);
                 reina.obrerasDesocupadas.Add(this);
-            }
+            }*/
             Task.current.Fail();
         }
     }
@@ -296,6 +296,7 @@ public class Obrera : HormigaGenerica
                             //Debug.Log("Sala de Hormigas creada, la capacidad ahora es: " + capacidadTotalDeHormigas);
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
+                            SacarDeOcupadas();
                             reina.numHormigasCavandoTuneles--;
                             Task.current.Succeed();
                         }
@@ -304,6 +305,7 @@ public class Obrera : HormigaGenerica
                             reina.espacioLlenoHormiguero = true;
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
+                            SacarDeOcupadas();
                             reina.numHormigasCavandoTuneles--;
                             Task.current.Fail();
                         }
@@ -319,6 +321,7 @@ public class Obrera : HormigaGenerica
                             //Debug.Log("Sala de Comida creada, la capacidad ahora es: " + capacidadTotalDeComida);
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
+                            SacarDeOcupadas();
                             reina.numHormigasCavandoTuneles--;
                             Task.current.Succeed();
                         }
@@ -327,6 +330,7 @@ public class Obrera : HormigaGenerica
                             reina.espacioLlenoHormiguero = true;
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
+                            SacarDeOcupadas();
                             reina.numHormigasCavandoTuneles--;
                             Task.current.Fail();
                         }
@@ -343,6 +347,7 @@ public class Obrera : HormigaGenerica
                             //Debug.Log("Sala de Huevos creada, la capacidad ahora es: " + capacidadTotalDeHuevos);
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
+                            SacarDeOcupadas();
                             reina.numHormigasCavandoTuneles--;
                             Task.current.Succeed();
                         }
@@ -351,17 +356,14 @@ public class Obrera : HormigaGenerica
                             reina.espacioLlenoHormiguero = true;
                             tiempoQueLlevaHaciendoElTunel = 0;
                             hayOrdenDeCavar = false;
+                            SacarDeOcupadas();
                             reina.numHormigasCavandoTuneles--;
                             Task.current.Fail();
                         }
                         break;
                 }
             }
-
-
         }
-
-
     }
 
     // HayHormigaQueCurarCerca()

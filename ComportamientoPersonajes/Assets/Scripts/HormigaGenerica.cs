@@ -275,39 +275,28 @@ public class HormigaGenerica : PersonajeGenerico
             necesitaSerCurada = true;
             if (!reina.hormigasHeridas.Contains(this))
             {
-                if (this.GetType().Equals("Nurse"))
-                {
-                    Nurse a = (Nurse)this;
-                    reina.nursesDesocupadas.Remove(a);
-                    if (!reina.nursesOcupadas.Contains(a))
-                    {
-                        reina.nursesOcupadas.Add(a);
-                    }
+                // Debo eliminar a la hormiga toda orden que tenga
+                reina.DesasignarComidaACoger(this);
+                reina.DesasignarHormigaACurar(this);
+                reina.DesasignarHuevoACurar(this);
 
-                }
-                else if (this.GetType().Equals("Obrera"))
+                if (hayOrdenBuscarComida)
                 {
-                    Debug.Log("Una obrera debe ser curada");
-                    Obrera a = (Obrera)this;
-                    reina.obrerasDesocupadas.Remove(a);
-                    if (!reina.obrerasOcupadas.Contains(a))
-                    {
-                        reina.obrerasOcupadas.Add(a);
-                    }
+                    hayOrdenBuscarComida = false;
+                    reina.numHormigasBuscandoComida--;
                 }
-                else if (this.GetType().Equals("Soldado"))
+                else if (hayOrdenCuidarHuevos)
                 {
-                    /*Soldado a = (Soldado)this;
-                    reina.soldadosDesocupadas.Remove(a);
-                    if (!reina.soldadosOcupadas.Contains(a))
-                    {
-                        reina.soldadosOcupadas.Add(a);
-                    }*/
+                    hayOrdenCuidarHuevos = false;
+                    reina.numHormigasCuidandoHuevos--;
                 }
-                else
+                else if (hayOrdenDeCavar)
                 {
-                    // Es la reina
+                    hayOrdenDeCavar = false;
+                    reina.numHormigasCavandoTuneles--;
                 }
+
+                SacarDeDesocupadas();
 
                 if (siendoCuradaPor == null)
                 {
@@ -345,11 +334,12 @@ public class HormigaGenerica : PersonajeGenerico
     public void SumarVida()
     {
         Debug.Log("Hormiga ganando vida");
-        this.vida += cantidadDeCura;
+        /*this.vida = cantidadDeCura;
         if (this.vida > 10)
         {
             this.vida = 10;
-        }
+        }*/
+        this.vida = 10;
 
         if (vida > umbralNecesitaCurarse)
         {
@@ -357,41 +347,9 @@ public class HormigaGenerica : PersonajeGenerico
             if (!this.hayOrdenBuscarComida || !this.hayOrdenCurarHormiga ||
                 !this.hayOrdenDeAtacar || this.hayOrdenCuidarHuevos || this.hayOrdenDeCavar)
             {
-                if (this.GetType().Equals("Nurse"))
-                {
-                    Nurse a = (Nurse)this;
-                    reina.nursesOcupadas.Remove(a);
-                    if (!reina.nursesDesocupadas.Contains(a))
-                    {
-                        reina.nursesDesocupadas.Add(a);
-                    }
-
-                }
-                else if (this.GetType().Equals("Obrera"))
-                {
-                    Obrera a = (Obrera)this;
-                    reina.obrerasOcupadas.Remove(a);
-                    if (!reina.obrerasDesocupadas.Contains(a))
-                    {
-                        reina.obrerasDesocupadas.Add(a);
-                    }
-                }
-                else if (this.GetType().Equals("Soldado"))
-                {
-                    /*Soldado a = (Soldado)this;
-                    reina.soldadosOcupadas.Remove(a);
-                    if (!reina.soldadosDesocupadas.Contains(a))
-                    {
-                        reina.soldadosDesocupadas.Add(a);
-                    }*/
-                }
-                else
-                {
-                    // Es la reina
-                }
+                SacarDeOcupadas();
             }
         }
-
     }
 
     #region Tareas Globales Hormigas
@@ -826,6 +784,7 @@ public class HormigaGenerica : PersonajeGenerico
                     if (hayOrdenCurarHormiga == true)
                     {
                         hayOrdenCurarHormiga = false;
+                        SacarDeOcupadas();
                     }
                     Task.current.Succeed();
                     return;
@@ -848,6 +807,7 @@ public class HormigaGenerica : PersonajeGenerico
             if (hayOrdenCurarHormiga == true)
             {
                 hayOrdenCurarHormiga = false;
+                SacarDeOcupadas();
             }
             Task.current.Fail();
             return;
@@ -935,6 +895,7 @@ public class HormigaGenerica : PersonajeGenerico
                     if (hayOrdenBuscarComida)
                     {
                         hayOrdenBuscarComida = false;
+                        SacarDeOcupadas();
                         reina.numHormigasBuscandoComida--;
                     }
                     comida = null;
@@ -965,6 +926,7 @@ public class HormigaGenerica : PersonajeGenerico
             if (hayOrdenBuscarComida)
             {
                 hayOrdenBuscarComida = false;
+                SacarDeOcupadas();
                 reina.numHormigasBuscandoComida--;
             }
             Task.current.Fail();
@@ -972,4 +934,61 @@ public class HormigaGenerica : PersonajeGenerico
     }
 
     #endregion
+
+    // Al quitar una orden
+    public void SacarDeDesocupadas ()
+    {
+        Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
+        //Nurse hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+        Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+        if (hormigaNurse != null)
+        {
+            if (reina.nursesDesocupadas.Remove(hormigaNurse))
+            {
+                reina.nursesOcupadas.Add(hormigaNurse);
+            }
+        }
+        else if (hormigaObrera != null)
+        {
+            if (reina.obrerasDesocupadas.Remove(hormigaObrera))
+            {
+                reina.obrerasOcupadas.Add(hormigaObrera);
+            }
+        }
+        /*else if (hormigaSoldado != null)
+        {
+            if (reina.soldadosDesocupadas.Remove(hormigaSoldado))
+            {
+                reina.soldadosOcupadas.Add(hormigaSoldado);
+            }
+        }*/
+    }
+
+    public void SacarDeOcupadas()
+    {
+        Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
+        //Nurse hormigaSoldado = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+        Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+        if (hormigaNurse != null)
+        {
+            if (reina.nursesOcupadas.Remove(hormigaNurse))
+            {
+                reina.nursesDesocupadas.Add(hormigaNurse);
+            }
+        }
+        else if (hormigaObrera != null)
+        {
+            if (reina.obrerasOcupadas.Remove(hormigaObrera))
+            {
+                reina.obrerasDesocupadas.Add(hormigaObrera);
+            }
+        }
+        /*else if (hormigaSoldado != null)
+        {
+            if (reina.soldadosOcupadas.Remove(hormigaSoldado))
+            {
+                reina.soldadosDesocupadas.Add(hormigaSoldado);
+            }
+        }*/
+    }
 }

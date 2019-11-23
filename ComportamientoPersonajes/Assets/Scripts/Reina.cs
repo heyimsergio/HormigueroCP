@@ -1464,6 +1464,10 @@ public class Reina : HormigaGenerica
         foreach (EnemigoGenerico enem in hormiga.enemigosCerca)
         {
             enem.hormigasCerca.Remove(hormiga);
+            if (enem.hormigaAAtacar == hormiga)
+            {
+                enem.hormigaAAtacar = null;
+            }
         }
         // Actualizamos a todos los huevos que tenga
         foreach (Huevo huevo in hormiga.huevosCerca)

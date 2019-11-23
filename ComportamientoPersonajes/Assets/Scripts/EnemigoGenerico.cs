@@ -13,6 +13,7 @@ public class EnemigoGenerico : PersonajeGenerico
     Reina reina = null;
 
     public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
+    public HormigaGenerica hormigaAAtacar = null;
     protected int tiempoParaIrse;
 
     public float tiempoEntreAtaques;
@@ -20,7 +21,7 @@ public class EnemigoGenerico : PersonajeGenerico
     public float tiempoEntreAtaquesMax = 0.5f;
 
     Floor hormigueroDentro;
-    Vector3 siguientePosicion;
+    Vector3 siguientePosicionExplorar;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class EnemigoGenerico : PersonajeGenerico
         pb = this.gameObject.GetComponent<PandaBehaviour>();
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         agente.speed = this.velocidad;
-        this.siguientePosicion = this.transform.position;
+        this.siguientePosicionExplorar = Vector3.zero;
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
         tiempoEntreAtaques = tiempoEntreAtaquesMax;
         reina = GameObject.FindObjectOfType<Reina>();
@@ -95,11 +96,15 @@ public class EnemigoGenerico : PersonajeGenerico
     {
         if (hormigasCerca.Count > 0)
         {
-            HormigaGenerica hormigaCerca = hormigasCerca[0];
-            if (hormigaCerca != null)
+            if (hormigaAAtacar == null)
             {
-                agente.SetDestination(hormigaCerca.transform.position);
-                float distanceToTarget = Vector3.Distance(transform.position, hormigaCerca.transform.position);
+                hormigaAAtacar = hormigasCerca[Random.Range(0, hormigasCerca.Count)];
+            }
+            //HormigaGenerica hormigaCerca = hormigasCerca[Random.Range(0, hormigasCerca.Count)];
+            if (hormigaAAtacar != null)
+            {
+                agente.SetDestination(hormigaAAtacar.transform.position);
+                float distanceToTarget = Vector3.Distance(transform.position, hormigaAAtacar.transform.position);
                 if (distanceToTarget < 1.2f)
                 {
                     if (tiempoEntreAtaques <= 0)
@@ -107,7 +112,8 @@ public class EnemigoGenerico : PersonajeGenerico
                         float random = Random.Range(0, 10);
                         if (random < 9f)
                         {
-                            hormigaCerca.QuitarVida(this.daño);
+                            hormigaAAtacar.QuitarVida(this.daño);
+                            //hormigaAAtacar = null;
                         }
                         else
                         {
@@ -117,7 +123,7 @@ public class EnemigoGenerico : PersonajeGenerico
                     }
                     else
                     {
-                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + hormigaCerca.transform.position;
+                        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * 1 + hormigaAAtacar.transform.position;
                         agente.SetDestination(randomDirection);
                         tiempoEntreAtaques -= Time.deltaTime;
                     }
@@ -126,7 +132,14 @@ public class EnemigoGenerico : PersonajeGenerico
                 }
                 else
                 {
-                    agente.SetDestination(hormigaCerca.transform.position);
+                    if (!hormigasCerca.Contains(hormigaAAtacar))
+                    {
+                        hormigaAAtacar = null;
+                    }
+                    else
+                    {
+                        agente.SetDestination(hormigaAAtacar.transform.position);
+                    }
                     Task.current.Succeed();
                     return;
                 }
@@ -166,6 +179,9 @@ public class EnemigoGenerico : PersonajeGenerico
     public void Explorar()
     {
         //Debug.Log("Explorar");
+        hormigaAAtacar = null;
+
+        /*
         float distanceToTarget = Vector3.Distance(transform.position, this.siguientePosicion);
         //Debug.Log(distanceToTarget);
         if (distanceToTarget < 0.2f)
@@ -193,14 +209,60 @@ public class EnemigoGenerico : PersonajeGenerico
 
 
             agente.SetDestination(aux.position);
-            this.siguientePosicion = aux.position;*/
+            this.siguientePosicion = aux.position;
         } else
         {
             agente.SetDestination(siguientePosicion);
         }
         Task.current.Succeed();
         //
+        */
+
+        // si esta dentro
+        if (zonaDondeEsta == 0)
+        {
+            // sale
+            siguientePosicionExplorar = Vector3.zero;
+            Vector3 randomDirection;
+            NavMeshHit aux;
+            bool aux2;
+            do
+            {
+                randomDirection = UnityEngine.Random.insideUnitSphere * 10 + reina.afueras.centro;
+                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+            } while (!aux2);
+            siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+            //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+            agente.SetDestination(siguientePosicionExplorar);
+
+        }
+        else
+        {
+            if (siguientePosicionExplorar == Vector3.zero)
+            {
+                Vector3 randomDirection;
+                NavMeshHit aux;
+                bool aux2;
+                do
+                {
+                    randomDirection = UnityEngine.Random.insideUnitSphere * (10) + this.transform.position;
+                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
+                } while (!aux2);
+                siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+                //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+                agente.SetDestination(siguientePosicionExplorar);
+            }
+            else if (Vector3.Distance(this.transform.position, siguientePosicionExplorar) < 0.5f)
+            {
+                siguientePosicionExplorar = Vector3.zero;
+            }
+            else
+            {
+                agente.SetDestination(siguientePosicionExplorar);
+            }
+
+        }
+        Task.current.Succeed();
     }
 
-    
 }

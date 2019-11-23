@@ -44,6 +44,7 @@ public class Floor : MonoBehaviour
 
 
     int numSalas = 0;
+    private bool primeritoDia = false;
     public Vector3 centro;
 
     void Start()
@@ -418,18 +419,22 @@ public class Floor : MonoBehaviour
         //y: indice de la casilla y donde queremos que cree la sala
     public  Room createRoom(int x, int y, Room.roomType roomType)
     {
-
         int roomWidth = Random.Range(minRoom, maxRoom);
         int roomHeigth = roomWidth;
         Room roomAux = null;
 
+        if (primeritoDia == false)
+        {
+            roomWidth = 7;
+            roomHeigth = roomWidth;
+            primeritoDia = true;
+        }
+
         x = (int)(x - (roomWidth / 2));
         y = (int)(y - (roomHeigth / 2));
 
-
         if ((x + roomWidth) < width && (y + roomHeigth) < heigth && x > 0 && y > 0)
         {
-
             if (!checkRoomSpace(x, y, roomWidth, roomHeigth))
             {
                 return null;
