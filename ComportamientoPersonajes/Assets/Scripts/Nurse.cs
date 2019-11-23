@@ -73,6 +73,7 @@ public class Nurse : HormigaGenerica
             reina.contPrioridadNavMesh = 1;
         }
         agente.avoidancePriority = reina.contPrioridadNavMesh;
+        priority = reina.contPrioridadNavMesh;
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
@@ -100,7 +101,6 @@ public class Nurse : HormigaGenerica
             bocadillos = FindObjectOfType<BocadillosControlador>();
             if (bocadillos != null)
             {
-                Debug.Log("Encontrado");
                 bocadillosFound = true;
             }
         }

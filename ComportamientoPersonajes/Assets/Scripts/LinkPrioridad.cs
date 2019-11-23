@@ -36,8 +36,12 @@ public class LinkPrioridad : MonoBehaviour
         if (link == null)
         {
             link = (NavMeshLink) agent.navMeshOwner;
-            oldLinkCost = link.costModifier;
-            link.costModifier = 1000;
+            if (link != null)
+            {
+                oldLinkCost = link.costModifier;
+                link.costModifier = 1000;
+            }
+            
             //          link.activated = false;
         }
     }

@@ -23,6 +23,7 @@ public class AntMovement : MonoBehaviour
     public OffMeshLink link;
     private float oldLinkCost;
 
+
     void Start()
     {
         pb = this.gameObject.GetComponent<PandaBehaviour>();
@@ -62,7 +63,8 @@ public class AntMovement : MonoBehaviour
                     //a.GetComponent<NavMeshAgent>().updatePosition = false;
                     //a.transform.position =  link.startPoint;
                     a.zonaDondeEsta = 3;
-                } else if (a.zonaDondeEsta == 1)
+                }
+                else if (a.zonaDondeEsta == 1)
                 {
                     //a.GetComponent<NavMeshAgent>().autoTraverseOffMeshLink = false;
                     //a.GetComponent<NavMeshAgent>().updatePosition = false;
@@ -79,7 +81,7 @@ public class AntMovement : MonoBehaviour
                 aux.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 aux.gameObject.GetComponent<SphereCollider>().enabled = false;
             }
-
+            agent.avoidancePriority = 99;
             agent.speed = speed * linkMultiplayer;
         }
         else
@@ -91,7 +93,8 @@ public class AntMovement : MonoBehaviour
                 if (a.zonaDondeEsta == 3)
                 {
                     a.zonaDondeEsta = 1;
-                } else
+                }
+                else
                 {
                     a.zonaDondeEsta = 0;
                 }
@@ -105,13 +108,14 @@ public class AntMovement : MonoBehaviour
                 aux.gameObject.GetComponent<MeshRenderer>().enabled = true;
                 aux.gameObject.GetComponent<SphereCollider>().enabled = true;
             }
+            agent.avoidancePriority = agent.gameObject.GetComponent<HormigaGenerica>().priority;
             agent.speed = speed;
         }
         
         
     }
 
-    void AcquireOffmeshLink()
+    /*void AcquireOffmeshLink()
     {
         if (link == null)
         {
@@ -130,5 +134,5 @@ public class AntMovement : MonoBehaviour
             //          link.activated = true;
             link = null;
         }
-    }
+    }*/
 }

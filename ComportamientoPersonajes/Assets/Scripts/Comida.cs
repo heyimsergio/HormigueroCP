@@ -59,7 +59,7 @@ public class Comida : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
-        if (usosDeLaComida <= 0)
+        else if (usosDeLaComida <= 0)
         {
             reina.ComidaHaMuerto(this);
             Destroy(this.gameObject);
