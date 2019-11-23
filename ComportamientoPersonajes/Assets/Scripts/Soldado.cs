@@ -173,6 +173,7 @@ public class Soldado : HormigaGenerica
         }
         else
         {
+            SacarDeOcupadas();
             Task.current.Fail();
         }
     }

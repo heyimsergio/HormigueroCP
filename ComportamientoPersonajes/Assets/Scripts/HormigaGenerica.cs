@@ -781,12 +781,12 @@ public class HormigaGenerica : PersonajeGenerico
                     agente.SetDestination(this.transform.position);
                 }
                 TiempoActual -= Time.deltaTime;
-                Debug.Log("Curando a Hormiga en : " + TiempoActual);
+                //Debug.Log("Curando a Hormiga en : " + TiempoActual);
                 // Si ha pasado el tiempo de cura
                 if (TiempoActual <= 0)
                 {
                     hormigaACurar.SumarVida();
-                    Debug.Log("Hormiga Curada");
+                    //Debug.Log("Hormiga Curada");
                     // Reseteas todos los valores
                     TiempoActual = tiempoParaCurar;
                     posHerida = Vector3.zero;

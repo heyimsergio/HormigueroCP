@@ -663,8 +663,6 @@ public class Reina : HormigaGenerica
         Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
-            // Si la hormiga ya estaba cuidando un huevo
-            DesasignarHuevoACurar(aux);
             // Si la hormiga ya tiene una hormiga curando
             DesasignarHormigaACurar(aux);
             // Si la hormiga ya tiene una comida asignada
@@ -767,6 +765,10 @@ public class Reina : HormigaGenerica
         Obrera aux = obrerasDesocupadas[0];
         if (aux != null)
         {
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
             aux.hayOrdenDeCavar = true;
             obrerasOcupadas.Add(aux);
             obrerasDesocupadas.Remove(aux);
@@ -903,6 +905,10 @@ public class Reina : HormigaGenerica
         }
         if (aux != null && aux != aux2)
         {
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
             aux.hayOrdenCurarHormiga = true;
             soldadosOcupadas.Add(aux);
             soldadosDesocupadas.Remove(aux);
@@ -939,6 +945,10 @@ public class Reina : HormigaGenerica
         if (aux != null && aux != aux2)
         {
             Debug.Log("Tengo obrera que mandar a curar");
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
             aux.hayOrdenCurarHormiga = true;
             obrerasOcupadas.Add(aux);
             obrerasDesocupadas.Remove(aux);
@@ -1205,7 +1215,7 @@ public class Reina : HormigaGenerica
         }
         if (ponerHuevo)
         {
-            Debug.Log(hormigaAponer + " : es la hormiga elegida");
+            //Debug.Log(hormigaAponer + " : es la hormiga elegida");
             if (hormigaAponer == TipoHormiga.NULL)
             {
                 
@@ -1213,17 +1223,17 @@ public class Reina : HormigaGenerica
                 switch (min)
                 {
                     case 0:
-                        Debug.Log("Hormiga Nurse");
+                        //Debug.Log("Hormiga Nurse");
                         hormigaAponer = TipoHormiga.NURSE;
                         numeroDeNurseEnEstaTanda++;
                         break;
                     case 1:
-                        Debug.Log("Hormiga Obrera");
+                        //Debug.Log("Hormiga Obrera");
                         hormigaAponer = TipoHormiga.OBRERA;
                         numeroDeObrerasEnEstaTanda++;
                         break;
                     case 2:
-                        Debug.Log("Hormiga Soldado");
+                        //Debug.Log("Hormiga Soldado");
                         hormigaAponer = TipoHormiga.SOLDADO;
                         numeroDeSoldadoEnEstaTanda++;
                         break;
@@ -1864,6 +1874,7 @@ public class Reina : HormigaGenerica
         {
             if (!aux.isFull)
             {
+                Debug.Log("capacidad restante sala: " + aux.llenadoActual);
                 return aux;
             }
         }

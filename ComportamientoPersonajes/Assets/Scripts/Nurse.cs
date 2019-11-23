@@ -222,11 +222,7 @@ public class Nurse : HormigaGenerica
         }
         else
         {
-            /*if (reina.nursesOcupadas.Contains(this))
-            {
-                reina.nursesOcupadas.Remove(this);
-                reina.nursesDesocupadas.Add(this);
-            }*/
+            SacarDeOcupadas();
             Task.current.Fail();
             return;
         }

@@ -195,11 +195,7 @@ public class Obrera : HormigaGenerica
         }
         else
         {
-            /*if (reina.obrerasOcupadas.Contains(this))
-            {
-                reina.obrerasOcupadas.Remove(this);
-                reina.obrerasDesocupadas.Add(this);
-            }*/
+            SacarDeOcupadas();
             Task.current.Fail();
         }
     }
@@ -358,7 +354,7 @@ public class Obrera : HormigaGenerica
                         break;
                     case 2:
 
-                        aux = reina.hormiguero.createCorridor(Room.roomType.STORAGE);
+                        aux = reina.hormiguero.createCorridor(Room.roomType.EGGROOM);
 
                         if (aux != null)
                         {
