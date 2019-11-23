@@ -39,9 +39,6 @@ tree("Soldado")
 			HayHormigaQueCurarCerca()
 			CurarHormiga()
 		sequence
-			HaceMuchoQueHabiaEnemigos()
-			Patrullar()
-		sequence
 			TengoHambre()
 			HayComida()
 			not
