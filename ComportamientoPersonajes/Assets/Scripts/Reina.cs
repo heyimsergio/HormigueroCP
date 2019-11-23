@@ -152,6 +152,7 @@ public class Reina : HormigaGenerica
 
     // planificador necesidades
     public float umbralComida;
+    public float umbralNecesidadCogerComida;
     #endregion
 
     #region prefabs
@@ -225,6 +226,10 @@ public class Reina : HormigaGenerica
         TIEMPO2 = 200;
         TIEMPO3 = 250;
         TIEMPO4 = 300;
+
+        //umbrales comida
+         umbralComida = 2.3f;
+         umbralNecesidadCogerComida = 1f;
 
         if (!bocadillosFound)
         {
@@ -582,7 +587,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayComidaSuficiente()
     {
-        if (totalHormigas * umbralComida < comidaTotal.Count)
+        if (totalHormigas * umbralNecesidadCogerComida < comidaTotal.Count)
         {
             Task.current.Succeed();
             return;
@@ -1200,23 +1205,25 @@ public class Reina : HormigaGenerica
         }
         if (ponerHuevo)
         {
+            Debug.Log(hormigaAponer + " : es la hormiga elegida");
             if (hormigaAponer == TipoHormiga.NULL)
             {
+                
                 int min = CompareLess3(numeroDeNursesTotal + numeroDeNurseEnEstaTanda, numeroDeObrerasTotal+numeroDeObrerasEnEstaTanda, numeroDeSoldadosTotal+numeroDeSoldadoEnEstaTanda, importanciaNurses, importanciaObreras, importanciaSoldados);
                 switch (min)
                 {
                     case 0:
-                        //Debug.Log("Hormiga Nurse");
+                        Debug.Log("Hormiga Nurse");
                         hormigaAponer = TipoHormiga.NURSE;
                         numeroDeNurseEnEstaTanda++;
                         break;
                     case 1:
-                        //Debug.Log("Hormiga Obrera");
+                        Debug.Log("Hormiga Obrera");
                         hormigaAponer = TipoHormiga.OBRERA;
                         numeroDeObrerasEnEstaTanda++;
                         break;
                     case 2:
-                        //Debug.Log("Hormiga Soldado");
+                        Debug.Log("Hormiga Soldado");
                         hormigaAponer = TipoHormiga.SOLDADO;
                         numeroDeSoldadoEnEstaTanda++;
                         break;
@@ -1235,7 +1242,6 @@ public class Reina : HormigaGenerica
                 {
                     //Debug.Log("No hay sala de huevos");
                     tienePosicionPonerHuevo = false;
-                    hormigaAponer = TipoHormiga.NULL;
                     salaDondePonerHuevo = null;
                     casillaDondePonerHuevo = null;
                     ponerHuevo = false;

@@ -32,8 +32,9 @@ public class Soldado : HormigaGenerica
     // posDejarComida = Vector3.zero;
 
     //Patrullar
-    public int tiempoPatrullando;
-    public Vector3 centro;
+    public float tiempoPatrullando;
+    public float tiempoActualPatrullando;
+    public Vector3 posicionPatrullar;
     public int radio;
 
     // Comer
@@ -84,6 +85,11 @@ public class Soldado : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
+        posicionPatrullar = Vector3.zero;
+        radio = 10;
+        tiempoPatrullando = 10;
+        tiempoPatrullando = 0;
+
         if (!bocadillosFound)
         {
             bocadillos = FindObjectOfType<BocadillosControlador>();
@@ -183,11 +189,74 @@ public class Soldado : HormigaGenerica
         Task.current.Fail();
     }
 
+    /// <summary>
+    /// Hay que setearle la posicion a patrullar cuando se le mande la orden
+    /// </summary>
     [Task]
     public void Patrullar()
     {
+        if (tiempoActualPatrullando < tiempoPatrullando)
+        {
+            // si esta dentro
+            if (zonaDondeEsta == 0)
+            {
+                // sale
+                siguientePosicionExplorar = Vector3.zero;
+                Vector3 randomDirection;
+                NavMeshHit aux;
+                bool aux2;
+                do
+                {
+                    randomDirection = UnityEngine.Random.insideUnitSphere * radio + posicionPatrullar;
+                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+                } while (!aux2);
+                siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+                //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+                agente.SetDestination(siguientePosicionExplorar);
+
+            }
+            else
+            {
+                tiempoPatrullando += Time.deltaTime;
+                if (siguientePosicionExplorar == Vector3.zero)
+                {
+                    Vector3 randomDirection;
+                    NavMeshHit aux;
+                    bool aux2;
+                    do
+                    {
+                        randomDirection = UnityEngine.Random.insideUnitSphere * (radio) + posicionPatrullar;
+                        aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
+                    } while (!aux2);
+                    siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+                    //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+                    agente.SetDestination(siguientePosicionExplorar);
+                }
+                else if (Vector3.Distance(this.transform.position, siguientePosicionExplorar) < 0.5f)
+                {
+                    siguientePosicionExplorar = Vector3.zero;
+                }
+                else
+                {
+                    agente.SetDestination(siguientePosicionExplorar);
+                }
+
+            }
+            Task.current.Succeed();
+        } else
+        {
+            Debug.Log("Acabe de patrullar");
+            hayOrdenDePatrullar = false;
+            tiempoActualPatrullando = 0;
+            Task.current.Fail();
+        }
+
         Task.current.Fail();
+
     }
+
+    
+    
 
     // HayHormigaQueCurarCerca()
 

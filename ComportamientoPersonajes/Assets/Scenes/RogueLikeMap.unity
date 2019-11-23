@@ -4436,6 +4436,8 @@ MonoBehaviour:
   zonaDondeEsta: 0
   bocadillos: {fileID: 0}
   bocadillosFound: 0
+  agente: {fileID: 0}
+  priority: 0
   hambre: 200
   umbralHambre: 500
   tengoHambre: 0
@@ -4547,6 +4549,7 @@ MonoBehaviour:
   "tama\xF1oMaxColaConstruccionSalas": 0
   salasEnConstruccion: 0
   umbralComida: 2.3
+  umbralNecesidadCogerComida: 1
   comidaPrefab: {fileID: 2867959774170439277, guid: 09ba6be01b00b9b46a847381e95dd101,
     type: 3}
   PrefabHuevo: {fileID: 1489546582499747470, guid: 36cebf16d8691e24c8c986527498073c,
