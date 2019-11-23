@@ -30,6 +30,9 @@ public class Reina : HormigaGenerica
     public int huevosQueLlevaPuestosEnEstaTanda;
     public int numeroMinimoHuevosPorTanda;
     public int numeroMaximoHuevosPorTanda;
+    public int numeroDeNurseEnEstaTanda;
+    public int numeroDeObrerasEnEstaTanda;
+    public int numeroDeSoldadoEnEstaTanda;
 
 
     //Cuidar huevos
@@ -101,7 +104,7 @@ public class Reina : HormigaGenerica
     public List<Room> salasHuevos = new List<Room>();
 
     public int probComida = 10;
-    public int MaxProbComida = 1000;
+    public int MaxProbComida;
 
     float initTime;
     float actualTime;
@@ -168,6 +171,16 @@ public class Reina : HormigaGenerica
     // Start is called before the first frame update
     void Start()
     {
+        DataController config = FindObjectOfType<DataController>();
+        if (config.facil)
+        {
+            MaxProbComida = 1500;
+        } else if (config.medio)
+        {
+            MaxProbComida = 3000;
+        } else {
+            MaxProbComida = 6000;
+        }
         // Inicializacion
         initTime = Time.time;
         this.zonaDondeEsta = 0;
@@ -207,9 +220,9 @@ public class Reina : HormigaGenerica
 
         //TiemposEvolucionJuego
         TIEMPO1 = 80;
-        TIEMPO2 = 130;
-        TIEMPO3 = 180;
-        TIEMPO4 = 230;
+        TIEMPO2 = 200;
+        TIEMPO3 = 250;
+        TIEMPO4 = 300;
 
         if (!bocadillosFound)
         {
@@ -1111,6 +1124,9 @@ public class Reina : HormigaGenerica
                 huevosAPonerEnEstaTanda = Random.Range(numeroMinimoHuevosPorTanda, numeroMaximoHuevosPorTanda);
                 tiempoRestanteHuevos = tiempoQueTardaEnPonerHuevos;
                 huevosQueLlevaPuestosEnEstaTanda = 0;
+                numeroDeNurseEnEstaTanda = 0;
+                numeroDeObrerasEnEstaTanda = 0;
+                numeroDeSoldadoEnEstaTanda = 0;
                 Task.current.Fail();
                 return;
             }
@@ -1137,20 +1153,23 @@ public class Reina : HormigaGenerica
         {
             if (hormigaAponer == TipoHormiga.NULL)
             {
-                int min = CompareLess3(numeroDeNursesTotal, numeroDeObrerasTotal, numeroDeSoldadosTotal, importanciaNurses, importanciaObreras, importanciaSoldados);
+                int min = CompareLess3(numeroDeNursesTotal + numeroDeNurseEnEstaTanda, numeroDeObrerasTotal+numeroDeObrerasEnEstaTanda, numeroDeSoldadosTotal+numeroDeSoldadoEnEstaTanda, importanciaNurses, importanciaObreras, importanciaSoldados);
                 switch (min)
                 {
                     case 0:
                         //Debug.Log("Hormiga Nurse");
                         hormigaAponer = TipoHormiga.NURSE;
+                        numeroDeNurseEnEstaTanda++;
                         break;
                     case 1:
                         //Debug.Log("Hormiga Obrera");
                         hormigaAponer = TipoHormiga.OBRERA;
+                        numeroDeObrerasEnEstaTanda++;
                         break;
                     case 2:
                         //Debug.Log("Hormiga Soldado");
                         hormigaAponer = TipoHormiga.SOLDADO;
+                        numeroDeSoldadoEnEstaTanda++;
                         break;
                 }
             }
@@ -1453,16 +1472,27 @@ public class Reina : HormigaGenerica
         int saleComida = Random.RandomRange(0, MaxProbComida + 1);
         if (saleComida < probComida)
         {
-            Vector3 centro = afueras.centro;
-            float posX = Random.RandomRange(-(afueras.width / 2), (afueras.width / 2));
-            float posZ = Random.RandomRange(-(afueras.heigth / 2), (afueras.heigth / 2));
-
-            centro.x += posX;
-            centro.z += posZ;
-
-            GameObject aux = Instantiate(comidaPrefab, centro, Quaternion.identity);
-            aux.GetComponent<Comida>().InitComida(Comida.comidaType.Trigo);
+            InstanciarComida();
         }
+    }
+
+    public void InstanciarComida()
+    {
+        Vector3 centro = afueras.centro;
+        float posX = Random.RandomRange(-(afueras.width / 2)+2, (afueras.width / 2)-2);
+        float posZ = Random.RandomRange(-(afueras.heigth / 2)+2, (afueras.heigth / 2)-2);
+
+        centro.x += posX;
+        centro.z += posZ;
+
+        GameObject aux = Instantiate(comidaPrefab, centro, Quaternion.identity);
+        aux.GetComponent<Comida>().InitComida(Comida.comidaType.Trigo);
+    }
+
+    public void InstanciarComidaPos(Vector3 pos)
+    {
+        GameObject aux = Instantiate(comidaPrefab, pos, Quaternion.identity);
+        aux.GetComponent<Comida>().InitComida(Comida.comidaType.Trigo);
     }
 
     // Tarea Poner Huevo de Reina
@@ -1639,6 +1669,8 @@ public class Reina : HormigaGenerica
 
     public void EnemigoHaMuerto(EnemigoGenerico enemigo)
     {
+        InstanciarComidaPos(enemigo.transform.position);
+
         // Avisamos a la hormiga de que el enemigo ha muerto
         foreach (HormigaGenerica h in enemigo.hormigasCerca)
         {
