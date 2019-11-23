@@ -379,4 +379,6 @@ public class BocadillosControlador : MonoBehaviour
         ponerHuevos = false;
         estarHerido = false;
     }
+
+    
 }

@@ -490,6 +490,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenAtacarSoldado()
     {
+        ordenesCanvas.OrdenAtacar();
         /*Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
@@ -509,6 +510,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenAtacarObrera()
     {
+        ordenesCanvas.OrdenAtacar();
         /*Obrera aux = obrerasDesocupadas[0];
         if (aux != null)
         {
@@ -622,6 +624,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaObreras()
     {
+        ordenesCanvas.OrdenBuscarComida();
         Obrera aux = obrerasDesocupadas[0];
         if (aux != null)
         {
@@ -659,6 +662,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaSoldados()
     {
+        ordenesCanvas.OrdenBuscarComida();
         Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
@@ -698,6 +702,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaNurses()
     {
+        ordenesCanvas.OrdenBuscarComida();
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
@@ -763,6 +768,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCavarObreras()
     {
+        ordenesCanvas.OrdenCavar();
         Obrera aux = obrerasDesocupadas[0];
         if (aux != null)
         {
@@ -838,6 +844,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCuidarNurses()
     {
+        ordenesCanvas.OrdenCuidarHuevo();
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
@@ -881,6 +888,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarSoldado()
     {
+        ordenesCanvas.OrdenCurarHormiga();
         Soldado aux = soldadosDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
         if (aux == aux2)
@@ -916,6 +924,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarObreras()
     {
+        ordenesCanvas.OrdenCurarHormiga();
         Obrera aux = obrerasDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
         if (aux == aux2)
@@ -952,6 +961,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarNurses()
     {
+        ordenesCanvas.OrdenCurarHormiga();
         Nurse aux = nursesDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
         // Comprobación para que no se cure a si misma
@@ -1010,6 +1020,7 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenPatrullarSoldado()
     {
+        ordenesCanvas.OrdenPatrullar();
         Task.current.Fail();
     }
 

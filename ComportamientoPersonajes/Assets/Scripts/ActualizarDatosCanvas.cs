@@ -48,7 +48,7 @@ public class ActualizarDatosCanvas : MonoBehaviour
         fondoOrdenes.color = aux;
 
         aux = ordenAtacarImg.color;
-        aux.a =3f;
+        aux.a =0.3f;
         ordenAtacarImg.color = aux;
 
         aux = ordenCavarImg.color;
@@ -115,6 +115,8 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
+
+        StartCoroutine(desaparecer(ordenAtacarImg));
     }
     public void OrdenCavar()
     {
@@ -142,8 +144,10 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
+
+        StartCoroutine(desaparecer(ordenCavarImg));
     }
-    public void OrdenCuidarHormiga()
+    public void OrdenCurarHormiga()
     {
         Color aux;
         aux = ordenAtacarImg.color;
@@ -169,8 +173,10 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
+
+        StartCoroutine(desaparecer(ordenCuidarHormigaImg));
     }
-    public void OrdenCurar()
+    public void OrdenCuidarHuevo()
     {
         Color aux;
         aux = ordenAtacarImg.color;
@@ -196,6 +202,8 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
+
+        StartCoroutine(desaparecer(ordenCurarImg));
     }
     public void OrdenPatrullar()
     {
@@ -223,6 +231,8 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
+
+        StartCoroutine(desaparecer(ordenPatrullarImg));
     }
     public void OrdenBuscarComida()
     {
@@ -250,5 +260,18 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 1f;
         ordenBuscarComidaImg.color = aux;
+
+        StartCoroutine(desaparecer(ordenBuscarComidaImg));
+    }
+
+    IEnumerator desaparecer(Image a)
+    {
+        for (float i = 0; i < 15; i += Time.deltaTime)
+        {
+            yield return null;
+        }
+        Color aux = a.color;
+        aux.a = 0.3f;
+        a.color = aux;
     }
 }
