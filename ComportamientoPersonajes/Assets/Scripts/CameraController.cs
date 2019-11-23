@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
     Camera cam;
     private Vector3 dentroPos;
     private Vector3 fueraPos;
+    BocadillosControlador bc;
 
     void Start()
     {
@@ -39,10 +40,12 @@ public class CameraController : MonoBehaviour
                     //Debug.Log("Es hormiga");
                     free = false;
                     target = h.gameObject;
+                    bc.hormigaSeleccionada = h;
                 } else
                 {
                     free = true;
                     target = null;
+                    bc.hormigaSeleccionada = null;
                 }
             }
         }
@@ -50,11 +53,13 @@ public class CameraController : MonoBehaviour
         {
             free = true;
             target = null;
+            bc.hormigaSeleccionada = null;
             this.transform.position = dentroPos;
         } else if (Input.GetKeyDown("1"))
         {
             free = true;
             target = null;
+            bc.hormigaSeleccionada = null;
             this.transform.position = fueraPos;
         }
         if (free)
