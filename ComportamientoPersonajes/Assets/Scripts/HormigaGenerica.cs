@@ -116,15 +116,7 @@ public class HormigaGenerica : PersonajeGenerico
     // Update is called once per frame
     void Update()
     {
-        if (!bocadillosFound)
-        {
-            bocadillos = FindObjectOfType<BocadillosControlador>();
-            if (bocadillos != null)
-            {
-                Debug.Log("Encontrado");
-                bocadillosFound = true;
-            }
-        }
+        
         ActualizarHambre();
 
         ActualizarSiPuedeSerCurada();
@@ -615,6 +607,17 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void NoMoverse()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.EstaHerido();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
         //siguientePosicionExplorar = this.transform.position;
         agente.SetDestination(this.transform.position);
         Task.current.Succeed();
@@ -675,6 +678,17 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void Comer()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Comer();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
         if (comidaAComer == null)
         {
             //Debug.Log("No tengo comida aun ");
@@ -772,6 +786,17 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void CurarHormiga()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Curar();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
         if (hormigaACurar != null)
         {
             // Si es la primera vez, no tengo asignada la posicion de la hormiga a curar
@@ -865,7 +890,14 @@ public class HormigaGenerica : PersonajeGenerico
     {
         if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
         {
-            bocadillos.BuscarComida();
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.BuscarComida();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
         }
         if (comida != null)
         {

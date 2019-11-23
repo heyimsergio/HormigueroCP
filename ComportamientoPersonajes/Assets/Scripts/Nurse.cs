@@ -248,6 +248,17 @@ public class Nurse : HormigaGenerica
     [Task]
     public void CuidarHuevos()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.CuidarHuevos();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
         if (huevoACuidar != null)
         {
             // Si es la primera vez, no tengo asignada la posicion del huevo
@@ -352,7 +363,13 @@ public class Nurse : HormigaGenerica
     {
         if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
         {
-            bocadillos.Explorar();
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Explorar();
+            } else
+            {
+                bocadillos.Nada();
+            }
         }
         if (zonaDondeEsta == 1)
         {

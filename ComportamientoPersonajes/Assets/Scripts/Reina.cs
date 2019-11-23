@@ -1122,6 +1122,17 @@ public class Reina : HormigaGenerica
     [Task]
     public void PonerHuevos()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.PonerHuevos();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
         if (ponerHuevo)
         {
             if (hormigaAponer == TipoHormiga.NULL)
@@ -1211,7 +1222,17 @@ public class Reina : HormigaGenerica
     [Task]
     public void Esperar()
     {
-
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Explorar();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
         if (zonaDondeEsta == 1)
         {
             //Debug.Log("Esta fuera");

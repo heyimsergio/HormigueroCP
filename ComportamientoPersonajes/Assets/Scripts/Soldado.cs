@@ -202,7 +202,14 @@ public class Soldado : HormigaGenerica
     {
         if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
         {
-            bocadillos.Explorar();
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Explorar();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
         }
         // si esta dentro
         if (zonaDondeEsta == 0)

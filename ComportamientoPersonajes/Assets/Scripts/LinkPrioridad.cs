@@ -10,6 +10,7 @@ public class LinkPrioridad : MonoBehaviour
     public NavMeshLink link;
     private int oldLinkCost;
 
+
     // Start is called before the first frame update
     void Start()
     {
