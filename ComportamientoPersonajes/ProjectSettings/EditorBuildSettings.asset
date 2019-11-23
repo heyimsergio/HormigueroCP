@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RogueLikeMap.unity
     guid: 669b3d04f6ef6c54c8a46738fade5701
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: a654e8b39451ce641a7b7657bde09597
   m_configObjects: {}

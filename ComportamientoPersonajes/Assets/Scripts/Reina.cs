@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Panda;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Reina : HormigaGenerica
 {
@@ -10,6 +11,9 @@ public class Reina : HormigaGenerica
     public enum TipoHormiga { NURSE, OBRERA, SOLDADO, NULL };
 
     #region atributos propios de la reina
+
+    //Actualizar canvas ordenes
+    public ActualizarDatosCanvas ordenesCanvas;
 
     // NavMesh
     public int contPrioridadNavMesh = 1;
@@ -1655,6 +1659,7 @@ public class Reina : HormigaGenerica
         else
         {
             // Si es la reina, sería fin de la simulación
+            SceneManager.LoadScene(2);
         }
 
         // Si la hormiga muere mientras cura a otra
