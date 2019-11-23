@@ -10,6 +10,13 @@ public class GeneradorEnemigos : MonoBehaviour
     public float tiempoMaximo;
     public float tiempoMinimo;
 
+    float initTiempoMaximo;
+    float initTiempoMinimo;
+    int minimoTiempo = 5;
+
+    float tiempoActual = 0;
+
+
     public Vector3 pos1;
     public Vector3 pos2;
     public Vector3 pos3;
@@ -18,8 +25,24 @@ public class GeneradorEnemigos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tiempoMaximo = 50f;
-        tiempoMinimo = 25f;
+        DataController config = FindObjectOfType<DataController>();
+        if (config.facil)
+        {
+            tiempoMaximo = 50f;
+            tiempoMinimo = 25f;
+        } else if (config.medio)
+        {
+            tiempoMaximo = 35f;
+            tiempoMinimo = 15f;
+        } else
+        {
+            tiempoMaximo = 25f;
+            tiempoMinimo = 10f;
+        }
+
+        initTiempoMaximo = tiempoMaximo;
+        initTiempoMinimo = tiempoMinimo;
+
         tiempoParaSpawnear = tiempoMinimo;
         pos1 = new Vector3(0.5f, 0, 0.5f);
         pos2 = new Vector3(1f, 0, 49f);
@@ -30,6 +53,19 @@ public class GeneradorEnemigos : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        tiempoActual += Time.deltaTime;
+        tiempoMaximo = initTiempoMaximo - tiempoActual / 90;
+        tiempoMinimo = initTiempoMinimo - tiempoActual / 90;
+
+        if(tiempoMinimo < minimoTiempo)
+        {
+            tiempoMinimo = minimoTiempo;
+        }
+        if(tiempoMaximo < minimoTiempo)
+        {
+            tiempoMaximo = minimoTiempo;
+        }
+
         tiempoParaSpawnear -= Time.deltaTime;
         if (tiempoParaSpawnear <= 0)
         {
