@@ -84,6 +84,10 @@ public class Soldado : HormigaGenerica
 
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
+
+        // Curar
+        tiempoParaCurar = 10.0f;
+
         if (!bocadillosFound)
         {
             bocadillos = FindObjectOfType<BocadillosControlador>();
@@ -167,6 +171,7 @@ public class Soldado : HormigaGenerica
         }
         else
         {
+            SacarDeOcupadas();
             Task.current.Fail();
         }
     }

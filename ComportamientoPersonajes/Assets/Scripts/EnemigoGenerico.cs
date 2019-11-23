@@ -13,6 +13,7 @@ public class EnemigoGenerico : PersonajeGenerico
     Reina reina = null;
 
     public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
+    public List<HormigaGenerica> hormigasAtacandole = new List<HormigaGenerica>();
     public HormigaGenerica hormigaAAtacar = null;
     protected int tiempoParaIrse;
 
