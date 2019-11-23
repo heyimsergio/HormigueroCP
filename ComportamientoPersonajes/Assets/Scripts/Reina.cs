@@ -1055,6 +1055,51 @@ public class Reina : HormigaGenerica
         return;
     }
 
+    [Task]
+    public void HayNursesEnElHormiguero()
+    {
+        if (numeroDeNursesTotal > 0)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
+    }
+
+    [Task]
+    public void HayHuevosQueNecesitanCuidados()
+    {
+        // Si no tengo ningun huevo asignado, miro los que hay alrededor
+        if (huevoACuidar == null)
+        {
+            // Recorremos la lista de huevos cercanos
+            foreach (Huevo h in huevosQueTienenQueSerCuidados)
+            {
+                // Si algun huevo PUEDE ser cuidado y no tiene a nadie asignado, se lo asigno e indico al huevo quien lo cuida
+                if (h.siendoCuidadoPor == null && h.necesitaCuidados)
+                {
+                    huevoACuidar = h;
+                    h.siendoCuidadoPor = this;
+                    // Si la reina lo tiene en su lista de huevos que necesitan cuidados, lo borro
+                    reina.huevosQueTienenQueSerCuidados.Remove(huevoACuidar);
+                    Task.current.Succeed();
+                    return;
+                }
+            }
+        }
+        else
+        {
+            Task.current.Succeed();
+            return;
+        }
+        // Si no encuentra ningun huevo
+        Task.current.Fail();
+        return;
+    }
+
+
     // CuidarHuevos() --> está en la nurse actualmente solo
     [Task]
     public void CuidarHuevos()

@@ -23,9 +23,15 @@ public class Huevo : MonoBehaviour
     void Start()
     {
         miReina = GameObject.FindObjectOfType<Reina>();
-        tiempoQueAguantaSinCuidar = maxTimeParaCuidar;
         huevoCollider = GetComponent<Collider>();
         huevoCollider.isTrigger = true;
+
+        // Variables huevo
+        maxTimeParaCuidar = 150;
+        tiempoQueAguantaSinCuidar = maxTimeParaCuidar - Random.Range(0, 20);
+        tiempoParaNacer = 150 + Random.Range(0, 100);
+        umbralDeAvisoCuidarHuevo = 70;
+        umbralDePoderseCuidar = 100;
     }
 
     public void Init(Room aux, Reina.TipoHormiga tipo, TileScript tile)

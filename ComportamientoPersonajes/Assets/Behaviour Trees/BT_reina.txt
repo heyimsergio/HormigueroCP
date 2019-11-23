@@ -101,6 +101,11 @@ tree("Reina")
 				HayHormigaQueCurarCerca()
 				CurarHormiga()
 			sequence
+				not
+					HayNursesEnElHormiguero()
+				HayHuevosQueNecesitanCuidados()
+				CuidarHuevos()
+			sequence
 				PuedoPonerHuevos()
 				PonerHuevos()
 			sequence
