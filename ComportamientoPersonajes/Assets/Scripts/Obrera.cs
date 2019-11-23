@@ -93,8 +93,11 @@ public class Obrera : HormigaGenerica
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
 
-        // cavar
+        // Cavar
         posCavar = Vector3.zero;
+
+        // Curar
+        tiempoParaCurar = 10.0f;
 
         if (!bocadillosFound)
         {
@@ -168,7 +171,57 @@ public class Obrera : HormigaGenerica
     [Task]
     public void HaySoldadosCerca()
     {
-        if (soldadosCerca)
+        foreach (HormigaGenerica h in hormigasCerca)
+        {
+            if (h != null)
+            {
+                Soldado hormigaSoldado = h.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+
+                if (hormigaSoldado != null)
+                {
+                    if (hormigaSoldado.enemigoAlQueAtacar == null)
+                    {
+                        hormigaSoldado.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                        {
+                            hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                        }
+                    }
+                }
+            }
+        }
+
+        bool haySoldadosEnTodas = false;
+        int cont = 0;
+        foreach (EnemigoGenerico enem in enemigosCerca)
+        {
+            cont = 0;
+            foreach (HormigaGenerica hormiga in enem.hormigasAtacandole)
+            {
+                if (hormiga != null)
+                {
+                    Soldado hormigaSoldado2 = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                    if (hormigaSoldado2 != null)
+                    {
+                        haySoldadosEnTodas = true;
+                        break;
+                    }
+                    else if (cont == enem.hormigasAtacandole.Count - 1)
+                    {
+                        haySoldadosEnTodas = false;
+                        break;
+                    }
+                }
+                cont++;
+            }
+
+            if (haySoldadosEnTodas == false)
+            {
+                break;
+            }
+        }
+
+        if (haySoldadosEnTodas)
         {
             Task.current.Succeed();
         }
@@ -195,11 +248,7 @@ public class Obrera : HormigaGenerica
         }
         else
         {
-            /*if (reina.obrerasOcupadas.Contains(this))
-            {
-                reina.obrerasOcupadas.Remove(this);
-                reina.obrerasDesocupadas.Add(this);
-            }*/
+            SacarDeOcupadas();
             Task.current.Fail();
         }
     }

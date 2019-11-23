@@ -80,6 +80,9 @@ public class HormigaGenerica : PersonajeGenerico
     // Orden Cuidar Huevos
     public bool hayOrdenCuidarHuevos = false;
 
+    // Huir cuando te ataquen
+    bool hayHormigasAtacandoAlEnemigo = false;
+
     //Explorar
     [Header("Explorar")]
     public Vector3 siguientePosicionExplorar;
@@ -95,7 +98,7 @@ public class HormigaGenerica : PersonajeGenerico
     //Ordenes de la reina
     public bool meHanMandadoOrden = false;
 
-    // sistema de vision
+    // Sistema de vision
     int numRayosExtra = 3;
     int numRayosFijos = 4;
     int RayDistance = 10;
@@ -367,7 +370,7 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void HayEnemigosCerca()
     {
-        if (enemigosCerca.Count != 0)
+        if (enemigosCerca.Count > 0)
         {
             Task.current.Succeed();
         }
@@ -404,6 +407,10 @@ public class HormigaGenerica : PersonajeGenerico
             if (enemigosCerca.Count > 0)
             {
                 enemigoAlQueAtacar = enemigosCerca[0];
+                if (enemigoAlQueAtacar.hormigasAtacandole.Contains(this))
+                {
+                    enemigoAlQueAtacar.hormigasAtacandole.Add(this);
+                }
                 Task.current.Succeed();
                 return;
             }
@@ -519,6 +526,7 @@ public class HormigaGenerica : PersonajeGenerico
                 Vector3 direccionEnemigo = enemigoCerca.transform.position - this.transform.position;
                 Vector3 direccionContraria = direccionEnemigo * -1;
                 agente.SetDestination(this.transform.position + direccionContraria);
+                Debug.Log("Estoy huyendo");
             }
             Task.current.Succeed();
             return;
@@ -781,7 +789,6 @@ public class HormigaGenerica : PersonajeGenerico
                     agente.SetDestination(this.transform.position);
                 }
                 TiempoActual -= Time.deltaTime;
-                Debug.Log("Curando a Hormiga en : " + TiempoActual);
                 // Si ha pasado el tiempo de cura
                 if (TiempoActual <= 0)
                 {
@@ -806,6 +813,7 @@ public class HormigaGenerica : PersonajeGenerico
             }
             else
             {
+                TiempoActual = tiempoParaCurar;
                 agente.SetDestination(hormigaACurar.transform.position);
             }
             Task.current.Succeed();
@@ -942,7 +950,7 @@ public class HormigaGenerica : PersonajeGenerico
         }
         else
         {
-            // La comida ha muerto o tengo que dejar al comida, reseteo datos
+            // La comida ha muerto o tengo que dejar la comida, reseteo datos
             salaDejarComida = null;
             casillaDejarComida = null;
             posComida = Vector3.zero;
@@ -966,6 +974,7 @@ public class HormigaGenerica : PersonajeGenerico
         Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
         Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
         Soldado hormigaSoldado = this.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+
         if (hormigaNurse != null)
         {
             if (reina.nursesDesocupadas.Remove(hormigaNurse))
@@ -994,6 +1003,7 @@ public class HormigaGenerica : PersonajeGenerico
         Nurse hormigaNurse = this.transform.gameObject.GetComponent(typeof(Nurse)) as Nurse;
         Obrera hormigaObrera = this.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
         Soldado hormigaSoldado = this.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+
         if (hormigaNurse != null)
         {
             if (reina.nursesOcupadas.Remove(hormigaNurse))

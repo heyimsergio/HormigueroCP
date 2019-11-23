@@ -194,7 +194,72 @@ public class Nurse : HormigaGenerica
     [Task]
     public void HayObrerasOSoldadosCerca()
     {
-        if (obrerasCerca || soldadosCerca)
+        foreach (HormigaGenerica h in hormigasCerca)
+        {
+            if (h != null)
+            {
+                Soldado hormigaSoldado = h.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                Obrera hormigaObrera = h.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+
+                if (hormigaObrera != null)
+                {
+                    if (hormigaObrera.enemigoAlQueAtacar == null)
+                    {
+                        hormigaObrera.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        if (hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                        {
+                            hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
+                        }
+                    }
+                }
+                else if (hormigaSoldado != null)
+                {
+                    if (hormigaSoldado.enemigoAlQueAtacar == null)
+                    {
+                        hormigaSoldado.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                        {
+                            hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                        }
+                    }
+                }
+            }
+        }
+
+        bool haySoldadosOObrerasEnTodas = false;
+        int cont = 0;
+        foreach (EnemigoGenerico enem in enemigosCerca)
+        {
+            cont = 0;
+            foreach (HormigaGenerica hormiga in enem.hormigasAtacandole)
+            {
+                Soldado hormigaSoldado2 = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                Obrera hormigaObrera2 = hormiga.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+                if (hormigaSoldado2 != null)
+                {
+                    haySoldadosOObrerasEnTodas = true;
+                    break;
+                }
+                else if (hormigaObrera2 != null)
+                {
+                    haySoldadosOObrerasEnTodas = true;
+                    break;
+                }
+                else if (cont == enem.hormigasAtacandole.Count - 1)
+                {
+                    haySoldadosOObrerasEnTodas = false;
+                    break;
+                }
+                cont++;
+            }
+
+            if (haySoldadosOObrerasEnTodas == false)
+            {
+                break;
+            }
+        }
+
+        if (haySoldadosOObrerasEnTodas)
         {
             Task.current.Succeed();
         }
@@ -202,6 +267,19 @@ public class Nurse : HormigaGenerica
         {
             Task.current.Fail();
         }
+
+        /*foreach (EnemigoGenerico enem in enemigosCerca)
+        {
+        }
+
+        if (obrerasCerca || soldadosCerca)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }*/
     }
 
     // ReinaEnPeligro()
@@ -222,11 +300,7 @@ public class Nurse : HormigaGenerica
         }
         else
         {
-            /*if (reina.nursesOcupadas.Contains(this))
-            {
-                reina.nursesOcupadas.Remove(this);
-                reina.nursesDesocupadas.Add(this);
-            }*/
+            SacarDeOcupadas();
             Task.current.Fail();
             return;
         }

@@ -220,6 +220,9 @@ public class Reina : HormigaGenerica
         // Explorar
         siguientePosicionExplorar = Vector3.zero;
 
+        // Curar Hormiga
+        tiempoParaCurar = 10.0f;
+
         //TiemposEvolucionJuego
         TIEMPO1 = 80;
         TIEMPO2 = 200;
@@ -898,11 +901,16 @@ public class Reina : HormigaGenerica
         }
         if (aux != null && aux != aux2)
         {
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
             aux.hayOrdenCurarHormiga = true;
             soldadosOcupadas.Add(aux);
             soldadosDesocupadas.Remove(aux);
             aux.hormigaACurar = aux2;
             aux2.siendoCuradaPor = aux;
+            aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
             return;
@@ -934,11 +942,16 @@ public class Reina : HormigaGenerica
         if (aux != null && aux != aux2)
         {
             Debug.Log("Tengo obrera que mandar a curar");
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
             aux.hayOrdenCurarHormiga = true;
             obrerasOcupadas.Add(aux);
             obrerasDesocupadas.Remove(aux);
             aux.hormigaACurar = aux2;
             aux2.siendoCuradaPor = aux;
+            aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
             return;
@@ -984,6 +997,7 @@ public class Reina : HormigaGenerica
             nursesDesocupadas.Remove(aux);
             aux.hormigaACurar = aux2;
             aux2.siendoCuradaPor = aux;
+            aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
             return;
@@ -1730,12 +1744,18 @@ public class Reina : HormigaGenerica
         foreach (HormigaGenerica h in enemigo.hormigasCerca)
         {
             h.enemigosCerca.Remove(enemigo);
-            if (h.enemigoAlQueAtacar == this)
+        }
+
+        // Avisamos a todas las hormigas que vayan a atacar a este enemigo
+        foreach (HormigaGenerica h in enemigo.hormigasAtacandole)
+        {
+            if (h.enemigoAlQueAtacar == enemigo)
             {
                 h.enemigoAlQueAtacar = null;
                 h.hayOrdenDeAtacar = false;
             }
         }
+
         // Eliminamos al enemigo de la lista de enemigosTotales de la reina
         if (enemigosTotal.Contains(enemigo))
         {
