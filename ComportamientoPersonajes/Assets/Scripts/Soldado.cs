@@ -96,7 +96,7 @@ public class Soldado : HormigaGenerica
         tiempoActualPatrullando = 0;
         tiempoPatrullandoMax = 20.0f;
         posicionPatrullar = Vector3.zero;
-        radio = 10;
+        radio = 5;
 
         if (!bocadillosFound)
         {
