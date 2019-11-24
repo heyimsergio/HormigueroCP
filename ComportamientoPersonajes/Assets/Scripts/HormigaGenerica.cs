@@ -82,6 +82,8 @@ public class HormigaGenerica : PersonajeGenerico
 
     // Huir cuando te ataquen
     bool hayHormigasAtacandoAlEnemigo = false;
+    public float tiempoDePatrullo = 10.0f;
+    public float tiempoDePatrulloMax = 10.0f;
 
     //Explorar
     [Header("Explorar")]
@@ -135,6 +137,8 @@ public class HormigaGenerica : PersonajeGenerico
                 bocadillosFound = true;
             }
         }
+
+        tiempoDePatrullo -= Time.deltaTime;
 
         ActualizarHambre();
 
@@ -410,6 +414,7 @@ public class HormigaGenerica : PersonajeGenerico
         {
             bocadillos.Atacar();
         }
+
         if (enemigoAlQueAtacar == null)
         {
             if (enemigosCerca.Count > 0)
@@ -425,6 +430,11 @@ public class HormigaGenerica : PersonajeGenerico
             else
             {
                 // No hay enemigo al que atacar
+                if (hayOrdenDeAtacar)
+                {
+                    hayOrdenDeAtacar = false;
+                    this.SacarDeOcupadas();
+                }
                 Task.current.Fail();
                 return;
             }
