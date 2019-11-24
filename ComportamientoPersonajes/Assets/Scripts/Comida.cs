@@ -22,7 +22,6 @@ public class Comida : MonoBehaviour
     public Room misala;
     public TileScript miTile;
 
-
     Reina reina = null;
 
     // Start is called before the first frame update
