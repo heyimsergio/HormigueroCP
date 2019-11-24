@@ -106,6 +106,11 @@ public class HormigaGenerica : PersonajeGenerico
     // Cavar
     public bool hayOrdenDeCavar = false;
 
+    //Huir
+    public bool hayQueHuir;
+    public Vector3 posHuida;
+    float distanciaHuida;
+
 
 
     // CODIGO ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +118,9 @@ public class HormigaGenerica : PersonajeGenerico
     // Start is called before the first frame update
     void Start()
     {
+        posHuida = Vector3.zero;
+        hayQueHuir = false;
+        distanciaHuida = 3f;
     }
 
     // Update is called once per frame
@@ -490,6 +498,37 @@ public class HormigaGenerica : PersonajeGenerico
     }
 
     [Task]
+    public void HayQueHuir()
+    {
+        if (hayQueHuir)
+        {
+            Task.current.Succeed();
+            return;
+        }
+        Task.current.Fail();
+    }
+
+    [Task]
+    public void EstoyHuyendo()
+    {
+        if (Vector3.Distance(this.transform.position, posHuida)< 0.5f)
+        {
+            Debug.Log("Huido");
+            Debug.Log("Mi pos: " + this.transform.position);
+            Debug.Log("Pos Huida: " + this.transform.position);
+            hayQueHuir = false;
+            posHuida = Vector3.zero;
+            Task.current.Succeed();
+            return;
+        } else
+        {
+            Debug.Log("Huyendo");
+            agente.SetDestination(posHuida);
+        }
+
+    }
+
+    [Task]
     public void Huir()
     {
         if (enemigosCerca.Count > 0)
@@ -523,10 +562,28 @@ public class HormigaGenerica : PersonajeGenerico
                     // No hace falta hacer nada
                 }
 
-                Vector3 direccionEnemigo = enemigoCerca.transform.position - this.transform.position;
-                Vector3 direccionContraria = direccionEnemigo * -1;
-                agente.SetDestination(this.transform.position + direccionContraria);
-                Debug.Log("Estoy huyendo");
+                Vector3 direccionEnemigo = Vector3.Normalize( enemigoCerca.transform.position - this.transform.position);
+                Debug.Log(" direccion enemigo: "+direccionEnemigo);
+                Vector3 direccionContraria = direccionEnemigo * -1f * 3;
+                Debug.Log("Distancia huida: " + distanciaHuida);
+                Debug.Log("direccion  contraria"+direccionContraria);
+                hayQueHuir = true;
+                posHuida = this.transform.position + direccionContraria;
+                NavMeshPath path = new NavMeshPath(); 
+                NavMesh.CalculatePath(transform.position, posHuida, NavMesh.AllAreas, path);
+                agente.SetDestination(posHuida);
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    agente.SetDestination(posHuida);
+                    Debug.Log("Me alejo");
+                } else
+                {
+                    posHuida = -posHuida;
+                    agente.SetDestination(posHuida);
+                    Debug.Log("Huyo hacia el y me paso");
+
+                }
+               
             }
             Task.current.Succeed();
             return;

@@ -24,13 +24,24 @@ public class EnemigoGenerico : PersonajeGenerico
     Floor hormigueroDentro;
     Vector3 siguientePosicionExplorar;
 
+    public bool escarabajo;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (escarabajo)
+        {
+            this.vida = 30;
+            this.daño = 3;
+            this.velocidad = 1.0f;
+        } else
+        {
+            this.vida = 15;
+            this.daño = 2;
+            this.velocidad = 2.0f;
+        }
         this.zonaDondeEsta = 1;
-        this.vida = 10;
-        this.daño = 2;
-        this.velocidad = 2.0f;
+
         pb = this.gameObject.GetComponent<PandaBehaviour>();
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         agente.speed = this.velocidad;

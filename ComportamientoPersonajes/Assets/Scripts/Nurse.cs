@@ -78,7 +78,7 @@ public class Nurse : HormigaGenerica
 
         // Ataques y Vida
         this.vida = 10;
-        this.daño = 2;
+        this.daño = 1;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
 

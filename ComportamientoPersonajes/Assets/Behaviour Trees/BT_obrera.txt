@@ -5,6 +5,9 @@ tree("Root")
 tree("Obrera")
 	fallback
 		sequence
+			HayQueHuir()
+			EstoyHuyendo()
+		sequence
 			HayEnemigosCerca()
 			fallback
 				sequence

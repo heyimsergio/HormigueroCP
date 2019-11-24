@@ -80,7 +80,7 @@ public class Obrera : HormigaGenerica
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
-        this.vida = 10;
+        this.vida = 20;
         this.daño = 2;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;

@@ -5,7 +5,10 @@ using UnityEngine;
 public class GeneradorEnemigos : MonoBehaviour
 {
 
+    int numeroDeGusanosPorEscarabajo;
+    int numeroActual;
     public GameObject enemigo;
+    public GameObject escarabajo;
     public float tiempoParaSpawnear;
     public float tiempoMaximo;
     public float tiempoMinimo;
@@ -25,17 +28,21 @@ public class GeneradorEnemigos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        numeroActual = 0;
         DataController config = FindObjectOfType<DataController>();
         if (config.facil)
         {
+            numeroDeGusanosPorEscarabajo = 100;
             tiempoMaximo = 50f;
             tiempoMinimo = 25f;
         } else if (config.medio)
         {
+            numeroDeGusanosPorEscarabajo = 20;
             tiempoMaximo = 35f;
             tiempoMinimo = 15f;
         } else
         {
+            numeroDeGusanosPorEscarabajo = 12;
             tiempoMaximo = 25f;
             tiempoMinimo = 10f;
         }
@@ -71,11 +78,18 @@ public class GeneradorEnemigos : MonoBehaviour
         {
             SpawnEnemigo();
             tiempoParaSpawnear = Random.Range(tiempoMinimo, tiempoMaximo);
+           
         }
     }
 
     public void SpawnEnemigo()
     {
+        numeroActual++;
+        if (numeroActual == numeroDeGusanosPorEscarabajo)
+        {
+            SpawnEscarabajo();
+            numeroActual = 0;
+        }
         int pos = Mathf.RoundToInt(Random.Range(1, 5));
         switch (pos)
         {
@@ -98,6 +112,32 @@ public class GeneradorEnemigos : MonoBehaviour
             default:
                 break;
         }
-
     }
+
+        public void SpawnEscarabajo()
+        {
+            int pos = Mathf.RoundToInt(Random.Range(1, 5));
+            switch (pos)
+            {
+                case 1:
+                    //Debug.Log("spawn en 1");
+                    Instantiate(escarabajo, pos1, Quaternion.identity);
+                    break;
+                case 2:
+                    //Debug.Log("spawn en 2");
+                    Instantiate(escarabajo, pos2, Quaternion.identity);
+                    break;
+                case 3:
+                    //Debug.Log("spawn en 3");
+                    Instantiate(escarabajo, pos3, Quaternion.identity);
+                    break;
+                case 4:
+                    //Debug.Log("spawn en 4");
+                    Instantiate(escarabajo, pos4, Quaternion.identity);
+                    break;
+                default:
+                    break;
+            }
+
+        }
 }

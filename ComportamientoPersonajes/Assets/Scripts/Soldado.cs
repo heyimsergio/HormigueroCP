@@ -73,8 +73,8 @@ public class Soldado : HormigaGenerica
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
-        this.vida = 10;
-        this.daño = 2;
+        this.vida = 30;
+        this.daño = 3;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
 

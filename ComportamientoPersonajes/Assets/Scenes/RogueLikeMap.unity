@@ -285,6 +285,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemigo: {fileID: 3883681755312135626, guid: 522bfccef2f87cb4485a9f5101874a4c, type: 3}
+  escarabajo: {fileID: 6787251665784915391, guid: 8ca6462f96be7a94c81c797362fafa53,
+    type: 3}
   tiempoParaSpawnear: 0
   tiempoMaximo: 0
   tiempoMinimo: 0
@@ -4229,6 +4231,7 @@ MonoBehaviour:
   hormigaAAtacar: {fileID: 0}
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 0.5
+  escarabajo: 0
 --- !u!65 &1459648001
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4710,6 +4713,7 @@ MonoBehaviour:
   hormigaAAtacar: {fileID: 0}
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 0.5
+  escarabajo: 0
 --- !u!65 &1546281724
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5561,6 +5565,7 @@ MonoBehaviour:
   hormigaAAtacar: {fileID: 0}
   tiempoEntreAtaques: 0
   tiempoEntreAtaquesMax: 0.5
+  escarabajo: 0
 --- !u!65 &1922200435
 BoxCollider:
   m_ObjectHideFlags: 0
