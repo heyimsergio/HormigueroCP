@@ -383,7 +383,7 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void HayEnemigosCerca()
     {
-        if (enemigosCerca.Count > 0)
+        if (enemigosCerca.Count > 0 || enemigoAlQueAtacar != null)
         {
             Task.current.Succeed();
         }

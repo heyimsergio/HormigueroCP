@@ -246,7 +246,7 @@ public class Soldado : HormigaGenerica
         {
             if (tiempoActualPatrullando < tiempoPatrullandoMax)
             {
-                tiempoPatrullandoMax += Time.deltaTime;
+                tiempoActualPatrullando += Time.deltaTime;
                 if (siguientePosicionExplorar == Vector3.zero)
                 {
                     Vector3 randomDirection;

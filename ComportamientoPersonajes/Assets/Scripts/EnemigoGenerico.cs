@@ -37,7 +37,7 @@ public class EnemigoGenerico : PersonajeGenerico
         }
         else
         {
-            this.vida = 18;
+            this.vida = 12;
             this.daño = 2;
             this.velocidad = 2.0f;
         }
