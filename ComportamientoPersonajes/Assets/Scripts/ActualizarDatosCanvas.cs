@@ -32,9 +32,16 @@ public class ActualizarDatosCanvas : MonoBehaviour
     public Image ordenAtacarImg;
     public Image ordenCavarImg;
     public Image ordenCuidarHormigaImg;
-    public Image ordenCurarImg;
+    public Image ordenCuidarHuevosImg;
     public Image ordenPatrullarImg;
     public Image ordenBuscarComidaImg;
+
+    Coroutine crAtacar;
+    Coroutine crCavar;
+    Coroutine crCuidarHormiga;
+    Coroutine crCuidarHuevos;
+    Coroutine crPatrullar;
+    Coroutine crBuscarComida;
 
 
     // Start is called before the first frame update
@@ -59,9 +66,9 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux.a = 0.3f;
         ordenCuidarHormigaImg.color = aux;
 
-        aux = ordenCurarImg.color;
+        aux = ordenCuidarHuevosImg.color;
         aux.a = 0.3f;
-        ordenCurarImg.color = aux;
+        ordenCuidarHuevosImg.color = aux;
 
         aux = ordenPatrullarImg.color;
         aux.a = 0.3f;
@@ -96,6 +103,7 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux.a = 1f;
         ordenAtacarImg.color = aux;
 
+        /*
         aux = ordenCavarImg.color;
         aux.a = 0.3f;
         ordenCavarImg.color = aux;
@@ -115,20 +123,29 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
-
-        StartCoroutine(desaparecer(ordenAtacarImg));
+        */
+        if (crAtacar == null)
+        {
+            crAtacar = StartCoroutine(desaparecer(ordenAtacarImg));
+        } else
+        {
+            StopCoroutine(crAtacar);
+            StartCoroutine(desaparecer(ordenAtacarImg));
+        }
     }
+
     public void OrdenCavar()
     {
         Color aux;
+        /*
         aux = ordenAtacarImg.color;
         aux.a = 0.3f;
         ordenAtacarImg.color = aux;
-
+        */
         aux = ordenCavarImg.color;
         aux.a = 1f;
         ordenCavarImg.color = aux;
-
+        /*
         aux = ordenCuidarHormigaImg.color;
         aux.a = 0.3f;
         ordenCuidarHormigaImg.color = aux;
@@ -144,12 +161,23 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
-
-        StartCoroutine(desaparecer(ordenCavarImg));
+        */
+        if (crCavar == null)
+        {
+            crCavar = StartCoroutine(desaparecer(ordenCavarImg));
+        }
+        else
+        {
+            StopCoroutine(crCavar);
+            StartCoroutine(desaparecer(ordenCavarImg));
+        }
+        
     }
+
     public void OrdenCurarHormiga()
     {
         Color aux;
+        /*
         aux = ordenAtacarImg.color;
         aux.a = 0.3f;
         ordenAtacarImg.color = aux;
@@ -157,11 +185,11 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenCavarImg.color;
         aux.a = 0.3f;
         ordenCavarImg.color = aux;
-
+        */
         aux = ordenCuidarHormigaImg.color;
         aux.a = 1f;
         ordenCuidarHormigaImg.color = aux;
-
+        /*
         aux = ordenCurarImg.color;
         aux.a = 0.3f;
         ordenCurarImg.color = aux;
@@ -173,12 +201,22 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
-
-        StartCoroutine(desaparecer(ordenCuidarHormigaImg));
+        */
+        if (crCuidarHormiga == null)
+        {
+            crCuidarHormiga = StartCoroutine(desaparecer(ordenCuidarHormigaImg));
+        }
+        else
+        {
+            StopCoroutine(crCuidarHormiga);
+            StartCoroutine(desaparecer(ordenCuidarHormigaImg));
+        }
+        
     }
     public void OrdenCuidarHuevo()
     {
         Color aux;
+        /*
         aux = ordenAtacarImg.color;
         aux.a = 0.3f;
         ordenAtacarImg.color = aux;
@@ -190,11 +228,11 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenCuidarHormigaImg.color;
         aux.a = 0.3f;
         ordenCuidarHormigaImg.color = aux;
-
-        aux = ordenCurarImg.color;
+        */
+        aux = ordenCuidarHuevosImg.color;
         aux.a = 1f;
-        ordenCurarImg.color = aux;
-
+        ordenCuidarHuevosImg.color = aux;
+        /*
         aux = ordenPatrullarImg.color;
         aux.a = 0.3f;
         ordenPatrullarImg.color = aux;
@@ -202,12 +240,23 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
-
-        StartCoroutine(desaparecer(ordenCurarImg));
+        */
+        if (crCuidarHuevos == null)
+        {
+            crCuidarHuevos = StartCoroutine(desaparecer(ordenCuidarHuevosImg));
+        }
+        else
+        {
+            StopCoroutine(crCuidarHuevos);
+            StartCoroutine(desaparecer(ordenCuidarHuevosImg));
+        }
+        
     }
+
     public void OrdenPatrullar()
     {
         Color aux;
+        /*
         aux = ordenAtacarImg.color;
         aux.a = 0.3f;
         ordenAtacarImg.color = aux;
@@ -220,23 +269,33 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux.a = 0.3f;
         ordenCuidarHormigaImg.color = aux;
 
-        aux = ordenCurarImg.color;
+        aux = ordenCuidarHuevosImg.color;
         aux.a = 0.3f;
-        ordenCurarImg.color = aux;
-
+        ordenCuidarHuevosImg.color = aux;
+        */
         aux = ordenPatrullarImg.color;
         aux.a = 1f;
         ordenPatrullarImg.color = aux;
-
+        /*
         aux = ordenBuscarComidaImg.color;
         aux.a = 0.3f;
         ordenBuscarComidaImg.color = aux;
-
-        StartCoroutine(desaparecer(ordenPatrullarImg));
+        */
+        if (crPatrullar == null)
+        {
+            crPatrullar = StartCoroutine(desaparecer(ordenPatrullarImg));
+        }
+        else
+        {
+            StopCoroutine(crPatrullar);
+            StartCoroutine(desaparecer(ordenPatrullarImg));
+        }
+        
     }
     public void OrdenBuscarComida()
     {
         Color aux;
+        /*
         aux = ordenAtacarImg.color;
         aux.a = 0.3f;
         ordenAtacarImg.color = aux;
@@ -249,19 +308,28 @@ public class ActualizarDatosCanvas : MonoBehaviour
         aux.a = 0.3f;
         ordenCuidarHormigaImg.color = aux;
 
-        aux = ordenCurarImg.color;
+        aux = ordenCuidarHuevosImg.color;
         aux.a = 0.3f;
-        ordenCurarImg.color = aux;
+        ordenCuidarHuevosImg.color = aux;
 
         aux = ordenPatrullarImg.color;
         aux.a = 0.3f;
         ordenPatrullarImg.color = aux;
-
+        */
         aux = ordenBuscarComidaImg.color;
         aux.a = 1f;
         ordenBuscarComidaImg.color = aux;
 
-        StartCoroutine(desaparecer(ordenBuscarComidaImg));
+        if (crBuscarComida == null)
+        {
+            crBuscarComida = StartCoroutine(desaparecer(ordenBuscarComidaImg));
+        }
+        else
+        {
+            StopCoroutine(crBuscarComida);
+            StartCoroutine(desaparecer(ordenBuscarComidaImg));
+        }
+        
     }
 
     IEnumerator desaparecer(Image a)

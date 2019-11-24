@@ -3319,7 +3319,7 @@ MonoBehaviour:
   ordenAtacarImg: {fileID: 606086648}
   ordenCavarImg: {fileID: 686524334}
   ordenCuidarHormigaImg: {fileID: 1136410924}
-  ordenCurarImg: {fileID: 777291548}
+  ordenCuidarHuevosImg: {fileID: 777291548}
   ordenPatrullarImg: {fileID: 763871990}
   ordenBuscarComidaImg: {fileID: 1410185164}
 --- !u!1 &1224314782
