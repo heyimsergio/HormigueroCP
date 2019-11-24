@@ -96,7 +96,7 @@ public class Soldado : HormigaGenerica
         tiempoActualPatrullando = 0;
         tiempoPatrullandoMax = 20.0f;
         posicionPatrullar = Vector3.zero;
-        radio = 10;
+        radio = 5;
 
         if (!bocadillosFound)
         {
@@ -250,7 +250,7 @@ public class Soldado : HormigaGenerica
         {
             if (tiempoActualPatrullando < tiempoPatrullandoMax)
             {
-                tiempoPatrullandoMax += Time.deltaTime;
+                tiempoActualPatrullando += Time.deltaTime;
                 if (siguientePosicionExplorar == Vector3.zero)
                 {
                     Vector3 randomDirection;

@@ -1882,12 +1882,13 @@ public class Reina : HormigaGenerica
         // Sacamos la comida de la sala si muere cuando está siendo llevada
         if (comidaMuerta.hormigaQueLlevaLaComida != null)
         {
-            Debug.Log("COMIDA QUE ESTABA LLEVANDO HA MUERTO");
+            GameObject aux = Instantiate(comidaMuerta.comidaMuerta, comidaMuerta.transform.position, Quaternion.identity);
+            aux.transform.Translate(0, 0.03f, 0);
+            aux.transform.Rotate(90, 0, 0);
             SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
         }
         else if (comidaMuerta.haSidoCogida)
         {
-            Debug.Log("HAN COMIDO COMIDA, POR LO QUE SE SACA DE SALA");
             SacarComidaSala(comidaMuerta.misala, comidaMuerta, comidaMuerta.miTile);
         }
         else
