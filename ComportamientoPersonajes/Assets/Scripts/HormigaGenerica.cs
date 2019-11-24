@@ -568,6 +568,10 @@ public class HormigaGenerica : PersonajeGenerico
     [Task]
     public void Huir()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Huir();
+        }
         if (enemigosCerca.Count > 0)
         {
             EnemigoGenerico enemigoCerca = enemigosCerca[0];

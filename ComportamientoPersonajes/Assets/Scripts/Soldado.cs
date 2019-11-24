@@ -224,6 +224,10 @@ public class Soldado : HormigaGenerica
     [Task]
     public void Patrullar()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            bocadillos.Patrullar();
+        }
         // si esta dentro
         if (zonaDondeEsta == 0)
         {

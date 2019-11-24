@@ -16,6 +16,7 @@ public class BocadillosControlador : MonoBehaviour
     public SpriteRenderer bocadilloAtacar;
     public SpriteRenderer bocadilloPonerHuevos;
     public SpriteRenderer bocadilloEstarHerido;
+    public SpriteRenderer bocadilloHuir;
 
     bool explorar = false;
     bool buscarComida = false;
@@ -27,6 +28,7 @@ public class BocadillosControlador : MonoBehaviour
     bool atacar = false;
     bool ponerHuevos = false;
     bool estarHerido = false;
+    bool huir = false;
 
     Vector3 offset = new Vector3(1.5f, 1f, 1.5f);
 
@@ -44,6 +46,7 @@ public class BocadillosControlador : MonoBehaviour
         bocadilloAtacar.gameObject.SetActive(false);
         bocadilloPonerHuevos.gameObject.SetActive(false);
         bocadilloEstarHerido.gameObject.SetActive(false);
+        bocadilloHuir.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -63,6 +66,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloExplorar.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -78,6 +82,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloBuscarComida.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -93,6 +98,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloCurar.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -108,6 +114,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloPatrullar.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -123,6 +130,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloCavar.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -138,6 +146,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloComer.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -153,6 +162,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloCuidarHuevo.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -168,6 +178,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(true);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloAtacar.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -183,6 +194,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(true);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloPonerHuevos.transform.position = hormigaSeleccionada.transform.position + offset;
             }
@@ -198,8 +210,25 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(true);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloEstarHerido.transform.position = hormigaSeleccionada.transform.position + offset;
+            }
+            else if (huir == true)
+            {
+                bocadilloExplorar.gameObject.SetActive(false);
+                bocadilloBuscarComida.gameObject.SetActive(false);
+                bocadilloCurar.gameObject.SetActive(false);
+                bocadilloPatrullar.gameObject.SetActive(false);
+                bocadilloCavar.gameObject.SetActive(false);
+                bocadilloComer.gameObject.SetActive(false);
+                bocadilloCuidarHuevo.gameObject.SetActive(false);
+                bocadilloAtacar.gameObject.SetActive(false);
+                bocadilloPonerHuevos.gameObject.SetActive(false);
+                bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(true);
+
+                bocadilloHuir.transform.position = hormigaSeleccionada.transform.position + offset;
             }
             else
             {
@@ -213,6 +242,7 @@ public class BocadillosControlador : MonoBehaviour
                 bocadilloAtacar.gameObject.SetActive(false);
                 bocadilloPonerHuevos.gameObject.SetActive(false);
                 bocadilloEstarHerido.gameObject.SetActive(false);
+                bocadilloHuir.gameObject.SetActive(false);
 
                 bocadilloExplorar.transform.position = Vector3.zero;
             }
@@ -228,6 +258,7 @@ public class BocadillosControlador : MonoBehaviour
             bocadilloAtacar.gameObject.SetActive(false);
             bocadilloPonerHuevos.gameObject.SetActive(false);
             bocadilloEstarHerido.gameObject.SetActive(false);
+            bocadilloHuir.gameObject.SetActive(false);
 
             bocadilloExplorar.transform.position = Vector3.zero;
         }
@@ -245,6 +276,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void BuscarComida()
     {
@@ -258,6 +290,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void Curar()
     {
@@ -271,6 +304,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void Patrullar()
     {
@@ -284,6 +318,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void Cavar()
     {
@@ -297,6 +332,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void Comer()
     {
@@ -310,6 +346,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void CuidarHuevos()
     {
@@ -323,6 +360,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
     public void Atacar()
     {
@@ -336,6 +374,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = true;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
 
     public void PonerHuevos()
@@ -350,6 +389,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = true;
         estarHerido = false;
+        huir = false;
     }
 
     public void EstaHerido()
@@ -364,6 +404,22 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = true;
+        huir = false;
+    }
+
+    public void Huir()
+    {
+        explorar = false;
+        buscarComida = false;
+        curar = false;
+        patrullar = false;
+        cavar = false;
+        comer = false;
+        cuidarHuevos = false;
+        atacar = false;
+        ponerHuevos = false;
+        estarHerido = false;
+        huir = true;
     }
 
     public void Nada()
@@ -378,6 +434,7 @@ public class BocadillosControlador : MonoBehaviour
         atacar = false;
         ponerHuevos = false;
         estarHerido = false;
+        huir = false;
     }
 
     
