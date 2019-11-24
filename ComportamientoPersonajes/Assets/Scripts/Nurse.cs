@@ -120,7 +120,17 @@ public class Nurse : HormigaGenerica
             // Actualizas a la hormiga y avisas a la reina de este enemigo
             if (!enemigosCerca.Contains(aux))
             {
-                reina.RecibirAlertaEnemigo(aux);
+                if (aux.hormigasAtacandole.Count < 2)
+                {
+                    if (aux.hormigasAtacandole.Count == 0)
+                    {
+                        reina.RecibirAlertaEnemigo(aux);
+                    }
+                    else if (aux.hormigasAtacandole[0] == this)
+                    {
+                        reina.RecibirAlertaEnemigo(aux);
+                    }
+                }
                 enemigosCerca.Add(aux);
             }
         }
@@ -206,7 +216,7 @@ public class Nurse : HormigaGenerica
                     if (hormigaObrera.enemigoAlQueAtacar == null)
                     {
                         hormigaObrera.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
-                        if (hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                        if (!hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
                         {
                             hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
                         }

@@ -13,11 +13,13 @@ tree("Reina")
 					mute
 						fallback
 							sequence
-								HaySoldadosLibres()
-								OrdenAtacarSoldado()
-							sequence
+								not
+									HaySoldadosLibres()
 								HayObrerasLibres()
 								OrdenAtacarObrera()
+							sequence
+								HaySoldadosLibres()
+								OrdenAtacarSoldado()
 			mute
 				fallback
 					sequence

@@ -94,10 +94,6 @@ public class Room
     public void meterCosas()
     {
         llenadoActual++;
-        if(myType == roomType.STORAGE)
-        {
-            Debug.Log("*****************Metiendo cosas en sala Comida: " + llenadoActual);
-        }
         if (llenadoActual >= capacidadTotalRoom)
         {
             isFull = true;
@@ -115,10 +111,6 @@ public class Room
         }
         llenadoActual--;
 
-        if (myType == roomType.STORAGE)
-        {
-            Debug.Log("******************Sacando cosas en sala Comida: " + llenadoActual);
-        }
         if (isFull)
         {
             isFull = false;

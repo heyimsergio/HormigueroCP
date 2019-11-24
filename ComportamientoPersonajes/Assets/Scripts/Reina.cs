@@ -136,7 +136,7 @@ public class Reina : HormigaGenerica
     private bool HayQueCuidarHuevos = false;*/
 
     //para ver si hay que mandar patrullar
-    public bool hormigaMuerta = false;
+    public Vector3 posHormigaMuerta = Vector3.zero;
 
     // para mandar a atacar;
     public float umbralHormigasAtacando;
@@ -471,6 +471,14 @@ public class Reina : HormigaGenerica
     [Task]
     public void SiendoAtacados()
     {
+        if (enemigosTotal.Count > 0)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
         /*if (HayQueAtacar)
         {
             Task.current.Succeed();
@@ -479,60 +487,70 @@ public class Reina : HormigaGenerica
         {
             Task.current.Fail();
         }*/
-        Task.current.Fail();
     }
 
     [Task]
     public void SuficientesLuchando()
     {
-        if (totalHormigas * umbralHormigasAtacando > numHormigasAtacando)
+        /*if (totalHormigas * umbralHormigasAtacando > numHormigasAtacando)
         {
             Task.current.Succeed();
         }
         else
         {
             Task.current.Fail();
-        }
+        }*/
+        Task.current.Fail();
     }
 
     [Task]
     public void OrdenAtacarSoldado()
     {
         ordenesCanvas.OrdenAtacar();
-        /*Soldado aux = soldadosDesocupadas[0];
+        
+        Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
             aux.hayOrdenDeAtacar = true;
-            aux.enemigoAlQueAtacar = enemigosTotales[0];
-            soldadosDesocupadas.Remove(aux);
-            soldadosOcupadas.Add(aux);
+            aux.enemigoAlQueAtacar = enemigosTotal[0];
+            aux.SacarDeDesocupadas();
+            if (!aux.enemigoAlQueAtacar.hormigasAtacandole.Contains(aux))
+            {
+                aux.enemigoAlQueAtacar.hormigasAtacandole.Add(aux);
+            }
+            enemigosTotal.Remove(aux.enemigoAlQueAtacar);
             Task.current.Succeed();
+            Debug.Log("REINA: Mando soldado a atacar");
         }
         else
         {
             Task.current.Fail();
-        }*/
-        Task.current.Fail();
+        }
     }
 
     [Task]
     public void OrdenAtacarObrera()
     {
         ordenesCanvas.OrdenAtacar();
-        /*Obrera aux = obrerasDesocupadas[0];
+
+        Obrera aux = obrerasDesocupadas[0];
         if (aux != null)
         {
             aux.hayOrdenDeAtacar = true;
-            aux.enemigoAlQueAtacar = enemigosTotales[0];
-            obrerasDesocupadas.Remove(aux);
-            obrerasOcupadas.Add(aux);
+            aux.enemigoAlQueAtacar = enemigosTotal[0];
+            if (!aux.enemigoAlQueAtacar.hormigasAtacandole.Contains(aux))
+            {
+                aux.enemigoAlQueAtacar.hormigasAtacandole.Add(aux);
+            }
+            aux.SacarDeDesocupadas();
+            Debug.Log("REINA: Mando obrera a atacar");
+            enemigosTotal.Remove(aux.enemigoAlQueAtacar);
             Task.current.Succeed();
         }
         else
         {
             Task.current.Fail();
-        }*/
-        Task.current.Fail();
+        }
     }
 
     #endregion
@@ -922,13 +940,13 @@ public class Reina : HormigaGenerica
             // Si la hormiga ya tiene una comida asignada
             DesasignarComidaACoger(aux);
             aux.hayOrdenCurarHormiga = true;
-            soldadosOcupadas.Add(aux);
-            soldadosDesocupadas.Remove(aux);
+            aux.SacarDeDesocupadas();
             aux.hormigaACurar = aux2;
             aux2.siendoCuradaPor = aux;
             aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
+            Debug.Log("REINA: Mando soldado a curar");
             return;
         }
     }
@@ -958,18 +976,17 @@ public class Reina : HormigaGenerica
         }
         if (aux != null && aux != aux2)
         {
-            Debug.Log("Tengo obrera que mandar a curar");
             // Si la hormiga ya tiene una hormiga curando
             DesasignarHormigaACurar(aux);
             // Si la hormiga ya tiene una comida asignada
             DesasignarComidaACoger(aux);
             aux.hayOrdenCurarHormiga = true;
-            obrerasOcupadas.Add(aux);
-            obrerasDesocupadas.Remove(aux);
+            aux.SacarDeDesocupadas();
             aux.hormigaACurar = aux2;
             aux2.siendoCuradaPor = aux;
             aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
+            Debug.Log("REINA: Mando obrera a curar");
             Task.current.Succeed();
             return;
         }
@@ -1002,7 +1019,6 @@ public class Reina : HormigaGenerica
 
         if (aux != null && aux != aux2)
         {
-            Debug.Log("Tengo nurse que mandar a curar");
             // Si la hormiga ya estaba cuidando un huevo
             DesasignarHuevoACurar(aux);
             // Si la hormiga ya tiene una hormiga curando
@@ -1011,12 +1027,12 @@ public class Reina : HormigaGenerica
             DesasignarComidaACoger(aux);
             // Asignamos la hormiga a cuidar
             aux.hayOrdenCurarHormiga = true;
-            nursesOcupadas.Add(aux);
-            nursesDesocupadas.Remove(aux);
+            aux.SacarDeDesocupadas();
             aux.hormigaACurar = aux2;
             aux2.siendoCuradaPor = aux;
             aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
+            Debug.Log("REINA: Mando nurse a curar");
             Task.current.Succeed();
             return;
         }
@@ -1032,13 +1048,37 @@ public class Reina : HormigaGenerica
     [Task]
     public void HaHabidoUnAtaqueReciente()
     {
-        Task.current.Fail();
+        if (posHormigaMuerta != Vector3.zero && tiempoDePatrullo > 0)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
     [Task]
     public void OrdenPatrullarSoldado()
     {
         ordenesCanvas.OrdenPatrullar();
+
+        Soldado aux = soldadosDesocupadas[0];
+        if (aux != null)
+        {
+            // Si la hormiga ya tiene una hormiga curando
+            DesasignarHormigaACurar(aux);
+            // Si la hormiga ya tiene una comida asignada
+            DesasignarComidaACoger(aux);
+
+            aux.hayOrdenDePatrullar = true;
+            aux.SacarDeDesocupadas();
+            aux.posicionPatrullar = posHormigaMuerta;
+            tiempoDePatrullo = 0;
+            Task.current.Succeed();
+            Debug.Log("Reina: Mando soldado a patrullar");
+            return;
+        }
         Task.current.Fail();
     }
 
@@ -1584,7 +1624,6 @@ public class Reina : HormigaGenerica
         Room sala = GetSalaLibreComida();
         if (sala != null)
         {
-            Debug.Log("----------------- METO COMIDA EN SALA: " + sala.llenadoActual);
             sala.meterCosas();
         }
         return sala;
@@ -1617,6 +1656,11 @@ public class Reina : HormigaGenerica
     {
         SacarHormigaSala(hormiga.miSala);
         Debug.Log("Hormiga A Muerto");
+
+        // Actualizamos la posicion de la hormiga muerta
+        posHormigaMuerta = hormiga.transform.position;
+        tiempoDePatrullo = tiempoDePatrulloMax;
+
         // Actualizamos a todos los enemigos que tenga
         foreach (EnemigoGenerico enem in hormiga.enemigosCerca)
         {
@@ -1625,6 +1669,11 @@ public class Reina : HormigaGenerica
             {
                 enem.hormigaAAtacar = null;
             }
+        }
+        // Actualizo al enemigo que estaba atacando para que lo elimine de su lista de hormigasAtacandole
+        if (hormiga.enemigoAlQueAtacar != null)
+        {
+            hormiga.enemigoAlQueAtacar.hormigasAtacandole.Remove(hormiga);
         }
         // Actualizamos a todos los huevos que tenga
         foreach (Huevo huevo in hormiga.huevosCerca)
@@ -1636,7 +1685,6 @@ public class Reina : HormigaGenerica
         {
             comida.hormigasCerca.Remove(hormiga);
         }
-
         // Eliminar a la hormiga de todas las listas
         if (hormigasHeridas.Contains(hormiga))
         {
@@ -1870,7 +1918,6 @@ public class Reina : HormigaGenerica
     public void SacarComidaSala(Room sala, Comida comida, TileScript miTile)
     {
         comidaTotal.Remove(comida);
-        Debug.Log("----------------- SACO COMIDA DE SALA: " + sala.llenadoActual);
         sala.sacarCosas(miTile);
     }
 
@@ -1902,7 +1949,6 @@ public class Reina : HormigaGenerica
         {
             if (!aux.isFull)
             {
-                Debug.Log("capacidad restante sala: " + aux.llenadoActual);
                 return aux;
             }
         }
