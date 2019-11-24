@@ -45,11 +45,13 @@ public class AntMovement : MonoBehaviour
             {
                 PersonajeGenerico a = agent.gameObject.GetComponent<PersonajeGenerico>();
                 HormigaGenerica h = this.gameObject.GetComponent<HormigaGenerica>();
+
                 foreach (EnemigoGenerico enem in h.enemigosCerca)
                 {
                     enem.hormigasCerca.Remove(h);
                 }
                 h.enemigosCerca = new List<EnemigoGenerico>();
+
                 foreach (Comida c in h.comidaQueHayCerca)
                 {
                     c.hormigasCerca.Remove(h);

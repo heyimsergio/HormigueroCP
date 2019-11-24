@@ -77,13 +77,16 @@ public class Nurse : HormigaGenerica
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
-        this.vida = 10;
+        totalVida = 10;
+        this.vida = totalVida;
+        this.umbralPuedeCurarse = 7;
+        this.umbralNecesitaCurarse = 3;
         this.daño = 1;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
 
         // Hambre
-        hambre = 300;
+        hambre = 300 + Random.Range (0, 100);
         umbralHambre = 200;
         umbralHambreMaximo = 80;
 
@@ -108,56 +111,59 @@ public class Nurse : HormigaGenerica
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si encuentras un enemigo y no está en la lista de enemigos
-        if (other.tag == "Enemigo")
+        if (!agente.isOnOffMeshLink)
         {
-            EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
-            // Actualizas al enemigo de que hay hormiga cerca
-            if (!aux.hormigasCerca.Contains(this))
+            // Si encuentras un enemigo y no está en la lista de enemigos
+            if (other.tag == "Enemigo")
             {
-                aux.hormigasCerca.Add(this);
-            }
-            // Actualizas a la hormiga y avisas a la reina de este enemigo
-            if (!enemigosCerca.Contains(aux))
-            {
-                if (aux.hormigasAtacandole.Count < 2)
+                EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+                // Actualizas al enemigo de que hay hormiga cerca
+                if (!aux.hormigasCerca.Contains(this))
                 {
-                    if (aux.hormigasAtacandole.Count == 0)
-                    {
-                        reina.RecibirAlertaEnemigo(aux);
-                    }
-                    else if (aux.hormigasAtacandole[0] == this)
-                    {
-                        reina.RecibirAlertaEnemigo(aux);
-                    }
+                    aux.hormigasCerca.Add(this);
                 }
-                enemigosCerca.Add(aux);
+                // Actualizas a la hormiga y avisas a la reina de este enemigo
+                if (!enemigosCerca.Contains(aux))
+                {
+                    if (aux.hormigasAtacandole.Count < 2)
+                    {
+                        if (aux.hormigasAtacandole.Count == 0)
+                        {
+                            reina.RecibirAlertaEnemigo(aux);
+                        }
+                        else if (aux.hormigasAtacandole[0] == this)
+                        {
+                            reina.RecibirAlertaEnemigo(aux);
+                        }
+                    }
+                    enemigosCerca.Add(aux);
+                }
             }
-        }
-        else if (other.tag == "Trigo")
-        {
-            Comida aux = other.gameObject.GetComponent<Comida>();
-            if (!aux.hormigasCerca.Contains(this))
+            else if (other.tag == "Trigo")
             {
-                aux.hormigasCerca.Add(this);
+                Comida aux = other.gameObject.GetComponent<Comida>();
+                if (!aux.hormigasCerca.Contains(this))
+                {
+                    aux.hormigasCerca.Add(this);
+                }
+                if (!aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
+                {
+                    reina.RecibirAlertaComida(aux);
+                }
             }
-            if (!aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
+            else if (other.tag == "Huevo")
             {
-                reina.RecibirAlertaComida(aux);
-            }
-        }
-        else if (other.tag == "Huevo")
-        {
-            Huevo aux = other.GetComponent<Huevo>();
-            // Actualizas al huevo de las hormigas que tiene cerca
-            if (!aux.hormigasCerca.Contains(this))
-            {
-                aux.hormigasCerca.Add(this);
-            }
-            // Actualizas la lista de huevos cerca
-            if (!huevosCerca.Contains(aux))
-            {
-                huevosCerca.Add(aux);
+                Huevo aux = other.GetComponent<Huevo>();
+                // Actualizas al huevo de las hormigas que tiene cerca
+                if (!aux.hormigasCerca.Contains(this))
+                {
+                    aux.hormigasCerca.Add(this);
+                }
+                // Actualizas la lista de huevos cerca
+                if (!huevosCerca.Contains(aux))
+                {
+                    huevosCerca.Add(aux);
+                }
             }
         }
     }
@@ -215,10 +221,15 @@ public class Nurse : HormigaGenerica
                 {
                     if (hormigaObrera.enemigoAlQueAtacar == null)
                     {
-                        hormigaObrera.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
-                        if (!hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                        EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        // Si no lo tiene ya asignado por orden
+                        if (hormigaObrera.enemigoAlQueAtacarPorOrden != enem)
                         {
-                            hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
+                            hormigaObrera.enemigoAlQueAtacar = enem;
+                            if (!hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                            {
+                                hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
+                            }
                         }
                     }
                 }
@@ -226,10 +237,15 @@ public class Nurse : HormigaGenerica
                 {
                     if (hormigaSoldado.enemigoAlQueAtacar == null)
                     {
-                        hormigaSoldado.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
-                        if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                        EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        // Si no lo tiene ya asignado por orden
+                        if (hormigaSoldado.enemigoAlQueAtacarPorOrden != enem)
                         {
-                            hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                            hormigaSoldado.enemigoAlQueAtacar = enem;
+                            if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                            {
+                                hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                            }
                         }
                     }
                 }
@@ -281,19 +297,6 @@ public class Nurse : HormigaGenerica
         {
             Task.current.Fail();
         }
-
-        /*foreach (EnemigoGenerico enem in enemigosCerca)
-        {
-        }
-
-        if (obrerasCerca || soldadosCerca)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }*/
     }
 
     // ReinaEnPeligro()

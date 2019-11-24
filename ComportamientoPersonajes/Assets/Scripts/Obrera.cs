@@ -80,13 +80,16 @@ public class Obrera : HormigaGenerica
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
-        this.vida = 20;
+        totalVida = 12;
+        this.umbralPuedeCurarse = 8;
+        this.umbralNecesitaCurarse = 5;
+        this.vida = totalVida;
         this.daño = 2;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
 
         // Hambre
-        hambre = 300;
+        hambre = 300 + Random.Range (0, 100);
         umbralHambre = 200;
         umbralHambreMaximo = 80;
 
@@ -111,43 +114,46 @@ public class Obrera : HormigaGenerica
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si encuentras un enemigo y no está en la lista de enemigos
-        if (other.tag == "Enemigo")
+        if (!agente.isOnOffMeshLink)
         {
-            EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
-            // Actualizas al enemigo de que hay hormiga cerca
-            if (!aux.hormigasCerca.Contains(this))
+            // Si encuentras un enemigo y no está en la lista de enemigos
+            if (other.tag == "Enemigo")
             {
-                aux.hormigasCerca.Add(this);
-            }
-            // Actualizas a la hormiga y avisas a la reina de este enemigo
-            if (!enemigosCerca.Contains(aux))
-            {
-                if (aux.hormigasAtacandole.Count < 2)
+                EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+                // Actualizas al enemigo de que hay hormiga cerca
+                if (!aux.hormigasCerca.Contains(this))
                 {
-                    if (aux.hormigasAtacandole.Count == 0)
-                    {
-                        reina.RecibirAlertaEnemigo(aux);
-                    }
-                    else if (aux.hormigasAtacandole[0] == this)
-                    {
-                        reina.RecibirAlertaEnemigo(aux);
-                    }
+                    aux.hormigasCerca.Add(this);
                 }
-                enemigosCerca.Add(aux);
+                // Actualizas a la hormiga y avisas a la reina de este enemigo
+                if (!enemigosCerca.Contains(aux))
+                {
+                    if (aux.hormigasAtacandole.Count < 2)
+                    {
+                        if (aux.hormigasAtacandole.Count == 0)
+                        {
+                            reina.RecibirAlertaEnemigo(aux);
+                        }
+                        else if (aux.hormigasAtacandole[0] == this)
+                        {
+                            reina.RecibirAlertaEnemigo(aux);
+                        }
+                    }
+                    enemigosCerca.Add(aux);
+                }
             }
-        }
-        else if (other.tag == "Trigo")
-        {
-            Comida aux = other.gameObject.GetComponent<Comida>();
-            if (!aux.hormigasCerca.Contains(this))
+            else if (other.tag == "Trigo")
             {
-                aux.hormigasCerca.Add(this);
-            }
-            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
-            {
-                reina.RecibirAlertaComida(aux);
-                comidaQueHayCerca.Add(aux);
+                Comida aux = other.gameObject.GetComponent<Comida>();
+                if (!aux.hormigasCerca.Contains(this))
+                {
+                    aux.hormigasCerca.Add(this);
+                }
+                if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
+                {
+                    reina.RecibirAlertaComida(aux);
+                    comidaQueHayCerca.Add(aux);
+                }
             }
         }
     }
@@ -186,15 +192,37 @@ public class Obrera : HormigaGenerica
             if (h != null)
             {
                 Soldado hormigaSoldado = h.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                Obrera hormigaObrera = h.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
 
-                if (hormigaSoldado != null)
+                if (hormigaObrera != null)
+                {
+                    if (hormigaObrera.enemigoAlQueAtacar == null)
+                    {
+                        EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        // Si no lo tiene ya asignado por orden
+                        if (hormigaObrera.enemigoAlQueAtacarPorOrden != enem)
+                        {
+                            hormigaObrera.enemigoAlQueAtacar = enem;
+                            if (!hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                            {
+                                hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
+                            }
+                        }
+                    }
+                }
+                else if (hormigaSoldado != null)
                 {
                     if (hormigaSoldado.enemigoAlQueAtacar == null)
                     {
-                        hormigaSoldado.enemigoAlQueAtacar = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
-                        if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                        EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                        // Si no lo tiene ya asignado por orden
+                        if (hormigaSoldado.enemigoAlQueAtacarPorOrden != enem)
                         {
-                            hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                            hormigaSoldado.enemigoAlQueAtacar = enem;
+                            if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                            {
+                                hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                            }
                         }
                     }
                 }

@@ -34,14 +34,15 @@ public class EnemigoGenerico : PersonajeGenerico
             this.vida = 30;
             this.daño = 3;
             this.velocidad = 1.0f;
-        } else
+        }
+        else
         {
-            this.vida = 15;
+            this.vida = 18;
             this.daño = 2;
             this.velocidad = 2.0f;
         }
-        this.zonaDondeEsta = 1;
 
+        this.zonaDondeEsta = 1;
         pb = this.gameObject.GetComponent<PandaBehaviour>();
         agente = this.gameObject.GetComponent<NavMeshAgent>();
         agente.speed = this.velocidad;
@@ -49,11 +50,22 @@ public class EnemigoGenerico : PersonajeGenerico
         hormigueroDentro = GameObject.FindObjectOfType<Floor>();
         tiempoEntreAtaques = tiempoEntreAtaquesMax;
         reina = GameObject.FindObjectOfType<Reina>();
+
+        if (escarabajo)
+        {
+            agente.avoidancePriority = 0;
+        }
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (hormigaAAtacar != null && !escarabajo)
+        {
+            agente.avoidancePriority = hormigaAAtacar.agente.avoidancePriority;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

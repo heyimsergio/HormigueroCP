@@ -7,6 +7,7 @@ public class Comida : MonoBehaviour
 
     public enum comidaType { Trigo}
     comidaType myType;
+    public GameObject comidaMuerta;
 
     public int peso;
     public double tiempoVida;
@@ -55,6 +56,9 @@ public class Comida : MonoBehaviour
             if (tiempoVida <= 0)
             {
                 reina.ComidaHaMuerto(this);
+                GameObject aux= Instantiate(comidaMuerta, this.transform.position, Quaternion.identity);
+                aux.transform.Translate(0, 0.03f, 0);
+                aux.transform.Rotate(90, 0, 0);
                 Destroy(this.gameObject);
             }
         }

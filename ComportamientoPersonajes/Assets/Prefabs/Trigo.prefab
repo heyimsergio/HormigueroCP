@@ -96,6 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45712506b54696c41ba9cb1013487038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  comidaMuerta: {fileID: 6554846404111185393, guid: a19a21156864346448a9ccb7e7048592,
+    type: 3}
   peso: 0
   tiempoVida: 0
   hambreQueRestaura: 0

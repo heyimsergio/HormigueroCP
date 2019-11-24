@@ -172,7 +172,6 @@ public class Reina : HormigaGenerica
     public bool ponerHuevo = false;
     #endregion
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -208,10 +207,13 @@ public class Reina : HormigaGenerica
         contPrioridadNavMesh = 1;
 
         // Ataques y Vida
-        this.vida = 10;
-        this.daño = 2;
+        totalVida = 50;
+        this.vida = totalVida;
+        this.daño = 3;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
+        umbralPuedeCurarse = 20;
+        umbralNecesitaCurarse = 10;
 
         // Hambre
         hambre = 400;
@@ -227,6 +229,10 @@ public class Reina : HormigaGenerica
 
         // Curar Hormiga
         tiempoParaCurar = 10.0f;
+
+        // Patrullar
+        tiempoDePatrulloMax = 20.0f;
+        tiempoDePatrullo = tiempoDePatrulloMax;
 
         //TiemposEvolucionJuego
         TIEMPO1 = 80;
@@ -508,19 +514,28 @@ public class Reina : HormigaGenerica
     {
         ordenesCanvas.OrdenAtacar();
         
-        Soldado aux = soldadosDesocupadas[0];
+        Soldado aux = soldadosDesocupadas[Random.Range(0, soldadosDesocupadas.Count)];
         if (aux != null)
         {
-            aux.hayOrdenDeAtacar = true;
-            aux.enemigoAlQueAtacar = enemigosTotal[0];
-            aux.SacarDeDesocupadas();
-            if (!aux.enemigoAlQueAtacar.hormigasAtacandole.Contains(aux))
+            EnemigoGenerico enem = enemigosTotal[Random.Range(0, enemigosTotal.Count)];
+            // Si no estoy ya atacando a ese enemigo, se me puede mandar la orden
+            if (enem != aux.enemigoAlQueAtacar)
             {
-                aux.enemigoAlQueAtacar.hormigasAtacandole.Add(aux);
+                aux.hayOrdenDeAtacar = true;
+                aux.enemigoAlQueAtacarPorOrden = enem;
+                aux.SacarDeDesocupadas();
+                if (!aux.enemigoAlQueAtacarPorOrden.hormigasAtacandole.Contains(aux))
+                {
+                    aux.enemigoAlQueAtacarPorOrden.hormigasAtacandole.Add(aux);
+                }
+                enemigosTotal.Remove(aux.enemigoAlQueAtacarPorOrden);
+                Task.current.Succeed();
+                Debug.Log("REINA: Mando soldado a atacar");
             }
-            enemigosTotal.Remove(aux.enemigoAlQueAtacar);
-            Task.current.Succeed();
-            Debug.Log("REINA: Mando soldado a atacar");
+            else
+            {
+                Task.current.Fail();
+            }
         }
         else
         {
@@ -533,19 +548,28 @@ public class Reina : HormigaGenerica
     {
         ordenesCanvas.OrdenAtacar();
 
-        Obrera aux = obrerasDesocupadas[0];
+        Obrera aux = obrerasDesocupadas[Random.Range(0, obrerasDesocupadas.Count)];
         if (aux != null)
         {
-            aux.hayOrdenDeAtacar = true;
-            aux.enemigoAlQueAtacar = enemigosTotal[0];
-            if (!aux.enemigoAlQueAtacar.hormigasAtacandole.Contains(aux))
+            EnemigoGenerico enem = enemigosTotal[Random.Range(0, enemigosTotal.Count)];
+            // Si no estoy ya atacando a ese enemigo, se me puede mandar la orden
+            if (enem != aux.enemigoAlQueAtacar)
             {
-                aux.enemigoAlQueAtacar.hormigasAtacandole.Add(aux);
+                aux.hayOrdenDeAtacar = true;
+                aux.enemigoAlQueAtacarPorOrden = enem;
+                aux.SacarDeDesocupadas();
+                if (!aux.enemigoAlQueAtacarPorOrden.hormigasAtacandole.Contains(aux))
+                {
+                    aux.enemigoAlQueAtacarPorOrden.hormigasAtacandole.Add(aux);
+                }
+                enemigosTotal.Remove(aux.enemigoAlQueAtacarPorOrden);
+                Task.current.Succeed();
+                Debug.Log("REINA: Mando obrera a atacar");
             }
-            aux.SacarDeDesocupadas();
-            Debug.Log("REINA: Mando obrera a atacar");
-            enemigosTotal.Remove(aux.enemigoAlQueAtacar);
-            Task.current.Succeed();
+            else
+            {
+                Task.current.Fail();
+            }
         }
         else
         {
@@ -1657,6 +1681,14 @@ public class Reina : HormigaGenerica
         SacarHormigaSala(hormiga.miSala);
         Debug.Log("Hormiga A Muerto");
 
+        GameObject aux = Instantiate(hormiga.tumbaHormiga, hormiga.transform.position, Quaternion.identity);
+        aux.transform.Translate(0, 0.03f, 0);
+        aux.transform.Rotate(90, 0, 0);
+        if (hormiga.bocadillos.hormigaSeleccionada != null && hormiga.bocadillos.hormigaSeleccionada == this)
+        {
+            hormiga.bocadillos.Nada();
+        }
+
         // Actualizamos la posicion de la hormiga muerta
         posHormigaMuerta = hormiga.transform.position;
         tiempoDePatrullo = tiempoDePatrulloMax;
@@ -1674,6 +1706,10 @@ public class Reina : HormigaGenerica
         if (hormiga.enemigoAlQueAtacar != null)
         {
             hormiga.enemigoAlQueAtacar.hormigasAtacandole.Remove(hormiga);
+        }
+        if (hormiga.enemigoAlQueAtacarPorOrden != null)
+        {
+            hormiga.enemigoAlQueAtacarPorOrden.hormigasAtacandole.Remove(hormiga);
         }
         // Actualizamos a todos los huevos que tenga
         foreach (Huevo huevo in hormiga.huevosCerca)
@@ -1824,7 +1860,12 @@ public class Reina : HormigaGenerica
             if (h.enemigoAlQueAtacar == enemigo)
             {
                 h.enemigoAlQueAtacar = null;
+            }
+            if (h.enemigoAlQueAtacarPorOrden == enemigo)
+            {
+                h.enemigoAlQueAtacarPorOrden = null;
                 h.hayOrdenDeAtacar = false;
+                h.SacarDeOcupadas();
             }
         }
 

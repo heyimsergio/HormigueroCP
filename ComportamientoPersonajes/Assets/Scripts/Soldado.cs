@@ -32,7 +32,7 @@ public class Soldado : HormigaGenerica
     // posDejarComida = Vector3.zero;
 
     //Patrullar
-    public float tiempoPatrullando;
+    public float tiempoPatrullandoMax;
     public float tiempoActualPatrullando;
     public Vector3 posicionPatrullar;
     public int radio;
@@ -73,13 +73,16 @@ public class Soldado : HormigaGenerica
         reina.contPrioridadNavMesh++;
 
         // Ataques y Vida
-        this.vida = 30;
+        totalVida = 15;
+        this.vida = totalVida;
+        this.umbralPuedeCurarse = 10;
+        this.umbralNecesitaCurarse = 5;
         this.daño = 3;
         tiempoEntreAtaquesMax = 0.5f;
         this.tiempoEntreAtaques = tiempoEntreAtaquesMax;
 
         // Hambre
-        hambre = 300;
+        hambre = 300 + Random.Range(0, 100);
         umbralHambre = 200;
         umbralHambreMaximo = 80;
 
@@ -88,10 +91,12 @@ public class Soldado : HormigaGenerica
 
         // Curar
         tiempoParaCurar = 10.0f;
+
+        // Patrullar
+        tiempoActualPatrullando = 0;
+        tiempoPatrullandoMax = 20.0f;
         posicionPatrullar = Vector3.zero;
         radio = 10;
-        tiempoPatrullando = 10;
-        tiempoPatrullando = 0;
 
         if (!bocadillosFound)
         {
@@ -105,43 +110,46 @@ public class Soldado : HormigaGenerica
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si encuentras un enemigo y no está en la lista de enemigos
-        if (other.tag == "Enemigo")
+        if (!agente.isOnOffMeshLink)
         {
-            EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
-            // Actualizas al enemigo de que hay hormiga cerca
-            if (!aux.hormigasCerca.Contains(this))
+            // Si encuentras un enemigo y no está en la lista de enemigos
+            if (other.tag == "Enemigo")
             {
-                aux.hormigasCerca.Add(this);
-            }
-            // Actualizas a la hormiga y avisas a la reina de este enemigo
-            if (!enemigosCerca.Contains(aux))
-            {
-                if (aux.hormigasAtacandole.Count < 2)
+                EnemigoGenerico aux = other.GetComponent<EnemigoGenerico>();
+                // Actualizas al enemigo de que hay hormiga cerca
+                if (!aux.hormigasCerca.Contains(this))
                 {
-                    if (aux.hormigasAtacandole.Count == 0)
-                    {
-                        reina.RecibirAlertaEnemigo(aux);
-                    }
-                    else if (aux.hormigasAtacandole[0] == this)
-                    {
-                        reina.RecibirAlertaEnemigo(aux);
-                    }
+                    aux.hormigasCerca.Add(this);
                 }
-                enemigosCerca.Add(aux);
+                // Actualizas a la hormiga y avisas a la reina de este enemigo
+                if (!enemigosCerca.Contains(aux))
+                {
+                    if (aux.hormigasAtacandole.Count < 2)
+                    {
+                        if (aux.hormigasAtacandole.Count == 0)
+                        {
+                            reina.RecibirAlertaEnemigo(aux);
+                        }
+                        else if (aux.hormigasAtacandole[0] == this)
+                        {
+                            reina.RecibirAlertaEnemigo(aux);
+                        }
+                    }
+                    enemigosCerca.Add(aux);
+                }
             }
-        }
-        else if (other.tag == "Trigo")
-        {
-            Comida aux = other.gameObject.GetComponent<Comida>();
-            if (!aux.hormigasCerca.Contains(this))
+            else if (other.tag == "Trigo")
             {
-                aux.hormigasCerca.Add(this);
-            }
-            if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
-            {
-                reina.RecibirAlertaComida(aux);
-                comidaQueHayCerca.Add(aux);
+                Comida aux = other.gameObject.GetComponent<Comida>();
+                if (!aux.hormigasCerca.Contains(this))
+                {
+                    aux.hormigasCerca.Add(this);
+                }
+                if (!comidaQueHayCerca.Contains(aux) && !aux.haSidoCogida && !aux.laEstanLLevando && aux.hormigaQueLlevaLaComida == null)
+                {
+                    reina.RecibirAlertaComida(aux);
+                    comidaQueHayCerca.Add(aux);
+                }
             }
         }
     }
@@ -200,7 +208,14 @@ public class Soldado : HormigaGenerica
     [Task]
     public void TengoOrdenDePatrullar()
     {
-        Task.current.Fail();
+        if (hayOrdenDePatrullar)
+        {
+            Task.current.Succeed();
+        }
+        else
+        {
+            Task.current.Fail();
+        }
     }
 
     /// <summary>
@@ -209,29 +224,29 @@ public class Soldado : HormigaGenerica
     [Task]
     public void Patrullar()
     {
-        if (tiempoActualPatrullando < tiempoPatrullando)
+        // si esta dentro
+        if (zonaDondeEsta == 0)
         {
-            // si esta dentro
-            if (zonaDondeEsta == 0)
+            // sale
+            siguientePosicionExplorar = Vector3.zero;
+            Vector3 randomDirection;
+            NavMeshHit aux;
+            bool aux2;
+            do
             {
-                // sale
-                siguientePosicionExplorar = Vector3.zero;
-                Vector3 randomDirection;
-                NavMeshHit aux;
-                bool aux2;
-                do
-                {
-                    randomDirection = UnityEngine.Random.insideUnitSphere * radio + posicionPatrullar;
-                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
-                } while (!aux2);
-                siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
-                //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
-                agente.SetDestination(siguientePosicionExplorar);
-
-            }
-            else
+                randomDirection = UnityEngine.Random.insideUnitSphere * radio + posicionPatrullar;
+                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+            } while (!aux2);
+            siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+            //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+            agente.SetDestination(siguientePosicionExplorar);
+            Task.current.Succeed();
+        }
+        else
+        {
+            if (tiempoActualPatrullando < tiempoPatrullandoMax)
             {
-                tiempoPatrullando += Time.deltaTime;
+                tiempoPatrullandoMax += Time.deltaTime;
                 if (siguientePosicionExplorar == Vector3.zero)
                 {
                     Vector3 randomDirection;
@@ -254,92 +269,87 @@ public class Soldado : HormigaGenerica
                 {
                     agente.SetDestination(siguientePosicionExplorar);
                 }
-
-            }
-            Task.current.Succeed();
-        } else
-        {
-            Debug.Log("Acabe de patrullar");
-            hayOrdenDePatrullar = false;
-            tiempoActualPatrullando = 0;
-            Task.current.Fail();
-        }
-
-        Task.current.Fail();
-
-    }
-
-    
-    
-
-    // HayHormigaQueCurarCerca()
-
-    [Task]
-    public void HaceMuchoQueHabiaEnemigos()
-    {
-        Task.current.Fail();
-    }
-
-    [Task]
-    public void Explorar()
-    {
-        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
-        {
-            if (!this.agente.isOnOffMeshLink)
-            {
-                bocadillos.Explorar();
+                Task.current.Succeed();
             }
             else
             {
-                bocadillos.Nada();
+                Debug.Log("Acabe de patrullar");
+                hayOrdenDePatrullar = false;
+                tiempoActualPatrullando = 0;
+                Task.current.Fail();
             }
         }
-        // si esta dentro
-        if (zonaDondeEsta == 0)
+    }
+
+
+// HayHormigaQueCurarCerca()
+
+[Task]
+public void HaceMuchoQueHabiaEnemigos()
+{
+    Task.current.Fail();
+}
+
+[Task]
+public void Explorar()
+{
+    if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+    {
+        if (!this.agente.isOnOffMeshLink)
         {
-            // sale
-            siguientePosicionExplorar = Vector3.zero;
+            bocadillos.Explorar();
+        }
+        else
+        {
+            bocadillos.Nada();
+        }
+    }
+    // si esta dentro
+    if (zonaDondeEsta == 0)
+    {
+        // sale
+        siguientePosicionExplorar = Vector3.zero;
+        Vector3 randomDirection;
+        NavMeshHit aux;
+        bool aux2;
+        do
+        {
+            randomDirection = UnityEngine.Random.insideUnitSphere * 10 + reina.afueras.centro;
+            aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+        } while (!aux2);
+        siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
+        //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
+        agente.SetDestination(siguientePosicionExplorar);
+
+    }
+    else
+    {
+        if (siguientePosicionExplorar == Vector3.zero)
+        {
             Vector3 randomDirection;
             NavMeshHit aux;
             bool aux2;
             do
             {
-                randomDirection = UnityEngine.Random.insideUnitSphere * 10 + reina.afueras.centro;
-                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 1.0f, NavMesh.AllAreas);
+                randomDirection = UnityEngine.Random.insideUnitSphere * (10) + this.transform.position;
+                aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
             } while (!aux2);
             siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
             //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
             agente.SetDestination(siguientePosicionExplorar);
-
+        }
+        else if (Vector3.Distance(this.transform.position, siguientePosicionExplorar) < 0.5f)
+        {
+            siguientePosicionExplorar = Vector3.zero;
         }
         else
         {
-            if (siguientePosicionExplorar == Vector3.zero)
-            {
-                Vector3 randomDirection;
-                NavMeshHit aux;
-                bool aux2;
-                do
-                {
-                    randomDirection = UnityEngine.Random.insideUnitSphere * (10) + this.transform.position;
-                    aux2 = NavMesh.SamplePosition(randomDirection, out aux, 4.0f, NavMesh.AllAreas);
-                } while (!aux2);
-                siguientePosicionExplorar = new Vector3(aux.position.x, 0, aux.position.z);
-                //Debug.Log("Posicion a la que va: " + siguientePosicionExplorar);
-                agente.SetDestination(siguientePosicionExplorar);
-            }
-            else if (Vector3.Distance(this.transform.position, siguientePosicionExplorar) < 0.5f)
-            {
-                siguientePosicionExplorar = Vector3.zero;
-            }
-            else
-            {
-                agente.SetDestination(siguientePosicionExplorar);
-            }
-
+            agente.SetDestination(siguientePosicionExplorar);
         }
-        Task.current.Succeed();
+
     }
+    Task.current.Succeed();
+}
 
     #endregion
 }

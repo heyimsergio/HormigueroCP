@@ -159,7 +159,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vida: 0
   zonaDondeEsta: 0
+  bocadillos: {fileID: 0}
+  bocadillosFound: 0
+  tumbaHormiga: {fileID: 807107275999191584, guid: 282525b2b071c7242898a263e03997b9,
+    type: 3}
+  agente: {fileID: 0}
+  priority: 0
   hambre: 300
+  totalVida: 0
   umbralHambre: 200
   tengoHambre: 0
   umbralHambreMaximo: 100
@@ -169,6 +176,7 @@ MonoBehaviour:
   enemigosCerca: []
   hayOrdenDeAtacar: 0
   enemigoAlQueAtacar: {fileID: 0}
+  enemigoAlQueAtacarPorOrden: {fileID: 0}
   reinaCerca: 0
   obrerasCerca: 0
   soldadosCerca: 0
@@ -195,13 +203,19 @@ MonoBehaviour:
   posHuevo: {x: 0, y: 0, z: 0}
   huevosCerca: []
   hayOrdenCuidarHuevos: 0
+  tiempoDePatrullo: 10
+  tiempoDePatrulloMax: 10
   siguientePosicionExplorar: {x: 0, y: 0, z: 0}
   comidaAComer: {fileID: 0}
   reina: {fileID: 0}
   meHanMandadoOrden: 0
   hayOrdenDeCavar: 0
-  tiempoPatrullando: 0
-  centro: {x: 0, y: 0, z: 0}
+  hayQueHuir: 0
+  posHuida: {x: 0, y: 0, z: 0}
+  hayOrdenDePatrullar: 0
+  tiempoPatrullandoMax: 0
+  tiempoActualPatrullando: 0
+  posicionPatrullar: {x: 0, y: 0, z: 0}
   radio: 0
 --- !u!1 &4576295137068443871
 GameObject:

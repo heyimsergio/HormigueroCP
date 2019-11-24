@@ -5,9 +5,6 @@ tree("Root")
 tree("Nurse")
 	fallback
 		sequence
-			HayQueHuir()
-			EstoyHuyendo()
-		sequence
 			HayEnemigosCerca()
 			fallback
 				sequence
