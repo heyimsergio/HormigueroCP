@@ -221,14 +221,17 @@ public class Nurse : HormigaGenerica
                 {
                     if (hormigaObrera.enemigoAlQueAtacar == null)
                     {
-                        EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
-                        // Si no lo tiene ya asignado por orden
-                        if (hormigaObrera.enemigoAlQueAtacarPorOrden != enem)
+                        if (enemigosCerca.Count > 0)
                         {
-                            hormigaObrera.enemigoAlQueAtacar = enem;
-                            if (!hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                            EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                            // Si no lo tiene ya asignado por orden
+                            if (hormigaObrera.enemigoAlQueAtacarPorOrden != enem)
                             {
-                                hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
+                                hormigaObrera.enemigoAlQueAtacar = enem;
+                                if (!hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaObrera))
+                                {
+                                    hormigaObrera.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaObrera);
+                                }
                             }
                         }
                     }
@@ -237,14 +240,17 @@ public class Nurse : HormigaGenerica
                 {
                     if (hormigaSoldado.enemigoAlQueAtacar == null)
                     {
-                        EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
-                        // Si no lo tiene ya asignado por orden
-                        if (hormigaSoldado.enemigoAlQueAtacarPorOrden != enem)
+                        if (enemigosCerca.Count > 0)
                         {
-                            hormigaSoldado.enemigoAlQueAtacar = enem;
-                            if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                            EnemigoGenerico enem = this.enemigosCerca[Random.Range(0, this.enemigosCerca.Count)];
+                            // Si no lo tiene ya asignado por orden
+                            if (hormigaSoldado.enemigoAlQueAtacarPorOrden != enem)
                             {
-                                hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                                hormigaSoldado.enemigoAlQueAtacar = enem;
+                                if (!hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Contains(hormigaSoldado))
+                                {
+                                    hormigaSoldado.enemigoAlQueAtacar.hormigasAtacandole.Add(hormigaSoldado);
+                                }
                             }
                         }
                     }
@@ -292,6 +298,7 @@ public class Nurse : HormigaGenerica
         if (haySoldadosOObrerasEnTodas)
         {
             Task.current.Succeed();
+            enemigoAlQueAtacar = null;
         }
         else
         {
@@ -363,7 +370,7 @@ public class Nurse : HormigaGenerica
                 return;
             }
             // Cuando la distancia al huevo sea pequeña
-            if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
+            if (Vector3.Distance(this.transform.position, huevoACuidar.transform.position) < 0.2f)
             {
                 TiempoActual -= Time.deltaTime;
                 // Si ha pasado el tiempo de cuidar

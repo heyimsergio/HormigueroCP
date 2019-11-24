@@ -68,41 +68,6 @@ public class EnemigoGenerico : PersonajeGenerico
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Obrera")
-        {
-            Debug.Log("Colision con hormiga");
-        }
-
-        if (other.tag == "Reina" ||
-            other.tag == "Nurse" ||
-            other.tag == "Obrera" ||
-            other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (!hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Add(aux);
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Reina" ||
-            other.tag == "Nurse" ||
-            other.tag == "Obrera" ||
-            other.tag == "Soldado")
-        {
-            HormigaGenerica aux = other.GetComponent<HormigaGenerica>();
-            if (hormigasCerca.Contains(aux))
-            {
-                hormigasCerca.Remove(aux);
-            }
-        }
-    }
-
     [Task]
     public void HayHormigasCerca()
     {

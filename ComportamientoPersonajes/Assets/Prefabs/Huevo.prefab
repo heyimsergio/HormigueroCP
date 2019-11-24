@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1489546582499747470}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 27.564955, y: 3.2226024, z: 23.79488}
-  m_LocalScale: {x: 0.58018816, y: 0.9237767, z: 0.6640512}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7628596952692825939}
   m_Father: {fileID: 0}
@@ -107,6 +107,7 @@ MonoBehaviour:
   umbralDePoderseCuidar: 60
   myTile: {fileID: 0}
   hormigasCerca: []
+  huevoF: {fileID: 2772627972800058031, guid: 888ec7de4b64beb449b31a2ed78e9d1f, type: 3}
 --- !u!1 &8716076046680918248
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +134,7 @@ Transform:
   m_GameObject: {fileID: 8716076046680918248}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.191, z: 0}
-  m_LocalScale: {x: 0.4661439, y: 0.33508468, z: 0.4661439}
+  m_LocalScale: {x: 0.21959604, y: 0.18912366, z: 0.18735266}
   m_Children: []
   m_Father: {fileID: 1489546582499747467}
   m_RootOrder: 0

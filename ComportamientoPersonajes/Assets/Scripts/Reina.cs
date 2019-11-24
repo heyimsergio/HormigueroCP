@@ -530,7 +530,7 @@ public class Reina : HormigaGenerica
                 }
                 enemigosTotal.Remove(aux.enemigoAlQueAtacarPorOrden);
                 Task.current.Succeed();
-                Debug.Log("REINA: Mando soldado a atacar");
+                //Debug.Log("REINA: Mando soldado a atacar");
             }
             else
             {
@@ -564,7 +564,7 @@ public class Reina : HormigaGenerica
                 }
                 enemigosTotal.Remove(aux.enemigoAlQueAtacarPorOrden);
                 Task.current.Succeed();
-                Debug.Log("REINA: Mando obrera a atacar");
+                //Debug.Log("REINA: Mando obrera a atacar");
             }
             else
             {
@@ -671,7 +671,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaObreras()
     {
-        ordenesCanvas.OrdenBuscarComida();
         Obrera aux = obrerasDesocupadas[0];
         if (aux != null)
         {
@@ -697,7 +696,8 @@ public class Reina : HormigaGenerica
                 reina.comidaVista.Remove(aux.comida);
                 // Actualizo la cantidad de hormigas buscando comida que hay
                 numHormigasBuscandoComida++;
-                Debug.Log("REINA: Mando obrera a por comida");
+                //Debug.Log("REINA: Mando obrera a por comida");
+                ordenesCanvas.OrdenBuscarComida();
                 Task.current.Succeed();
                 return;
             }
@@ -709,7 +709,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaSoldados()
     {
-        ordenesCanvas.OrdenBuscarComida();
         Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
@@ -735,7 +734,8 @@ public class Reina : HormigaGenerica
                 reina.comidaVista.Remove(aux.comida);
                 // Actualizo la cantidad de hormigas buscando comida que hay
                 numHormigasBuscandoComida++;
-                Debug.Log("REINA: Mando soldado a por comida");
+                //Debug.Log("REINA: Mando soldado a por comida");
+                ordenesCanvas.OrdenBuscarComida();
                 Task.current.Succeed();
                 return;
             }
@@ -747,7 +747,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenBuscarComidaNurses()
     {
-        ordenesCanvas.OrdenBuscarComida();
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
@@ -776,7 +775,8 @@ public class Reina : HormigaGenerica
                 reina.comidaVista.Remove(aux.comida);
                 // Actualizo el numero de hormigas buscando comida
                 numHormigasBuscandoComida++;
-                Debug.Log("REINA: Mando nurse a por comida");
+                //Debug.Log("REINA: Mando nurse a por comida");
+                ordenesCanvas.OrdenBuscarComida();
                 Task.current.Succeed();
                 return;
             }
@@ -893,7 +893,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCuidarNurses()
     {
-        ordenesCanvas.OrdenCuidarHuevo();
         Nurse aux = nursesDesocupadas[0];
         if (aux != null)
         {
@@ -905,11 +904,11 @@ public class Reina : HormigaGenerica
             DesasignarComidaACoger(aux);
             // Asignamos el huevo a curar a la hormiga
             aux.hayOrdenCuidarHuevos = true;
-            nursesOcupadas.Add(aux);
-            nursesDesocupadas.Remove(aux);
+            aux.SacarDeDesocupadas();
             aux.huevoACuidar = huevosQueTienenQueSerCuidados[0];
             aux.huevoACuidar.siendoCuidadoPor = aux;
-            huevosQueTienenQueSerCuidados.RemoveAt(0);
+            huevosQueTienenQueSerCuidados.Remove(aux.huevoACuidar);
+            ordenesCanvas.OrdenCuidarHuevo();
             Task.current.Succeed();
             return;
         }
@@ -937,7 +936,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarSoldado()
     {
-        ordenesCanvas.OrdenCurarHormiga();
         Soldado aux = soldadosDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
         if (aux == aux2)
@@ -970,7 +968,8 @@ public class Reina : HormigaGenerica
             aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
             Task.current.Succeed();
-            Debug.Log("REINA: Mando soldado a curar");
+            ordenesCanvas.OrdenCurarHormiga();
+            //Debug.Log("REINA: Mando soldado a curar");
             return;
         }
     }
@@ -978,7 +977,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarObreras()
     {
-        ordenesCanvas.OrdenCurarHormiga();
         Obrera aux = obrerasDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
         if (aux == aux2)
@@ -1010,7 +1008,8 @@ public class Reina : HormigaGenerica
             aux2.siendoCuradaPor = aux;
             aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
-            Debug.Log("REINA: Mando obrera a curar");
+            //Debug.Log("REINA: Mando obrera a curar");
+            ordenesCanvas.OrdenCurarHormiga();
             Task.current.Succeed();
             return;
         }
@@ -1019,7 +1018,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenCurarNurses()
     {
-        ordenesCanvas.OrdenCurarHormiga();
         Nurse aux = nursesDesocupadas[0];
         HormigaGenerica aux2 = hormigasHeridas[0];
         // Comprobación para que no se cure a si misma
@@ -1056,7 +1054,8 @@ public class Reina : HormigaGenerica
             aux2.siendoCuradaPor = aux;
             aux.posHerida = Vector3.zero;
             hormigasHeridas.Remove(aux2);
-            Debug.Log("REINA: Mando nurse a curar");
+            //Debug.Log("REINA: Mando nurse a curar");
+            ordenesCanvas.OrdenCurarHormiga();
             Task.current.Succeed();
             return;
         }
@@ -1085,8 +1084,6 @@ public class Reina : HormigaGenerica
     [Task]
     public void OrdenPatrullarSoldado()
     {
-        ordenesCanvas.OrdenPatrullar();
-
         Soldado aux = soldadosDesocupadas[0];
         if (aux != null)
         {
@@ -1100,7 +1097,8 @@ public class Reina : HormigaGenerica
             aux.posicionPatrullar = posHormigaMuerta;
             tiempoDePatrullo = 0;
             Task.current.Succeed();
-            Debug.Log("Reina: Mando soldado a patrullar");
+            //Debug.Log("Reina: Mando soldado a patrullar");
+            ordenesCanvas.OrdenPatrullar();
             return;
         }
         Task.current.Fail();
@@ -1201,6 +1199,18 @@ public class Reina : HormigaGenerica
     [Task]
     public void CuidarHuevos()
     {
+        if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
+        {
+            if (!this.agente.isOnOffMeshLink)
+            {
+                bocadillos.CuidarHuevos();
+            }
+            else
+            {
+                bocadillos.Nada();
+            }
+        }
+
         if (huevoACuidar != null)
         {
             // Si es la primera vez, no tengo asignada la posicion del huevo
@@ -1214,7 +1224,7 @@ public class Reina : HormigaGenerica
                 return;
             }
             // Cuando la distancia al huevo sea pequeña
-            if (Vector3.Distance(this.transform.position, posHuevo) < 0.2)
+            if (Vector3.Distance(this.transform.position, huevoACuidar.transform.position) < 0.2f)
             {
                 TiempoActual -= Time.deltaTime;
                 // Si ha pasado el tiempo de cuidar
@@ -1679,7 +1689,7 @@ public class Reina : HormigaGenerica
     public void HormigaHaMuerto(HormigaGenerica hormiga)
     {
         SacarHormigaSala(hormiga.miSala);
-        Debug.Log("Hormiga A Muerto");
+        //Debug.Log("Hormiga A Muerto");
 
         GameObject aux = Instantiate(hormiga.tumbaHormiga, hormiga.transform.position, Quaternion.identity);
         aux.transform.Translate(0, 0.03f, 0);
@@ -1734,7 +1744,7 @@ public class Reina : HormigaGenerica
 
         if (hormigaNurse != null)
         {
-            Debug.Log("NURSE HA MUERTO");
+            //Debug.Log("NURSE HA MUERTO");
             //Nurse hormigaNurse = (Nurse)hormiga;
             if (nursesDesocupadas.Contains(hormigaNurse))
             {

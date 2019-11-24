@@ -19,6 +19,8 @@ public class Huevo : MonoBehaviour
     Collider huevoCollider;
     public List<HormigaGenerica> hormigasCerca = new List<HormigaGenerica>();
 
+    public GameObject huevoF;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +69,9 @@ public class Huevo : MonoBehaviour
         {
             //Debug.Log("Huevo Muerto");
             miReina.HuevoHaMuerto(this);
+            GameObject aux = Instantiate(huevoF, this.transform.position, Quaternion.identity);
+            aux.transform.Translate(0, 0.03f, 0);
+            aux.transform.Rotate(90, 0, 0);
             Destroy(this.gameObject);
         }
         // Nace Huevo

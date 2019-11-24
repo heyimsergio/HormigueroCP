@@ -172,7 +172,7 @@ public class Soldado : HormigaGenerica
         else if (other.tag == "Reina")
         {
             reinaCerca = false;
-            Debug.Log("Reina cerca");
+            //Debug.Log("Reina cerca");
         }
     }
 
@@ -277,7 +277,7 @@ public class Soldado : HormigaGenerica
             }
             else
             {
-                Debug.Log("Acabe de patrullar");
+                //Debug.Log("Acabe de patrullar");
                 hayOrdenDePatrullar = false;
                 tiempoActualPatrullando = 0;
                 Task.current.Fail();

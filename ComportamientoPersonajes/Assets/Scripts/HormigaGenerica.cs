@@ -31,9 +31,9 @@ public class HormigaGenerica : PersonajeGenerico
     public float pesoQuePuedenTransportar;
     public bool estaLuchando = false;
     protected float tiempoEntreAtaques;
-    [HideInInspector]
+    //[HideInInspector]
     protected float tiempoEntreAtaquesMax = 0.5f;
-    protected float TiempoActual;
+    public float TiempoActual;
     public Room miSala;
 
     // Atacar
@@ -134,7 +134,7 @@ public class HormigaGenerica : PersonajeGenerico
             bocadillos = FindObjectOfType<BocadillosControlador>();
             if (bocadillos != null)
             {
-                Debug.Log("Encontrado");
+                //Debug.Log("Encontrado");
                 bocadillosFound = true;
             }
         }
@@ -348,7 +348,7 @@ public class HormigaGenerica : PersonajeGenerico
 
     public void QuitarVida(int damage)
     {
-        Debug.Log("Hormiga perdiendo vida");
+        //Debug.Log("Hormiga perdiendo vida");
         this.vida -= damage;
         if (vida <= 0)
         {
@@ -359,7 +359,7 @@ public class HormigaGenerica : PersonajeGenerico
 
     public void SumarVida()
     {
-        Debug.Log("Hormiga ganando vida");
+        //Debug.Log("Hormiga ganando vida");
         /*this.vida = cantidadDeCura;
         if (this.vida > 10)
         {
@@ -413,7 +413,15 @@ public class HormigaGenerica : PersonajeGenerico
     {
         if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
         {
-            bocadillos.Atacar();
+            if (this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Nada();
+            }
+            else
+            {
+                bocadillos.Atacar();
+            }
+            
         }
 
         // Si el enemigo al que tenia asignado como orden, muere, me quito la orden
@@ -570,7 +578,14 @@ public class HormigaGenerica : PersonajeGenerico
     {
         if (bocadillos.hormigaSeleccionada != null && bocadillos.hormigaSeleccionada == this)
         {
-            bocadillos.Huir();
+            if (this.agente.isOnOffMeshLink)
+            {
+                bocadillos.Nada();
+            }
+            else
+            {
+                bocadillos.Huir();
+            }
         }
         if (enemigosCerca.Count > 0)
         {
@@ -619,7 +634,7 @@ public class HormigaGenerica : PersonajeGenerico
                 }
                 else
                 {
-                    posHuida = -posHuida;
+                    posHuida = posHuida - 2 * direccionContraria;
                     agente.SetDestination(posHuida);
                 }
             }
@@ -903,7 +918,7 @@ public class HormigaGenerica : PersonajeGenerico
             // Si es la primera vez, no tengo asignada la posicion de la hormiga a curar
             if (posHerida == Vector3.zero)
             {
-                Debug.Log("Se asigna la posicion de la hormiga a curar");
+                //Debug.Log("Se asigna la posicion de la hormiga a curar");
                 TiempoActual = tiempoParaCurar;
                 posHerida = hormigaACurar.transform.position;
                 agente.SetDestination(hormigaACurar.transform.position);
