@@ -233,24 +233,28 @@ public class Nurse : HormigaGenerica
             cont = 0;
             foreach (HormigaGenerica hormiga in enem.hormigasAtacandole)
             {
-                Soldado hormigaSoldado2 = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
-                Obrera hormigaObrera2 = hormiga.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
-                if (hormigaSoldado2 != null)
+                if(hormiga != null)
                 {
-                    haySoldadosOObrerasEnTodas = true;
-                    break;
+                    Soldado hormigaSoldado2 = hormiga.transform.gameObject.GetComponent(typeof(Soldado)) as Soldado;
+                    Obrera hormigaObrera2 = hormiga.transform.gameObject.GetComponent(typeof(Obrera)) as Obrera;
+                    if (hormigaSoldado2 != null)
+                    {
+                        haySoldadosOObrerasEnTodas = true;
+                        break;
+                    }
+                    else if (hormigaObrera2 != null)
+                    {
+                        haySoldadosOObrerasEnTodas = true;
+                        break;
+                    }
+                    else if (cont == enem.hormigasAtacandole.Count - 1)
+                    {
+                        haySoldadosOObrerasEnTodas = false;
+                        break;
+                    }
+                    cont++;
                 }
-                else if (hormigaObrera2 != null)
-                {
-                    haySoldadosOObrerasEnTodas = true;
-                    break;
-                }
-                else if (cont == enem.hormigasAtacandole.Count - 1)
-                {
-                    haySoldadosOObrerasEnTodas = false;
-                    break;
-                }
-                cont++;
+                
             }
 
             if (haySoldadosOObrerasEnTodas == false)

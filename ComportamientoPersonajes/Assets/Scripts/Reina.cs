@@ -123,7 +123,7 @@ public class Reina : HormigaGenerica
     public float importanciaSoldados;
 
     //NECESIDADES DEL HORMIGUERO
-    // MandarHordenes
+    // MandarOrdenes
     //enum tipoOrden {CAVAR, BUSCAR, ATACAR, CUIDAR, PATRULLAR, NADA}
     public bool hayQueCrearSalasHormigas = false;
     public bool hayQueCrearSalasComida = false;
@@ -608,13 +608,10 @@ public class Reina : HormigaGenerica
     [Task]
     public void HayHormigasBuscandoComida()
     {
-        if (numHormigasBuscandoComida > 2)
-        {
-            Task.current.Succeed();
-            return;
-        }
+
         Task.current.Fail();
         return;
+        
     }
 
     [Task]
@@ -1755,7 +1752,10 @@ public class Reina : HormigaGenerica
         if (hormiga.agente.isOnOffMeshLink)
         {
             NavMeshLink link = (NavMeshLink) hormiga.agente.navMeshOwner;
-            link.costModifier = -1;
+            if(link != null)
+            {
+                link.costModifier = -1;
+            }
         }
         hormiga = null;
     }
