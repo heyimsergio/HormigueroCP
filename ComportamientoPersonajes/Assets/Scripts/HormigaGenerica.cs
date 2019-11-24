@@ -352,6 +352,9 @@ public class HormigaGenerica : PersonajeGenerico
         this.vida -= damage;
         if (vida <= 0)
         {
+            // Actualizamos la posicion de la hormiga muerta
+            reina.posHormigaMuerta = this.transform.position;
+            reina.tiempoDePatrullo = tiempoDePatrulloMax;
             reina.HormigaHaMuerto(this);
             Destroy(this.gameObject);
         }

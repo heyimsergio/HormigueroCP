@@ -8,30 +8,15 @@ tree("Reina")
 			mute
 				sequence
 					SiendoAtacados()
-					not
-						SuficientesLuchando()
-					mute
-						fallback
-							sequence
-								not
-									HaySoldadosLibres()
-								HayObrerasLibres()
-								OrdenAtacarObrera()
-							sequence
+					fallback
+						sequence
+							not
 								HaySoldadosLibres()
-								OrdenAtacarSoldado()
-			mute
-				fallback
-					sequence
-						VaALlover()
-						not
-							HormigueroEstaTapado()
-						not
-							SuficientesObrerasTapando()
-						OrdenTaparObreras()
-					sequence
-						HaDejadoDeLlover()
-						OrdenDestaparObreras()
+							HayObrerasLibres()
+							OrdenAtacarObrera()
+						sequence
+							HaySoldadosLibres()
+							OrdenAtacarSoldado()
 			mute
 				sequence
 					HayHuevosQueCuidar()

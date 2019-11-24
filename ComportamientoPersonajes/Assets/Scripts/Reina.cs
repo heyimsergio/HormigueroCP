@@ -147,6 +147,9 @@ public class Reina : HormigaGenerica
     public int TIEMPO3 = 7 * 60 + 30; // 7 mins y 30 segs
     public int TIEMPO4 = 10 * 60;
 
+    public int saleComida;
+    public bool par;
+
     // planificador de necesidad  de crear salas
     public float umbralCapacidadHormigas = 0.2f;
     public float umbralCapacidadHuevos = 0.1f;
@@ -185,6 +188,7 @@ public class Reina : HormigaGenerica
         } else {
             MaxProbComida = 6000;
         }
+        par = false;
         // Inicializacion
         initTime = Time.time;
         this.zonaDondeEsta = 0;
@@ -485,28 +489,6 @@ public class Reina : HormigaGenerica
         {
             Task.current.Fail();
         }
-        /*if (HayQueAtacar)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }*/
-    }
-
-    [Task]
-    public void SuficientesLuchando()
-    {
-        /*if (totalHormigas * umbralHormigasAtacando > numHormigasAtacando)
-        {
-            Task.current.Succeed();
-        }
-        else
-        {
-            Task.current.Fail();
-        }*/
-        Task.current.Fail();
     }
 
     [Task]
@@ -575,45 +557,6 @@ public class Reina : HormigaGenerica
         {
             Task.current.Fail();
         }
-    }
-
-    #endregion
-
-    #region Ordenes Llover
-    [Task]
-    public void VaALlover()
-    {
-        Task.current.Fail();
-    }
-
-    [Task]
-    public void HormigueroEstaTapado()
-    {
-        Task.current.Fail();
-    }
-
-    [Task]
-    public void SuficientesObrerasTapando()
-    {
-        Task.current.Fail();
-    }
-
-    [Task]
-    public void OrdenTaparObreras()
-    {
-        Task.current.Fail();
-    }
-
-    [Task]
-    public void HaDejadoDeLlover()
-    {
-        Task.current.Fail();
-    }
-
-    [Task]
-    public void OrdenDestaparObreras()
-    {
-        Task.current.Fail();
     }
 
     #endregion
@@ -1624,11 +1567,53 @@ public class Reina : HormigaGenerica
 
     public void CrearComida()
     {
-        int saleComida = Random.RandomRange(0, MaxProbComida + 1);
-        if (saleComida < probComida)
+        if (Time.timeScale == 0)
         {
-            InstanciarComida();
+            // Nada
         }
+        else if (Time.timeScale == 1)
+        {
+            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            if (saleComida < probComida)
+            {
+                InstanciarComida();
+            }
+        }
+        else if (Time.timeScale == 2)
+        {
+            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            if (saleComida < probComida)
+            {
+                InstanciarComida();
+            }
+            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            if (saleComida < probComida)
+            {
+                InstanciarComida();
+            }
+        }
+        else
+        {
+            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            if (saleComida < probComida)
+            {
+                InstanciarComida();
+            }
+            if (!par)
+            {
+                saleComida = Random.RandomRange(0, MaxProbComida + 1);
+                if (saleComida < probComida)
+                {
+                    InstanciarComida();
+                }
+                par = true;
+            }
+            else
+            {
+                par = false;
+            }
+        }
+        
     }
 
     public void InstanciarComida()
@@ -1698,10 +1683,6 @@ public class Reina : HormigaGenerica
         {
             hormiga.bocadillos.Nada();
         }
-
-        // Actualizamos la posicion de la hormiga muerta
-        posHormigaMuerta = hormiga.transform.position;
-        tiempoDePatrullo = tiempoDePatrulloMax;
 
         // Actualizamos a todos los enemigos que tenga
         foreach (EnemigoGenerico enem in hormiga.enemigosCerca)
