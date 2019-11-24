@@ -78,8 +78,7 @@ public class AntMovement : MonoBehaviour
             Comida aux = agent.gameObject.GetComponentInChildren<Comida>();
             if (aux != null)
             {
-                aux.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                aux.gameObject.GetComponent<SphereCollider>().enabled = false;
+                aux.gameObject.GetComponentInChildren<SpriteRenderer>().enabled = false;
             }
             agent.avoidancePriority = 99;
             agent.speed = speed * linkMultiplayer;
@@ -105,8 +104,7 @@ public class AntMovement : MonoBehaviour
             Comida aux = agent.gameObject.GetComponentInChildren<Comida>();
             if (aux != null)
             {
-                aux.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                aux.gameObject.GetComponent<SphereCollider>().enabled = true;
+                aux.gameObject.GetComponentInChildren<SpriteRenderer>().enabled = true;
             }
             agent.avoidancePriority = agent.gameObject.GetComponent<HormigaGenerica>().priority;
             agent.speed = speed;
