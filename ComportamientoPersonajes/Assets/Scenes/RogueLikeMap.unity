@@ -5140,7 +5140,8 @@ MonoBehaviour:
   zonaDondeEsta: 0
   bocadillos: {fileID: 0}
   bocadillosFound: 0
-  tumbaHormiga: {fileID: 0}
+  tumbaHormiga: {fileID: 807107275999191584, guid: 282525b2b071c7242898a263e03997b9,
+    type: 3}
   agente: {fileID: 0}
   priority: 0
   hambre: 200

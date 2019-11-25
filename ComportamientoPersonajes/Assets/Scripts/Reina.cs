@@ -181,12 +181,12 @@ public class Reina : HormigaGenerica
         DataController config = FindObjectOfType<DataController>();
         if (config.facil)
         {
-            MaxProbComida = 1500;
+            MaxProbComida = 2000;
         } else if (config.medio)
         {
-            MaxProbComida = 3000;
+            MaxProbComida = 4000;
         } else {
-            MaxProbComida = 6000;
+            MaxProbComida = 7500;
         }
         par = false;
         // Inicializacion
@@ -630,7 +630,7 @@ public class Reina : HormigaGenerica
                 obrerasDesocupadas.Remove(aux);
                 // Actualizamos a la obrera
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
-                aux.comida = comidaVista[0];
+                aux.comida = comidaVista[comidaVista.Count - 1];
                 aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
                 aux.comida.hormigaQueLlevaLaComida = aux;
                 aux.posComida = Vector3.zero;
@@ -668,7 +668,7 @@ public class Reina : HormigaGenerica
                 soldadosDesocupadas.Remove(aux);
                 // Actualizamos a la soldado
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
-                aux.comida = comidaVista[0];
+                aux.comida = comidaVista[comidaVista.Count - 1];
                 aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
                 aux.comida.hormigaQueLlevaLaComida = aux;
                 aux.posComida = Vector3.zero;
@@ -709,7 +709,7 @@ public class Reina : HormigaGenerica
                 nursesDesocupadas.Remove(aux);
                 // Actualizamos a la nurse
                 aux.casillaDejarComida = aux.salaDejarComida.getFreeTile();
-                aux.comida = comidaVista[0];
+                aux.comida = comidaVista[comidaVista.Count - 1];
                 aux.comida.CogerComida(aux.salaDejarComida, aux.casillaDejarComida);
                 aux.comida.hormigaQueLlevaLaComida = aux;
                 aux.posComida = Vector3.zero;
@@ -1573,7 +1573,7 @@ public class Reina : HormigaGenerica
         }
         else if (Time.timeScale == 1)
         {
-            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            saleComida = Random.Range(0, MaxProbComida + 1);
             if (saleComida < probComida)
             {
                 InstanciarComida();
@@ -1581,12 +1581,12 @@ public class Reina : HormigaGenerica
         }
         else if (Time.timeScale == 2)
         {
-            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            saleComida = Random.Range(0, MaxProbComida + 1);
             if (saleComida < probComida)
             {
                 InstanciarComida();
             }
-            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            saleComida = Random.Range(0, MaxProbComida + 1);
             if (saleComida < probComida)
             {
                 InstanciarComida();
@@ -1594,14 +1594,14 @@ public class Reina : HormigaGenerica
         }
         else
         {
-            saleComida = Random.RandomRange(0, MaxProbComida + 1);
+            saleComida = Random.Range(0, MaxProbComida + 1);
             if (saleComida < probComida)
             {
                 InstanciarComida();
             }
             if (!par)
             {
-                saleComida = Random.RandomRange(0, MaxProbComida + 1);
+                saleComida = Random.Range(0, MaxProbComida + 1);
                 if (saleComida < probComida)
                 {
                     InstanciarComida();

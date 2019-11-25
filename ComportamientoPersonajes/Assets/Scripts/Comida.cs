@@ -38,7 +38,7 @@ public class Comida : MonoBehaviour
         {
             case comidaType.Trigo:
                 peso = 1;
-                tiempoVida = 100;
+                tiempoVida = 100 + Random.Range (0, 25);
                 hambreQueRestaura = Random.Range(100,200);
                 usosDeLaComida = 1;
                 break;
